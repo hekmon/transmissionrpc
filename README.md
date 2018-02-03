@@ -12,11 +12,11 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 ### Done
 
-_None_
+* torrent-get
 
 ### In Progress
 
-* torrent-get
+_None_
 
 ### To Do
 
