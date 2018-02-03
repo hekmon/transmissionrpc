@@ -133,6 +133,15 @@ type Torrent struct {
 	Status                  *int64             `json:"status"`
 	Trackers                []*Tracker         `json:"trackers"`
 	TrackerStats            []*TrackerStats    `json:"trackerStats"`
+	TotalSize               *int64             `json:"totalSize"`
+	TorrentFile             *string            `json:"torrentFile"`
+	UploadedEver            *int64             `json:"uploadedEver"`
+	UploadLimit             *int64             `json:"uploadLimit"`
+	UploadLimited           *bool              `json:"uploadLimited"`
+	UploadRatio             *float64           `json:"uploadRatio"`
+	Wanted                  []int64            `json:"wanted"`   // boolean in number form | https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
+	WebSeeds                []string           `json:"webseeds"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L314
+	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
 }
 
 // TorrentFile represent one file from a Torrent
