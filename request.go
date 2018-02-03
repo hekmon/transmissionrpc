@@ -58,9 +58,8 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	defer resp.Body.Close()
 	// Is the CRSF token invalid ?
 	if resp.StatusCode == http.StatusConflict {
-		// Recover new token
+		// Recover new token and save it
 		c.updateSessionID(resp.Header.Get(csrfHeader))
-		fmt.Printf("DEBUG updated CSRF token to: %s\n", c.getSessionID())
 		// Retry request if first try
 		if retry {
 			return c.request(method, arguments, result, false)
@@ -95,7 +94,7 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	}
 	if answer.Tag != tag {
 		err = errors.New("http request and answer payload tag do not match")
-		return // not really needed but clean
+		return // not really needed but whatevs
 	}
 	// All good
 	return
