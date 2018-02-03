@@ -20,6 +20,11 @@ func (c *Controller) TorrentGetAll() (torrents []*Torrent, err error) {
 	return c.torrentGet(validTorrentFields, nil)
 }
 
+// TorrentGetAllFrom returns all known fields for the given torrent's ids
+func (c *Controller) TorrentGetAllFrom(ids []int64) (torrents []*Torrent, err error) {
+	return c.torrentGet(validTorrentFields, ids)
+}
+
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal)
 func (c *Controller) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
 	// Validate fields
@@ -104,6 +109,30 @@ type Torrent struct {
 	Name                    *string            `json:"name"`
 	PeerLimit               *int64             `json:"peer-limit"`
 	Peers                   []*Peer            `json:"peers"`
+	PeersConnected          *int64             `json:"peersConnected"`
+	PeersFrom               *TorrentPeersFrom  `json:"peersFrom"`
+	PeersGettingFromUs      *int64             `json:"peersGettingFromUs"`
+	PeersSendingToUs        *int64             `json:"peersSendingToUs"`
+	PercentDone             *float64           `json:"percentDone"`
+	Pieces                  *string            `json:"pieces"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L264
+	PieceCount              *int64             `json:"pieceCount"`
+	PieceSize               *int64             `json:"pieceSize"`
+	Priorities              []int64            `json:"priorities"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L270
+	QueuePosition           *int64             `json:"queuePosition"`
+	RateDownload            *int64             `json:"rateDownload"` // B/s
+	RateUpload              *int64             `json:"rateUpload"`   // B/s
+	RecheckProgress         *float64           `json:"recheckProgress"`
+	SecondsDownloading      *int64             `json:"secondsDownloading"`
+	SecondsSeeding          *int64             `json:"secondsSeeding"`
+	SeedIdleLimit           *int64             `json:"seedIdleLimit"`
+	SeedIdleMode            *int64             `json:"seedIdleMode"`
+	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
+	SeedRatioMode           *int64             `json:"seedRatioMode"`
+	SizeWhenDone            *int64             `json:"sizeWhenDone"`
+	StartDate               *int64             `json:"startDate"`
+	Status                  *int64             `json:"status"`
+	Trackers                []*Tracker         `json:"trackers"`
+	TrackerStats            []*TrackerStats    `json:"trackerStats"`
 }
 
 // TorrentFile represent one file from a Torrent
@@ -139,6 +168,58 @@ type Peer struct {
 	PeerIsint64erested   bool    `json:"peerIsint64erested"`
 	Port                 int64   `json:"port"`
 	Progress             float64 `json:"progress"`
-	RateToClient         int64   `json:"rateToClient"`
-	RateToPeer           int64   `json:"rateToPeer"`
+	RateToClient         int64   `json:"rateToClient"` // B/s
+	RateToPeer           int64   `json:"rateToPeer"`   // B/s
+}
+
+// TorrentPeersFrom represents the peers statistics of a torrent
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L254
+type TorrentPeersFrom struct {
+	FromCache    int64 `json:"fromCache"`
+	FromDHT      int64 `json:"fromDht"`
+	FromIncoming int64 `json:"fromIncoming"`
+	FromLPD      int64 `json:"fromLpd"`
+	FromLTEP     int64 `json:"fromLtep"`
+	FromPEX      int64 `json:"fromPex"`
+	FromTracker  int64 `json:"fromTracker"`
+}
+
+// Tracker represent the base data of a torrent's tracker
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L274
+type Tracker struct {
+	Announce string `json:"announce"`
+	ID       int64  `json:"id"`
+	Scrape   string `json:"scrape"`
+	Tier     int64  `json:"tier"`
+}
+
+// TrackerStats represent the extended data of a torrent's tracker
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L281
+type TrackerStats struct {
+	Announce              string `json:"announce"`
+	AnnounceState         int64  `json:"announceState"`
+	DownloadCount         int64  `json:"downloadCount"`
+	HasAnnounced          bool   `json:"hasAnnounced"`
+	HasScraped            bool   `json:"hasScraped"`
+	Host                  string `json:"host"`
+	ID                    int64  `json:"id"`
+	IsBackup              bool   `json:"isBackup"`
+	LastAnnouncePeerCount int64  `json:"lastAnnouncePeerCount"`
+	LastAnnounceResult    string `json:"lastAnnounceResult"`
+	LastAnnounceStartTime int64  `json:"lastAnnounceStartTime"`
+	LastAnnounceSucceeded bool   `json:"lastAnnounceSucceeded"`
+	LastAnnounceTime      int64  `json:"lastAnnounceTime"`
+	LastAnnounceTimedOut  bool   `json:"lastAnnounceTimedOut"`
+	LastScrapeResult      string `json:"lastScrapeResult"`
+	LastScrapeStartTime   int64  `json:"lastScrapeStartTime"`
+	LastScrapeSucceeded   bool   `json:"lastScrapeSucceeded"`
+	LastScrapeTime        int64  `json:"lastScrapeTime"`
+	LastScrapeTimedOut    int64  `json:"lastScrapeTimedOut"` // should be boolean but number. Boolean in number form ?
+	LeecherCount          int64  `json:"leecherCount"`
+	NextAnnounceTime      int64  `json:"nextAnnounceTime"`
+	NextScrapeTime        int64  `json:"nextScrapeTime"`
+	Scrape                string `json:"scrape"`
+	ScrapeState           int64  `json:"scrapeState"`
+	SeederCount           int64  `json:"seederCount"`
+	Tier                  int64  `json:"tier"`
 }
