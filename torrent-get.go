@@ -131,7 +131,7 @@ type Torrent struct {
 	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
 	SeedRatioMode           *int64             `json:"seedRatioMode"`
 	SizeWhenDone            *int64             `json:"sizeWhenDone"`
-	StartDate               *int64             `json:"startDate"`
+	StartDate               *time.Time         `json:"startDate"`
 	Status                  *int64             `json:"status"`
 	Trackers                []*Tracker         `json:"trackers"`
 	TrackerStats            []*TrackerStats    `json:"trackerStats"`
@@ -156,6 +156,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		DateCreated    *int64  `json:"dateCreated"`
 		DoneDate       *int64  `json:"doneDate"`
 		SecondsSeeding *int64  `json:"secondsSeeding"`
+		StartDate      *int64  `json:"startDate"`
 		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
@@ -186,6 +187,11 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
 		t.SecondsSeeding = &dur
 	}
+	if tmp.StartDate != nil {
+		st := time.Unix(*tmp.StartDate, 0)
+		t.StartDate = &st
+	}
+	// Boolean slice in decimal form
 	if tmp.Wanted != nil {
 		t.Wanted = make([]bool, len(tmp.Wanted))
 		for index, value := range tmp.Wanted {
