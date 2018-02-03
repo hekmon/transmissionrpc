@@ -1,11 +1,17 @@
 package TransmissionRPC
 
 import (
-	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
 	"time"
+)
+
+const (
+	defaultPort      = 9091
+	defaultRPCPath   = "/transmission/rpc"
+	defaultTimeout   = 30 * time.Second
+	defaultUserAgent = "github.com/Hekmon/TransmissionRPC"
 )
 
 // Controller is the base object to interract with a remote transmission rpc endpoint
@@ -15,6 +21,7 @@ type Controller struct {
 	user      string
 	password  string
 	sessionID string
+	userAgent string
 	rnd       *rand.Rand
 	httpC     *http.Client
 }
@@ -26,44 +33,49 @@ type AdvancedConfig struct {
 	Port        uint16
 	RPCURI      string
 	HTTPTimeout time.Duration
+	UserAgent   string
 }
 
 // New returns an initialized and ready to use Controller
-func New(host, user, password string, conf *AdvancedConfig) (c *Controller, err error) {
-	// Check extra config if any
+func New(host, user, password string, conf *AdvancedConfig) *Controller {
+	// COnfig
 	if conf == nil {
 		conf = &AdvancedConfig{
 			// HTTPS false by default
-			RPCURI:      "/transmission/rpc",
-			HTTPTimeout: 30 * time.Second,
+			Port:        defaultPort,
+			RPCURI:      defaultRPCPath,
+			HTTPTimeout: defaultTimeout,
+			UserAgent:   defaultUserAgent,
+		}
+	} else {
+		if conf.Port == 0 {
+			conf.Port = defaultPort
+		}
+		if conf.RPCURI == "" {
+			conf.RPCURI = defaultRPCPath
+		}
+		if conf.HTTPTimeout == 0 {
+			conf.HTTPTimeout = defaultTimeout
+		}
+		if conf.UserAgent == "" {
+			conf.UserAgent = defaultUserAgent
 		}
 	}
-	if conf.HTTPTimeout == 0 {
-		err = errors.New("HTTPTimeout can't be 0")
-		return
-	}
-	// Compute missing data
 	var scheme string
 	if conf.HTTPS {
 		scheme = "https"
-		if conf.Port == 0 {
-			conf.Port = 443
-		}
 	} else {
 		scheme = "http"
-		if conf.Port == 0 {
-			conf.Port = 80
-		}
 	}
 	// Initialize & return
-	c = &Controller{
-		url:      fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI),
-		user:     user,
-		password: password,
-		rnd:      rand.New(rand.NewSource(time.Now().Unix())),
+	return &Controller{
+		url:       fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI),
+		user:      user,
+		password:  password,
+		userAgent: conf.UserAgent,
+		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
 		httpC: &http.Client{
 			Timeout: time.Minute,
 		},
 	}
-	return
 }
