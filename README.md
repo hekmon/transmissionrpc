@@ -1,6 +1,7 @@
 # TransmissionRPC
+[![GoDoc](https://godoc.org/github.com/Hekmon/TransmissionRPC?status.svg)](https://godoc.org/github.com/Hekmon/TransmissionRPC)
 
-Golang bindings to TransmissionBT RPC interface
+Golang bindings to Transmission (bittorent) RPC interface
 
 Work in Progress
 
