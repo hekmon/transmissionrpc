@@ -141,7 +141,7 @@ type Torrent struct {
 	UploadLimit             *int64             `json:"uploadLimit"`
 	UploadLimited           *bool              `json:"uploadLimited"`
 	UploadRatio             *float64           `json:"uploadRatio"`
-	Wanted                  []int64            `json:"wanted"`   // boolean in number form | https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
+	Wanted                  []bool             `json:"wanted"`   //https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
 	WebSeeds                []string           `json:"webseeds"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L314
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
 }
@@ -151,11 +151,12 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
 	tmp := &struct {
-		ActivityDate   *int64 `json:"activityDate"`
-		AddedDate      *int64 `json:"addedDate"`
-		DateCreated    *int64 `json:"dateCreated"`
-		DoneDate       *int64 `json:"doneDate"`
-		SecondsSeeding *int64 `json:"secondsSeeding"`
+		ActivityDate   *int64  `json:"activityDate"`
+		AddedDate      *int64  `json:"addedDate"`
+		DateCreated    *int64  `json:"dateCreated"`
+		DoneDate       *int64  `json:"doneDate"`
+		SecondsSeeding *int64  `json:"secondsSeeding"`
+		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
 		RawTorrent: (*RawTorrent)(t),
@@ -184,6 +185,16 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	if tmp.SecondsSeeding != nil {
 		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
 		t.SecondsSeeding = &dur
+	}
+	if tmp.Wanted != nil {
+		t.Wanted = make([]bool, len(tmp.Wanted))
+		for index, value := range tmp.Wanted {
+			if value == 1 {
+				t.Wanted[index] = true
+			} else if value != 0 {
+				return fmt.Errorf("Can't convert Wanted index %d value '%d' as boolean", index, value)
+			}
+		}
 	}
 	return
 }
@@ -298,11 +309,9 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 		return
 	}
 	// Convert to real boolean
-	if tmp.LastScrapeTimedOut == 0 {
-		ts.LastScrapeTimedOut = false
-	} else if tmp.LastScrapeTimedOut == 1 {
+	if tmp.LastScrapeTimedOut == 1 {
 		ts.LastScrapeTimedOut = true
-	} else {
+	} else if tmp.LastScrapeTimedOut != 0 {
 		return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
 	}
 	// Create the real time value from the timestamps
