@@ -1,11 +1,12 @@
 package TransmissionRPC
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"sync"
 )
 
 const csrfHeader = "X-Transmission-Session-Id"
@@ -27,21 +28,11 @@ func (c *Controller) rpcCall(method string, arguments interface{}, result interf
 }
 
 func (c *Controller) request(method string, arguments interface{}, result interface{}, retry bool) (err error) {
-	// Prepare payload
-	tag := c.rnd.Int()
-	var buff bytes.Buffer
-	err = json.NewEncoder(&buff).Encode(&requestPayload{
-		Method:    method,
-		Arguments: arguments,
-		Tag:       tag,
-	})
-	if err != nil {
-		err = fmt.Errorf("can't marshall JSON payload: %v", err)
-		return
-	}
+	// Prepare the pipeline between payload generation and request
+	pOut, pIn := io.Pipe()
 	// Prepare the request
 	var req *http.Request
-	if req, err = http.NewRequest("POST", c.url, &buff); err != nil {
+	if req, err = http.NewRequest("POST", c.url, pOut); err != nil {
 		err = fmt.Errorf("can't prepare request for '%s' method: %v", method, err)
 		return
 	}
@@ -49,10 +40,28 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	req.Header.Set("User-Agent", c.userAgent)
 	req.Header.Set(csrfHeader, c.getSessionID())
 	req.SetBasicAuth(c.user, c.password)
+	// Prepare the marshalling goroutine
+	tag := c.rnd.Int()
+	var encErr error
+	var mg sync.WaitGroup
+	mg.Add(1)
+	go func() {
+		encErr = json.NewEncoder(pIn).Encode(&requestPayload{
+			Method:    method,
+			Arguments: arguments,
+			Tag:       tag,
+		})
+		pIn.Close()
+		mg.Done()
+	}()
 	// Execute request
 	var resp *http.Response
 	if resp, err = c.httpC.Do(req); err != nil {
 		err = fmt.Errorf("request error: %v", err)
+		mg.Wait()
+		if encErr != nil {
+			err = fmt.Errorf("%v | json payload marshall error: %v", err, encErr)
+		}
 		return
 	}
 	defer resp.Body.Close()
