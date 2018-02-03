@@ -43,13 +43,11 @@ func (c *Controller) TorrentGet(fields []string, ids []int) (torrents []*Torrent
 }
 
 func (c *Controller) torrentGet(fields []string, ids []int) (torrents []*Torrent, err error) {
-	// Prepare
 	arguments := torrentGetParams{
 		Fields: fields,
 		IDs:    ids,
 	}
 	var result torrentGetResults
-	// Execute
 	if err = c.rpcCall("torrent-get", &arguments, &result); err != nil {
 		err = fmt.Errorf("'torrent-get' rpc method failed: %v", err)
 		return
@@ -68,32 +66,48 @@ type torrentGetResults struct {
 }
 
 // Torrent represents all the possible fields of data for a torrent
-// All fields are pointers to avoid unecessary memory allocation when retreiving only some fields
-// but also to differentiate non present field from their default value
+// All fields are pointers to detect if the value is nil (field not requested) or default real default value
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L148
 type Torrent struct {
-	ActivityDate      *int               `json:"activityDate"`
-	AddedDate         *int               `json:"addedDate"`
-	BandwidthPriority *int               `json:"bandwidthPriority"`
-	Comment           *string            `json:"comment"`
-	CorruptEver       *int               `json:"corruptEver"`
-	Creator           *string            `json:"creator"`
-	DateCreated       *int               `json:"dateCreated"`
-	DesiredAvailable  *int               `json:"desiredAvailable"`
-	DoneDate          *int               `json:"doneDate"`
-	DownloadDir       *string            `json:"downloadDir"`
-	DownloadedEver    *int               `json:"downloadedEver"`
-	DownloadLimit     *int               `json:"downloadLimit"`
-	DownloadLimited   *bool              `json:"downloadLimited"`
-	Error             *int               `json:"error"`
-	ErrorString       *string            `json:"errorString"`
-	Eta               *int               `json:"eta"`
-	EtaIdle           *int               `json:"etaIdle"`
-	Files             []*TorrentFile     `json:"files"`
-	FileStats         []*TorrentFileStat `json:"fileStats"`
-	HashString        *string            `json:"hashString"`
+	ActivityDate            *int               `json:"activityDate"`
+	AddedDate               *int               `json:"addedDate"`
+	BandwidthPriority       *int               `json:"bandwidthPriority"`
+	Comment                 *string            `json:"comment"`
+	CorruptEver             *int               `json:"corruptEver"`
+	Creator                 *string            `json:"creator"`
+	DateCreated             *int               `json:"dateCreated"`
+	DesiredAvailable        *int               `json:"desiredAvailable"`
+	DoneDate                *int               `json:"doneDate"`
+	DownloadDir             *string            `json:"downloadDir"`
+	DownloadedEver          *int               `json:"downloadedEver"`
+	DownloadLimit           *int               `json:"downloadLimit"`
+	DownloadLimited         *bool              `json:"downloadLimited"`
+	Error                   *int               `json:"error"`
+	ErrorString             *string            `json:"errorString"`
+	Eta                     *int               `json:"eta"`
+	EtaIdle                 *int               `json:"etaIdle"`
+	Files                   []*TorrentFile     `json:"files"`
+	FileStats               []*TorrentFileStat `json:"fileStats"`
+	HashString              *string            `json:"hashString"`
+	HaveUnchecked           *int               `json:"haveUnchecked"`
+	HaveValid               *int               `json:"haveValid"`
+	HonorsSessionLimits     *bool              `json:"honorsSessionLimits"`
+	ID                      *int               `json:"id"`
+	IsFinished              *bool              `json:"isFinished"`
+	IsPrivate               *bool              `json:"isPrivate"`
+	IsStalled               *bool              `json:"isStalled"`
+	LeftUntilDone           *int               `json:"leftUntilDone"`
+	MagnetLink              *string            `json:"magnetLink"`
+	ManualAnnounceTime      *int               `json:"manualAnnounceTime"`
+	MaxConnectedPeers       *int               `json:"maxConnectedPeers"`
+	MetadataPercentComplete *float64           `json:"metadataPercentComplete"`
+	Name                    *string            `json:"name"`
+	PeerLimit               *int               `json:"peer-limit"`
+	Peers                   []*Peer            `json:"peers"`
 }
 
 // TorrentFile represent one file from a Torrent
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L221
 type TorrentFile struct {
 	BytesCompleted int    `json:"bytesCompleted"`
 	Length         int    `json:"length"`
@@ -101,8 +115,30 @@ type TorrentFile struct {
 }
 
 // TorrentFileStat represents the metadata of a torrent's file
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L227
 type TorrentFileStat struct {
 	BytesCompleted int  `json:"bytesCompleted"`
 	Wanted         bool `json:"wanted"`
 	Priority       int  `json:"priority"`
+}
+
+// Peer represent a peer metadata of a torrent's peer list
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L235
+type Peer struct {
+	Address            string  `json:"address"`
+	ClientName         string  `json:"clientName"`
+	ClientIsChoked     bool    `json:"clientIsChoked"`
+	ClientIsInterested bool    `json:"clientIsInterested"`
+	FlagStr            string  `json:"flagStr"`
+	IsDownloadingFrom  bool    `json:"isDownloadingFrom"`
+	IsEncrypted        bool    `json:"isEncrypted"`
+	IsIncoming         bool    `json:"isIncoming"`
+	IsUploadingTo      bool    `json:"isUploadingTo"`
+	IsUTP              bool    `json:"isUTP"`
+	PeerIsChoked       bool    `json:"peerIsChoked"`
+	PeerIsInterested   bool    `json:"peerIsInterested"`
+	Port               int     `json:"port"`
+	Progress           float64 `json:"progress"`
+	RateToClient       int     `json:"rateToClient"`
+	RateToPeer         int     `json:"rateToPeer"`
 }
