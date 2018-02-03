@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -17,13 +18,14 @@ const (
 // Controller is the base object to interract with a remote transmission rpc endpoint
 // It must be created with New()
 type Controller struct {
-	url       string
-	user      string
-	password  string
-	sessionID string
-	userAgent string
-	rnd       *rand.Rand
-	httpC     *http.Client
+	url             string
+	user            string
+	password        string
+	sessionID       string
+	sessionIDAccess sync.RWMutex
+	userAgent       string
+	rnd             *rand.Rand
+	httpC           *http.Client
 }
 
 // AdvancedConfig handles options that are not mandatory for New()
