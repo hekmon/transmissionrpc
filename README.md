@@ -1,6 +1,6 @@
 # TransmissionRPC
 
-Golang binding to TransmissionBT RPC interface
+Golang bindings to TransmissionBT RPC interface
 
 Work in Progress
 
