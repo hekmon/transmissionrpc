@@ -1,8 +1,10 @@
 package TransmissionRPC
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
+	"time"
 )
 
 var validTorrentFields []string
@@ -74,15 +76,15 @@ type torrentGetResults struct {
 // All fields are point64ers to detect if the value is nil (field not requested) or default real default value
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L148
 type Torrent struct {
-	ActivityDate            *int64             `json:"activityDate"`
-	AddedDate               *int64             `json:"addedDate"`
+	ActivityDate            *time.Time         `json:"activityDate"`
+	AddedDate               *time.Time         `json:"addedDate"`
 	BandwidthPriority       *int64             `json:"bandwidthPriority"`
 	Comment                 *string            `json:"comment"`
 	CorruptEver             *int64             `json:"corruptEver"`
 	Creator                 *string            `json:"creator"`
-	DateCreated             *int64             `json:"dateCreated"`
+	DateCreated             *time.Time         `json:"dateCreated"`
 	DesiredAvailable        *int64             `json:"desiredAvailable"`
-	DoneDate                *int64             `json:"doneDate"`
+	DoneDate                *time.Time         `json:"doneDate"`
 	DownloadDir             *string            `json:"downloadDir"`
 	DownloadedEver          *int64             `json:"downloadedEver"`
 	DownloadLimit           *int64             `json:"downloadLimit"`
@@ -123,7 +125,7 @@ type Torrent struct {
 	RateUpload              *int64             `json:"rateUpload"`   // B/s
 	RecheckProgress         *float64           `json:"recheckProgress"`
 	SecondsDownloading      *int64             `json:"secondsDownloading"`
-	SecondsSeeding          *int64             `json:"secondsSeeding"`
+	SecondsSeeding          *time.Duration     `json:"secondsSeeding"`
 	SeedIdleLimit           *int64             `json:"seedIdleLimit"`
 	SeedIdleMode            *int64             `json:"seedIdleMode"`
 	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
@@ -142,6 +144,48 @@ type Torrent struct {
 	Wanted                  []int64            `json:"wanted"`   // boolean in number form | https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
 	WebSeeds                []string           `json:"webseeds"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L314
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
+}
+
+// UnmarshalJSON allows to convert timestamps to golang time.Time values
+func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
+	// Shadow real type for regular unmarshalling
+	type RawTorrent Torrent
+	tmp := &struct {
+		ActivityDate   *int64 `json:"activityDate"`
+		AddedDate      *int64 `json:"addedDate"`
+		DateCreated    *int64 `json:"dateCreated"`
+		DoneDate       *int64 `json:"doneDate"`
+		SecondsSeeding *int64 `json:"secondsSeeding"`
+		*RawTorrent
+	}{
+		RawTorrent: (*RawTorrent)(t),
+	}
+	// Unmarshall (with timestamps as number)
+	if err = json.Unmarshal(data, &tmp); err != nil {
+		return
+	}
+	// Create the real time value from the timestamps
+	if tmp.ActivityDate != nil {
+		ad := time.Unix(*tmp.ActivityDate, 0)
+		t.ActivityDate = &ad
+	}
+	if tmp.AddedDate != nil {
+		ad := time.Unix(*tmp.AddedDate, 0)
+		t.AddedDate = &ad
+	}
+	if tmp.DateCreated != nil {
+		dc := time.Unix(*tmp.DateCreated, 0)
+		t.DateCreated = &dc
+	}
+	if tmp.DoneDate != nil {
+		dd := time.Unix(*tmp.DoneDate, 0)
+		t.DoneDate = &dd
+	}
+	if tmp.SecondsSeeding != nil {
+		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
+		t.SecondsSeeding = &dur
+	}
+	return
 }
 
 // TorrentFile represent one file from a Torrent
@@ -205,30 +249,68 @@ type Tracker struct {
 // TrackerStats represent the extended data of a torrent's tracker
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L281
 type TrackerStats struct {
-	Announce              string `json:"announce"`
-	AnnounceState         int64  `json:"announceState"`
-	DownloadCount         int64  `json:"downloadCount"`
-	HasAnnounced          bool   `json:"hasAnnounced"`
-	HasScraped            bool   `json:"hasScraped"`
-	Host                  string `json:"host"`
-	ID                    int64  `json:"id"`
-	IsBackup              bool   `json:"isBackup"`
-	LastAnnouncePeerCount int64  `json:"lastAnnouncePeerCount"`
-	LastAnnounceResult    string `json:"lastAnnounceResult"`
-	LastAnnounceStartTime int64  `json:"lastAnnounceStartTime"`
-	LastAnnounceSucceeded bool   `json:"lastAnnounceSucceeded"`
-	LastAnnounceTime      int64  `json:"lastAnnounceTime"`
-	LastAnnounceTimedOut  bool   `json:"lastAnnounceTimedOut"`
-	LastScrapeResult      string `json:"lastScrapeResult"`
-	LastScrapeStartTime   int64  `json:"lastScrapeStartTime"`
-	LastScrapeSucceeded   bool   `json:"lastScrapeSucceeded"`
-	LastScrapeTime        int64  `json:"lastScrapeTime"`
-	LastScrapeTimedOut    int64  `json:"lastScrapeTimedOut"` // should be boolean but number. Boolean in number form ?
-	LeecherCount          int64  `json:"leecherCount"`
-	NextAnnounceTime      int64  `json:"nextAnnounceTime"`
-	NextScrapeTime        int64  `json:"nextScrapeTime"`
-	Scrape                string `json:"scrape"`
-	ScrapeState           int64  `json:"scrapeState"`
-	SeederCount           int64  `json:"seederCount"`
-	Tier                  int64  `json:"tier"`
+	Announce              string    `json:"announce"`
+	AnnounceState         int64     `json:"announceState"`
+	DownloadCount         int64     `json:"downloadCount"`
+	HasAnnounced          bool      `json:"hasAnnounced"`
+	HasScraped            bool      `json:"hasScraped"`
+	Host                  string    `json:"host"`
+	ID                    int64     `json:"id"`
+	IsBackup              bool      `json:"isBackup"`
+	LastAnnouncePeerCount int64     `json:"lastAnnouncePeerCount"`
+	LastAnnounceResult    string    `json:"lastAnnounceResult"`
+	LastAnnounceStartTime time.Time `json:"lastAnnounceStartTime"`
+	LastAnnounceSucceeded bool      `json:"lastAnnounceSucceeded"`
+	LastAnnounceTime      time.Time `json:"lastAnnounceTime"`
+	LastAnnounceTimedOut  bool      `json:"lastAnnounceTimedOut"`
+	LastScrapeResult      string    `json:"lastScrapeResult"`
+	LastScrapeStartTime   time.Time `json:"lastScrapeStartTime"`
+	LastScrapeSucceeded   bool      `json:"lastScrapeSucceeded"`
+	LastScrapeTime        time.Time `json:"lastScrapeTime"`
+	LastScrapeTimedOut    bool      `json:"lastScrapeTimedOut"` // should be boolean but number. Will be converter in UnmarshalJSON
+	LeecherCount          int64     `json:"leecherCount"`
+	NextAnnounceTime      time.Time `json:"nextAnnounceTime"`
+	NextScrapeTime        time.Time `json:"nextScrapeTime"`
+	Scrape                string    `json:"scrape"`
+	ScrapeState           int64     `json:"scrapeState"`
+	SeederCount           int64     `json:"seederCount"`
+	Tier                  int64     `json:"tier"`
+}
+
+// UnmarshalJSON allows to convert timestamps to golang time.Time values
+func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
+	// Shadow real type for regular unmarshalling
+	type RawTrackerStats TrackerStats
+	tmp := struct {
+		LastAnnounceStartTime int64 `json:"lastAnnounceStartTime"`
+		LastAnnounceTime      int64 `json:"lastAnnounceTime"`
+		LastScrapeStartTime   int64 `json:"lastScrapeStartTime"`
+		LastScrapeTime        int64 `json:"lastScrapeTime"`
+		LastScrapeTimedOut    int64 `json:"lastScrapeTimedOut"`
+		NextAnnounceTime      int64 `json:"nextAnnounceTime"`
+		NextScrapeTime        int64 `json:"nextScrapeTime"`
+		*RawTrackerStats
+	}{
+		RawTrackerStats: (*RawTrackerStats)(ts),
+	}
+	// Unmarshall (with timestamps as number)
+	if err = json.Unmarshal(data, &tmp); err != nil {
+		return
+	}
+	// Convert to real boolean
+	if tmp.LastScrapeTimedOut == 0 {
+		ts.LastScrapeTimedOut = false
+	} else if tmp.LastScrapeTimedOut == 1 {
+		ts.LastScrapeTimedOut = true
+	} else {
+		return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
+	}
+	// Create the real time value from the timestamps
+	ts.LastAnnounceStartTime = time.Unix(tmp.LastAnnounceStartTime, 0)
+	ts.LastAnnounceTime = time.Unix(tmp.LastAnnounceTime, 0)
+	ts.LastScrapeStartTime = time.Unix(tmp.LastScrapeStartTime, 0)
+	ts.LastScrapeTime = time.Unix(tmp.LastScrapeTime, 0)
+	ts.NextAnnounceTime = time.Unix(tmp.NextAnnounceTime, 0)
+	ts.NextScrapeTime = time.Unix(tmp.NextScrapeTime, 0)
+	return
 }
