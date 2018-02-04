@@ -15,8 +15,8 @@ const (
 	defaultUserAgent = "github.com/Hekmon/TransmissionRPC"
 )
 
-// Controller is the base object to interract with a remote transmission rpc endpoint
-// It must be created with New()
+// Controller is the base object to interract with a remote transmission rpc endpoint.
+// It must be created with New().
 type Controller struct {
 	url             string
 	user            string
@@ -28,8 +28,9 @@ type Controller struct {
 	httpC           *http.Client
 }
 
-// AdvancedConfig handles options that are not mandatory for New()
-// If Port is not specified it will be set at 80 if HTTPS is false, 443 otherwise
+// AdvancedConfig handles options that are not mandatory for New().
+// Default value for HTTPS is false, default port is 9091, default RPC URI is
+// '/transmission/rpc', default HTTPTimeout is 30s.
 type AdvancedConfig struct {
 	HTTPS       bool
 	Port        uint16
@@ -40,7 +41,7 @@ type AdvancedConfig struct {
 
 // New returns an initialized and ready to use Controller
 func New(host, user, password string, conf *AdvancedConfig) *Controller {
-	// COnfig
+	// Config
 	if conf == nil {
 		conf = &AdvancedConfig{
 			// HTTPS false by default
