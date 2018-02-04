@@ -44,7 +44,7 @@ type TorrentSetPayload struct {
 	PriorityLow         []int64        `json:"priority-low"`    // empty array == all files
 	PriorityNormal      []int64        `json:"priority-normal"` // empty array == all files
 	QueuePosition       *int64         `json:"queuePosition"`
-	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"` // unit is seconds
+	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"` // will be converted as seconds
 	SeedIdleMode        *int64         `json:"seedIdleMode"`
 	SeedRatioLimit      *float64       `json:"seedRatioLimit"`
 	SeedRatioMode       *int64         `json:"seedRatioMode"`
