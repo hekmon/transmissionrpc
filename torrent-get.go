@@ -170,7 +170,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return
 	}
-	// Create the real time value from the timestamps
+	// Create the real time & duration from timsteamps and seconds
 	if tmp.ActivityDate != nil {
 		ad := time.Unix(*tmp.ActivityDate, 0)
 		t.ActivityDate = &ad
@@ -207,6 +207,60 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 	return
+}
+
+// MarshalJSON allows to convert back golang values to original payload values
+func (t *Torrent) MarshalJSON() (data []byte, err error) {
+	// Shadow real type for regular unmarshalling
+	type RawTorrent Torrent
+	tmp := &struct {
+		ActivityDate   *int64  `json:"activityDate"`
+		AddedDate      *int64  `json:"addedDate"`
+		DateCreated    *int64  `json:"dateCreated"`
+		DoneDate       *int64  `json:"doneDate"`
+		SecondsSeeding *int64  `json:"secondsSeeding"`
+		StartDate      *int64  `json:"startDate"`
+		Wanted         []int64 `json:"wanted"` // boolean in number form
+		*RawTorrent
+	}{
+		RawTorrent: (*RawTorrent)(t),
+	}
+	// Timestamps & Duration
+	if t.ActivityDate != nil {
+		ad := t.ActivityDate.Unix()
+		tmp.ActivityDate = &ad
+	}
+	if t.AddedDate != nil {
+		ad := t.AddedDate.Unix()
+		tmp.AddedDate = &ad
+	}
+	if t.DateCreated != nil {
+		dc := t.DateCreated.Unix()
+		tmp.DateCreated = &dc
+	}
+	if t.DoneDate != nil {
+		dd := t.DoneDate.Unix()
+		tmp.DoneDate = &dd
+	}
+	if t.SecondsSeeding != nil {
+		ss := int64(*t.SecondsSeeding / time.Second)
+		tmp.SecondsSeeding = &ss
+	}
+	if t.StartDate != nil {
+		st := t.StartDate.Unix()
+		tmp.StartDate = &st
+	}
+	// Boolean as number
+	if t.Wanted != nil {
+		tmp.Wanted = make([]int64, len(t.Wanted))
+		for index, value := range t.Wanted {
+			if value {
+				tmp.Wanted[index] = 1
+			}
+		}
+	}
+	// Marshall original values within the tmp payload
+	return json.Marshal(tmp)
 }
 
 // TorrentFile represent one file from a Torrent
