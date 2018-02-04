@@ -402,19 +402,18 @@ func (ts *TrackerStats) MarshalJSON() (data []byte, err error) {
 		NextScrapeTime        int64 `json:"nextScrapeTime"`
 		*RawTrackerStats
 	}{
-		RawTrackerStats: (*RawTrackerStats)(ts),
+		LastAnnounceStartTime: ts.LastAnnounceStartTime.Unix(),
+		LastAnnounceTime:      ts.LastAnnounceTime.Unix(),
+		LastScrapeStartTime:   ts.LastScrapeStartTime.Unix(),
+		LastScrapeTime:        ts.LastScrapeTime.Unix(),
+		NextAnnounceTime:      ts.NextAnnounceTime.Unix(),
+		NextScrapeTime:        ts.NextScrapeTime.Unix(),
+		RawTrackerStats:       (*RawTrackerStats)(ts),
 	}
 	// Convert real bool to its number form
 	if ts.LastScrapeTimedOut {
 		tmp.LastScrapeTimedOut = 1
 	}
-	// Convert back to timestamp
-	tmp.LastAnnounceStartTime = ts.LastAnnounceStartTime.Unix()
-	tmp.LastAnnounceTime = ts.LastAnnounceTime.Unix()
-	tmp.LastScrapeStartTime = ts.LastScrapeStartTime.Unix()
-	tmp.LastScrapeTime = ts.LastScrapeTime.Unix()
-	tmp.NextAnnounceTime = ts.NextAnnounceTime.Unix()
-	tmp.NextScrapeTime = ts.NextScrapeTime.Unix()
 	// MarshalJSON allows to convert back golang values to original payload values
 	return json.Marshal(&tmp)
 }
