@@ -260,7 +260,7 @@ func (t *Torrent) MarshalJSON() (data []byte, err error) {
 		}
 	}
 	// Marshall original values within the tmp payload
-	return json.Marshal(tmp)
+	return json.Marshal(&tmp)
 }
 
 // TorrentFile represent one file from a Torrent
@@ -386,4 +386,35 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 	ts.NextAnnounceTime = time.Unix(tmp.NextAnnounceTime, 0)
 	ts.NextScrapeTime = time.Unix(tmp.NextScrapeTime, 0)
 	return
+}
+
+// MarshalJSON allows to convert back golang values to original payload values
+func (ts *TrackerStats) MarshalJSON() (data []byte, err error) {
+	// Shadow real type for regular unmarshalling
+	type RawTrackerStats TrackerStats
+	tmp := struct {
+		LastAnnounceStartTime int64 `json:"lastAnnounceStartTime"`
+		LastAnnounceTime      int64 `json:"lastAnnounceTime"`
+		LastScrapeStartTime   int64 `json:"lastScrapeStartTime"`
+		LastScrapeTime        int64 `json:"lastScrapeTime"`
+		LastScrapeTimedOut    int64 `json:"lastScrapeTimedOut"`
+		NextAnnounceTime      int64 `json:"nextAnnounceTime"`
+		NextScrapeTime        int64 `json:"nextScrapeTime"`
+		*RawTrackerStats
+	}{
+		RawTrackerStats: (*RawTrackerStats)(ts),
+	}
+	// Convert real bool to its number form
+	if ts.LastScrapeTimedOut {
+		tmp.LastScrapeTimedOut = 1
+	}
+	// Convert back to timestamp
+	tmp.LastAnnounceStartTime = ts.LastAnnounceStartTime.Unix()
+	tmp.LastAnnounceTime = ts.LastAnnounceTime.Unix()
+	tmp.LastScrapeStartTime = ts.LastScrapeStartTime.Unix()
+	tmp.LastScrapeTime = ts.LastScrapeTime.Unix()
+	tmp.NextAnnounceTime = ts.NextAnnounceTime.Unix()
+	tmp.NextScrapeTime = ts.NextScrapeTime.Unix()
+	// MarshalJSON allows to convert back golang values to original payload values
+	return json.Marshal(&tmp)
 }
