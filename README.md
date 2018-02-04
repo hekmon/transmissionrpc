@@ -14,11 +14,11 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 #### Torrent Action Requests
 
-* torrent-start _(to do)_
-* torrent-start-now _(to do)_
-* torrent-stop _(to do)_
-* torrent-verify _(to do)_
-* torrent-reannounce _(to do)_
+* torrent-start _(done)_
+* torrent-start-now _(done)_
+* torrent-stop _(done)_
+* torrent-verify _(done)_
+* torrent-reannounce _(done)_
 
 #### Torrent Mutators
 
@@ -26,7 +26,7 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 #### Torrent Accessors
 
-* torrent-get _(Done)_
+* torrent-get _(done)_
 
 #### Adding a Torrent
 
