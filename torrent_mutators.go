@@ -13,7 +13,7 @@ import (
 	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L90
 */
 
-// TorrentSet apply a list of mutator(s) to a list of torrent ids
+// TorrentSet apply a list of mutator(s) to a list of torrent ids.
 func (c *Controller) TorrentSet(payload *TorrentSetPayload) (err error) {
 	// Validate
 	if payload == nil {
@@ -29,20 +29,21 @@ func (c *Controller) TorrentSet(payload *TorrentSetPayload) (err error) {
 	return
 }
 
-// TorrentSetPayload contains all the mutators appliable on one torrent
+// TorrentSetPayload contains all the mutators appliable on one torrent.
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L96
 type TorrentSetPayload struct {
 	BandwidthPriority   *int64         `json:"bandwidthPriority"`
 	DownloadLimit       *int64         `json:"downloadLimit"`
 	DownloadLimited     *bool          `json:"downloadLimited"`
-	FilesWanted         []int64        `json:"files-wanted"`   // empty array == all files
-	FilesUnwanted       []int64        `json:"files-unwanted"` // empty array == all files
+	FilesWanted         []int64        `json:"files-wanted"`   // empty array (not nil !) == all files
+	FilesUnwanted       []int64        `json:"files-unwanted"` // empty array (not nil !) == all files
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"`
 	IDs                 []int64        `json:"ids"`
 	Location            *string        `json:"location"`
 	Peerlimit           *int64         `json:"peer-limit"`
-	PriorityHigh        []int64        `json:"priority-high"`   // empty array == all files
-	PriorityLow         []int64        `json:"priority-low"`    // empty array == all files
-	PriorityNormal      []int64        `json:"priority-normal"` // empty array == all files
+	PriorityHigh        []int64        `json:"priority-high"`   // empty array (not nil !) == all files
+	PriorityLow         []int64        `json:"priority-low"`    // empty array (not nil !) == all files
+	PriorityNormal      []int64        `json:"priority-normal"` // empty array (not nil !) == all files
 	QueuePosition       *int64         `json:"queuePosition"`
 	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"` // will be converted as seconds
 	SeedIdleMode        *int64         `json:"seedIdleMode"`
