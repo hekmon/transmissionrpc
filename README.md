@@ -10,34 +10,73 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 ## Progress
 
-### Done
+### Torrent Requests
 
-* torrent-get
+#### Torrent Action Requests
 
-### In Progress
+* torrent-start _(to do)_
+* torrent-start-now _(to do)_
+* torrent-stop _(to do)_
+* torrent-verify _(to do)_
+* torrent-reannounce _(to do)_
 
-_None_
+#### Torrent Mutators
 
-### To Do
+* torrent-set _(to do)_
 
-* torrent-start
-* torrent-start-now
-* torrent-stop
-* torrent-verify
-* torrent-reannounce
-* torrent-set
-* torrent-add
-* torrent-remove
-* torrent-set-location
-* torrent-rename-path
-* session-set
-* session-get
-* session-stats
-* blocklist-update
-* port-test
-* session-close
-* queue-move-top
-* queue-move-up
-* queue-move-down
-* queue-move-bottom
-* free-space
+#### Torrent Accessors
+
+* torrent-get _(Done)_
+
+#### Adding a Torrent
+
+* torrent-add _(to do)_
+
+#### Removing a Torrent
+
+* torrent-remove _(to do)_
+
+#### Moving a Torrent
+
+* torrent-set-location _(to do)_
+
+#### Renaming a Torrent's Path
+
+* torrent-rename-path _(to do)_
+
+### Session Requests
+
+#### Mutators
+
+* session-set _(to do)_
+
+#### Accessors
+
+* session-get _(to do)_
+
+#### Session Statistics
+
+* session-stats _(to do)_
+
+#### Blocklist
+
+* blocklist-update _(to do)_
+
+#### Port Checking
+
+* port-test _(to do)_
+
+#### Session shutdown
+
+* session-close _(to do)_
+
+#### Queue Movement Requests
+
+* queue-move-top _(to do)_
+* queue-move-up _(to do)_
+* queue-move-down _(to do)_
+* queue-move-bottom _(to do)_
+
+#### Free Space
+
+* free-space _(to do)_
