@@ -28,6 +28,11 @@ func (c *Controller) rpcCall(method string, arguments interface{}, result interf
 }
 
 func (c *Controller) request(method string, arguments interface{}, result interface{}, retry bool) (err error) {
+	// Let's avoid crashing
+	if c.httpC == nil {
+		err = errors.New("this controller is not initialized, please use the New() function")
+		return
+	}
 	// Prepare the pipeline between payload generation and request
 	pOut, pIn := io.Pipe()
 	// Prepare the request

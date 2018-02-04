@@ -1,8 +1,12 @@
 package TransmissionRPC
 
+/*
+	Torrent Accessors
+	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L127
+*/
+
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -51,9 +55,6 @@ func (c *Controller) TorrentGet(fields []string, ids []int64) (torrents []*Torre
 }
 
 func (c *Controller) torrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
-	if c.httpC == nil {
-		err = errors.New("this controller is not initialized, please use the New() function")
-	}
 	arguments := torrentGetParams{
 		Fields: fields,
 		IDs:    ids,
