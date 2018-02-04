@@ -80,22 +80,21 @@ func (tsp *TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 	for i := 0; i < tspv.NumField(); i++ {
 		currentValue = tspv.Field(i)
 		currentStructField = tspt.Field(i)
-		// For the nested/inherited struct
-		if currentStructField.Name == "baseTorrentSetPayload" && !currentValue.IsNil() {
-			nestedStruct = reflect.Indirect(currentValue)
-			for j = 0; j < nestedStruct.NumField(); j++ {
-				currentNestedValue = nestedStruct.Field(j)
-				currentNestedStructField = nestedStruct.Type().Field(j)
-				if !currentNestedValue.IsNil() {
-					cleanPayload[currentNestedStructField.Tag.Get("json")] = currentNestedValue.Interface()
-				}
-			}
-			continue
-		}
-		// For the overloaded fields
 		if !currentValue.IsNil() {
-			fmt.Println(currentStructField.Name)
-			cleanPayload[currentStructField.Tag.Get("json")] = currentValue.Interface()
+			if currentStructField.Name == "baseTorrentSetPayload" {
+				// inherited/nested struct
+				nestedStruct = reflect.Indirect(currentValue)
+				for j = 0; j < nestedStruct.NumField(); j++ {
+					currentNestedValue = nestedStruct.Field(j)
+					currentNestedStructField = nestedStruct.Type().Field(j)
+					if !currentNestedValue.IsNil() {
+						cleanPayload[currentNestedStructField.Tag.Get("json")] = currentNestedValue.Interface()
+					}
+				}
+			} else {
+				// Overloaded field
+				cleanPayload[currentStructField.Tag.Get("json")] = currentValue.Interface()
+			}
 		}
 	}
 	// Marshall the clean payload
