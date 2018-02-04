@@ -15,9 +15,9 @@ import (
 var validTorrentFields []string
 
 func init() {
-	val := reflect.ValueOf(Torrent{})
-	for i := 0; i < val.Type().NumField(); i++ {
-		validTorrentFields = append(validTorrentFields, val.Type().Field(i).Tag.Get("json"))
+	torrentType := reflect.TypeOf(Torrent{})
+	for i := 0; i < torrentType.NumField(); i++ {
+		validTorrentFields = append(validTorrentFields, torrentType.Field(i).Tag.Get("json"))
 	}
 }
 
