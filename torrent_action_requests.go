@@ -47,7 +47,7 @@ func (c *Controller) TorrentStartRecentlyActive() (err error) {
 	return
 }
 
-// TorrentStartNowIDs start-nows torrent(s) which id is in the provided slice.
+// TorrentStartNowIDs starts (now) torrent(s) which id is in the provided slice.
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Controller) TorrentStartNowIDs(ids []int64) (err error) {
 	if err = c.rpcCall("torrent-start-now", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
@@ -56,7 +56,7 @@ func (c *Controller) TorrentStartNowIDs(ids []int64) (err error) {
 	return
 }
 
-// TorrentStartNowHashes start-nows torrent(s) which hash is in the provided slice.
+// TorrentStartNowHashes starts (now) torrent(s) which hash is in the provided slice.
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Controller) TorrentStartNowHashes(hashes []string) (err error) {
 	if err = c.rpcCall("torrent-start-now", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
@@ -65,7 +65,7 @@ func (c *Controller) TorrentStartNowHashes(hashes []string) (err error) {
 	return
 }
 
-// TorrentStartNowRecentlyActive start-nows torrent(s) which have been recently active.
+// TorrentStartNowRecentlyActive starts (now) torrent(s) which have been recently active.
 func (c *Controller) TorrentStartNowRecentlyActive() (err error) {
 	if err = c.rpcCall("torrent-start-now", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
 		err = fmt.Errorf("'torrent-start-now' rpc method failed: %v", err)
