@@ -21,18 +21,18 @@ func init() {
 	}
 }
 
-// TorrentGetAll returns all the known fields for all the torrents
+// TorrentGetAll returns all the known fields for all the torrents.
 func (c *Controller) TorrentGetAll() (torrents []*Torrent, err error) {
 	// Send already validated fields to the low level fx
 	return c.torrentGet(validTorrentFields, nil)
 }
 
-// TorrentGetAllFrom returns all known fields for the given torrent's ids
+// TorrentGetAllFrom returns all known fields for the given torrent's ids.
 func (c *Controller) TorrentGetAllFrom(ids []int64) (torrents []*Torrent, err error) {
 	return c.torrentGet(validTorrentFields, ids)
 }
 
-// TorrentGet returns the given of fields (mandatory) for each ids (optionnal)
+// TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
 func (c *Controller) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
 	// Validate fields
 	var fieldInvalid bool
@@ -77,8 +77,8 @@ type torrentGetResults struct {
 	Torrents []*Torrent `json:"torrents"`
 }
 
-// Torrent represents all the possible fields of data for a torrent
-// All fields are point64ers to detect if the value is nil (field not requested) or default real default value
+// Torrent represents all the possible fields of data for a torrent.
+// All fields are point64ers to detect if the value is nil (field not requested) or default real default value.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L148
 type Torrent struct {
 	ActivityDate            *time.Time         `json:"activityDate"`
@@ -151,7 +151,7 @@ type Torrent struct {
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
 }
 
-// UnmarshalJSON allows to convert timestamps to golang time.Time values
+// UnmarshalJSON allows to convert timestamps to golang time.Time values.
 func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
@@ -210,7 +210,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	return
 }
 
-// MarshalJSON allows to convert back golang values to original payload values
+// MarshalJSON allows to convert back golang values to original payload values.
 func (t *Torrent) MarshalJSON() (data []byte, err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
@@ -264,7 +264,7 @@ func (t *Torrent) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(&tmp)
 }
 
-// TorrentFile represent one file from a Torrent
+// TorrentFile represent one file from a Torrent.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L221
 type TorrentFile struct {
 	BytesCompleted int64  `json:"bytesCompleted"`
@@ -272,7 +272,7 @@ type TorrentFile struct {
 	Name           string `json:"name"`
 }
 
-// TorrentFileStat represents the metadata of a torrent's file
+// TorrentFileStat represents the metadata of a torrent's file.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L227
 type TorrentFileStat struct {
 	BytesCompleted int64 `json:"bytesCompleted"`
@@ -280,7 +280,7 @@ type TorrentFileStat struct {
 	Priority       int64 `json:"priority"`
 }
 
-// Peer represent a peer metadata of a torrent's peer list
+// Peer represent a peer metadata of a torrent's peer list.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L235
 type Peer struct {
 	Address              string  `json:"address"`
@@ -301,7 +301,7 @@ type Peer struct {
 	RateToPeer           int64   `json:"rateToPeer"`   // B/s
 }
 
-// TorrentPeersFrom represents the peers statistics of a torrent
+// TorrentPeersFrom represents the peers statistics of a torrent.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L254
 type TorrentPeersFrom struct {
 	FromCache    int64 `json:"fromCache"`
@@ -313,7 +313,7 @@ type TorrentPeersFrom struct {
 	FromTracker  int64 `json:"fromTracker"`
 }
 
-// Tracker represent the base data of a torrent's tracker
+// Tracker represent the base data of a torrent's tracker.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L274
 type Tracker struct {
 	Announce string `json:"announce"`
@@ -322,7 +322,7 @@ type Tracker struct {
 	Tier     int64  `json:"tier"`
 }
 
-// TrackerStats represent the extended data of a torrent's tracker
+// TrackerStats represent the extended data of a torrent's tracker.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L281
 type TrackerStats struct {
 	Announce              string    `json:"announce"`
@@ -353,7 +353,7 @@ type TrackerStats struct {
 	Tier                  int64     `json:"tier"`
 }
 
-// UnmarshalJSON allows to convert timestamps to golang time.Time values
+// UnmarshalJSON allows to convert timestamps to golang time.Time values.
 func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTrackerStats TrackerStats
@@ -389,7 +389,7 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 	return
 }
 
-// MarshalJSON allows to convert back golang values to original payload values
+// MarshalJSON allows to convert back golang values to original payload values.
 func (ts *TrackerStats) MarshalJSON() (data []byte, err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTrackerStats TrackerStats
