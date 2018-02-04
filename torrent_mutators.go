@@ -39,7 +39,7 @@ type TorrentSetPayload struct {
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"`
 	IDs                 []int64        `json:"ids"`
 	Location            *string        `json:"location"`
-	PeeLlimit           *int64         `json:"peer-limit"`
+	Peerlimit           *int64         `json:"peer-limit"`
 	PriorityHigh        []int64        `json:"priority-high"`   // empty array == all files
 	PriorityLow         []int64        `json:"priority-low"`    // empty array == all files
 	PriorityNormal      []int64        `json:"priority-normal"` // empty array == all files
