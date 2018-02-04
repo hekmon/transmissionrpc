@@ -57,14 +57,21 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	// Execute request
 	var resp *http.Response
 	if resp, err = c.httpC.Do(req); err != nil {
-		err = fmt.Errorf("request error: %v", err)
 		mg.Wait()
 		if encErr != nil {
-			err = fmt.Errorf("%v | json payload marshall error: %v", err, encErr)
+			err = fmt.Errorf("request error: %v | json payload marshall error: %v", err, encErr)
+		} else {
+			err = fmt.Errorf("request error: %v", err)
 		}
 		return
 	}
 	defer resp.Body.Close()
+	// Let's test the enc result, just in case
+	mg.Wait()
+	if encErr != nil {
+		err = fmt.Errorf("request payload JSON marshalling failed: %v", encErr)
+		return
+	}
 	// Is the CRSF token invalid ?
 	if resp.StatusCode == http.StatusConflict {
 		// Recover new token and save it
