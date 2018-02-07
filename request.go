@@ -93,7 +93,7 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 		err = fmt.Errorf("HTTP error %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		return
 	}
-	// // Debug
+	// Debug
 	// {
 	// 	var data []byte
 	// 	data, err = ioutil.ReadAll(resp.Body)
@@ -108,18 +108,20 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 		err = fmt.Errorf("can't unmarshall request answer body: %v", err)
 		return
 	}
+	// fmt.Println("DEBUG >", answer.Result)
 	// Final checks
-	if answer.Result != "success" {
-		err = fmt.Errorf("http request ok but payload does not indicate success: %s", answer.Result)
-		return
-	}
 	if answer.Tag == nil {
 		err = errors.New("http answer does not have a tag within it's payload")
 		return
 	}
 	if *answer.Tag != tag {
 		err = errors.New("http request tag and answer payload tag do not match")
-		return // not really needed but whatevs
+		return
+	}
+	if answer.Result != "success" {
+		err = fmt.Errorf("http request ok but payload does not indicate success: %s", answer.Result)
+		fmt.Println(err)
+		return
 	}
 	// All good
 	return
