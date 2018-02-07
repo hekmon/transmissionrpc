@@ -23,7 +23,7 @@ type TorrentAddPayload struct {
 	MetaInfo          *string `json:"metainfo,omitempty"`
 	Paused            *bool   `json:"paused,omitempty"`
 	PeerLimit         *int64  `json:"peer-limit,omitempty"`
-	BandwidthPriority *int64  `json:"bandwidthPriority,omitempty"`
+	BandwidthPriority *int64  `json:"bandwidthPriority,omitempty"` // mm can't it be equals to 0 ? need custom marshalling with reflect
 	FilesWanted       []int64 `json:"files-wanted,omitempty"`
 	FilesUnwanted     []int64 `json:"files-unwanted,omitempty"`
 	PriorityHigh      []int64 `json:"priority-high,omitempty"`
