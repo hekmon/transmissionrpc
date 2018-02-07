@@ -120,7 +120,6 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	}
 	if answer.Result != "success" {
 		err = fmt.Errorf("http request ok but payload does not indicate success: %s", answer.Result)
-		fmt.Println(err)
 		return
 	}
 	// All good
