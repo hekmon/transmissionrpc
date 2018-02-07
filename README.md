@@ -30,7 +30,7 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 #### Adding a Torrent
 
-* torrent-add _(in progress)_
+* torrent-add _(done)_
 
 #### Removing a Torrent
 
