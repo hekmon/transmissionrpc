@@ -93,7 +93,7 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 		err = fmt.Errorf("HTTP error %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		return
 	}
-	// Debug
+	// // Debug
 	// {
 	// 	var data []byte
 	// 	data, err = ioutil.ReadAll(resp.Body)
