@@ -1,4 +1,4 @@
-package TransmissionRPC
+package transmissionrpc
 
 import (
 	"encoding/json"

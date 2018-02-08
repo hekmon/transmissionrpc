@@ -1,4 +1,4 @@
-package TransmissionRPC
+package transmissionrpc
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ const (
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
 	defaultTimeout   = 30 * time.Second
-	defaultUserAgent = "github.com/Hekmon/TransmissionRPC"
+	defaultUserAgent = "github.com/Hekmon/transmissionrpc"
 )
 
 // Controller is the base object to interract with a remote transmission rpc endpoint.

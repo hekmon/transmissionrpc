@@ -1,4 +1,4 @@
-package TransmissionRPC
+package transmissionrpc
 
 import (
 	"encoding/json"
@@ -54,7 +54,6 @@ type TorrentSetPayload struct {
 	TrackerReplace      []string       `json:"trackerReplace"`      // pairs of <trackerId/new announce URLs>
 	UploadLimit         *int64         `json:"uploadLimit"`         // maximum upload speed (KBps)
 	UploadLimited       *bool          `json:"uploadLimited"`       // true if "uploadLimit" is honored
-
 }
 
 // MarshalJSON allows to marshall into JSON only the non nil fields.
