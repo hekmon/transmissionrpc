@@ -32,28 +32,29 @@ func (c *Controller) TorrentSet(payload *TorrentSetPayload) (err error) {
 // TorrentSetPayload contains all the mutators appliable on one torrent.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L96
 type TorrentSetPayload struct {
-	BandwidthPriority   *int64         `json:"bandwidthPriority"`
-	DownloadLimit       *int64         `json:"downloadLimit"`
-	DownloadLimited     *bool          `json:"downloadLimited"`
-	FilesWanted         []int64        `json:"files-wanted"`   // empty array (not nil !) == all files
-	FilesUnwanted       []int64        `json:"files-unwanted"` // empty array (not nil !) == all files
-	HonorsSessionLimits *bool          `json:"honorsSessionLimits"`
-	IDs                 []int64        `json:"ids"`
-	Location            *string        `json:"location"`
-	Peerlimit           *int64         `json:"peer-limit"`
-	PriorityHigh        []int64        `json:"priority-high"`   // empty array (not nil !) == all files
-	PriorityLow         []int64        `json:"priority-low"`    // empty array (not nil !) == all files
-	PriorityNormal      []int64        `json:"priority-normal"` // empty array (not nil !) == all files
-	QueuePosition       *int64         `json:"queuePosition"`
-	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"` // will be converted as seconds
-	SeedIdleMode        *int64         `json:"seedIdleMode"`
-	SeedRatioLimit      *float64       `json:"seedRatioLimit"`
-	SeedRatioMode       *int64         `json:"seedRatioMode"`
-	TrackerAdd          []string       `json:"trackerAdd"`
-	TrackerRemove       []int64        `json:"trackerRemove"`
-	TrackerReplace      []string       `json:"trackerReplace"` // mmmm...
-	UploadLimit         *int64         `json:"uploadLimit"`    // KBps
-	UploadLimited       *bool          `json:"uploadLimited"`
+	BandwidthPriority   *int64         `json:"bandwidthPriority"`   // this torrent's bandwidth tr_priority_t
+	DownloadLimit       *int64         `json:"downloadLimit"`       // maximum download speed (KBps)
+	DownloadLimited     *bool          `json:"downloadLimited"`     // true if "downloadLimit" is honored
+	FilesWanted         []int64        `json:"files-wanted"`        // indices of file(s) to download
+	FilesUnwanted       []int64        `json:"files-unwanted"`      // indices of file(s) to not download
+	HonorsSessionLimits *bool          `json:"honorsSessionLimits"` // true if session upload limits are honored
+	IDs                 []int64        `json:"ids"`                 // torrent list
+	Location            *string        `json:"location"`            // new location of the torrent's content
+	Peerlimit           *int64         `json:"peer-limit"`          // maximum number of peers
+	PriorityHigh        []int64        `json:"priority-high"`       // indices of high-priority file(s)
+	PriorityLow         []int64        `json:"priority-low"`        // indices of low-priority file(s)
+	PriorityNormal      []int64        `json:"priority-normal"`     // indices of normal-priority file(s)
+	QueuePosition       *int64         `json:"queuePosition"`       // position of this torrent in its queue [0...n)
+	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"`       // torrent-level number of minutes of seeding inactivity
+	SeedIdleMode        *int64         `json:"seedIdleMode"`        // which seeding inactivity to use
+	SeedRatioLimit      *float64       `json:"seedRatioLimit"`      // torrent-level seeding ratio
+	SeedRatioMode       *int64         `json:"seedRatioMode"`       // which ratio to use
+	TrackerAdd          []string       `json:"trackerAdd"`          // strings of announce URLs to add
+	TrackerRemove       []int64        `json:"trackerRemove"`       // ids of trackers to remove
+	TrackerReplace      []string       `json:"trackerReplace"`      // pairs of <trackerId/new announce URLs>
+	UploadLimit         *int64         `json:"uploadLimit"`         // maximum upload speed (KBps)
+	UploadLimited       *bool          `json:"uploadLimited"`       // true if "uploadLimit" is honored
+
 }
 
 // MarshalJSON allows to marshall into JSON only the non nil fields.
@@ -69,7 +70,7 @@ func (tsp *TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 		baseTorrentSetPayload: (*baseTorrentSetPayload)(tsp),
 	}
 	if tsp.SeedIdleLimit != nil {
-		sil := int64(*tsp.SeedIdleLimit / time.Second)
+		sil := int64(*tsp.SeedIdleLimit / time.Minute)
 		tmp.SeedIdleLimit = &sil
 	}
 	// Build a payload with only the non nil fields
