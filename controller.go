@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"crypto/tls"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -32,25 +33,19 @@ type Controller struct {
 // Default value for HTTPS is false, default port is 9091, default RPC URI is
 // '/transmission/rpc', default HTTPTimeout is 30s.
 type AdvancedConfig struct {
-	HTTPS       bool
-	Port        uint16
-	RPCURI      string
-	HTTPTimeout time.Duration
-	UserAgent   string
+	HTTPS         bool
+	HTTPSInsecure bool
+	Port          uint16
+	RPCURI        string
+	HTTPTimeout   time.Duration
+	UserAgent     string
 }
 
 // New returns an initialized and ready to use Controller
 func New(host, user, password string, conf *AdvancedConfig) *Controller {
 	// Config
-	if conf == nil {
-		conf = &AdvancedConfig{
-			// HTTPS false by default
-			Port:        defaultPort,
-			RPCURI:      defaultRPCPath,
-			HTTPTimeout: defaultTimeout,
-			UserAgent:   defaultUserAgent,
-		}
-	} else {
+	if conf != nil {
+		// Check custom config
 		if conf.Port == 0 {
 			conf.Port = defaultPort
 		}
@@ -62,6 +57,15 @@ func New(host, user, password string, conf *AdvancedConfig) *Controller {
 		}
 		if conf.UserAgent == "" {
 			conf.UserAgent = defaultUserAgent
+		}
+	} else {
+		// Spawn default config
+		conf = &AdvancedConfig{
+			// HTTPS and HTTPSInsecure false by default
+			Port:        defaultPort,
+			RPCURI:      defaultRPCPath,
+			HTTPTimeout: defaultTimeout,
+			UserAgent:   defaultUserAgent,
 		}
 	}
 	var scheme string
@@ -79,6 +83,11 @@ func New(host, user, password string, conf *AdvancedConfig) *Controller {
 		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
 		httpC: &http.Client{
 			Timeout: time.Minute,
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: conf.HTTPSInsecure,
+				},
+			},
 		},
 	}
 }
