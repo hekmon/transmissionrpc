@@ -10,7 +10,7 @@ import (
 	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L392
 */
 
-// TorrentDelete apply a list of mutator(s) to a list of torrent ids.
+// TorrentDelete allows to delete one or more torrents only or with their data.
 func (c *Controller) TorrentDelete(payload *TorrentDeletePayload) (err error) {
 	// Validate
 	if payload == nil {
@@ -25,7 +25,7 @@ func (c *Controller) TorrentDelete(payload *TorrentDeletePayload) (err error) {
 	return
 }
 
-// TorrentDeletePayload allows to delete several torrents at once.
+// TorrentDeletePayload holds the torrent id(s) to delete with a data deletion flag.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L398
 type TorrentDeletePayload struct {
 	IDs             []int64 `json:"ids"`
