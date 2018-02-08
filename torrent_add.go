@@ -14,26 +14,27 @@ import (
 	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L356
 */
 
-// TorrentAddPayload represents the data to send in order to add a torrent.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L362
-type TorrentAddPayload struct {
-	Cookies           *string `json:"cookies,omitempty"`
-	DownloadDir       *string `json:"download-dir,omitempty"`
-	Filename          *string `json:"filename,omitempty"`
-	MetaInfo          *string `json:"metainfo,omitempty"`
-	Paused            *bool   `json:"paused,omitempty"`
-	PeerLimit         *int64  `json:"peer-limit,omitempty"`
-	BandwidthPriority *int64  `json:"bandwidthPriority,omitempty"` // mm can't it be equals to 0 ? need custom marshalling with reflect
-	FilesWanted       []int64 `json:"files-wanted,omitempty"`
-	FilesUnwanted     []int64 `json:"files-unwanted,omitempty"`
-	PriorityHigh      []int64 `json:"priority-high,omitempty"`
-	PriorityLow       []int64 `json:"priority-low,omitempty"`
-	PriorityNormal    []int64 `json:"priority-normal,omitempty"`
+// TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
+// and payload generation). If successfull (torrent added or duplicate) torrent return value
+// will only have HashString, ID and Name fields set up.
+func (c *Controller) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
+	// Validate
+	if filepath == "" {
+		err = errors.New("filepath can't be empty")
+		return
+	}
+	// Get base64 encoded file content
+	b64, err := file2Base64(filepath)
+	if err != nil {
+		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
+		return
+	}
+	// Prepare and send payload
+	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64})
 }
 
-// TorrentAdd allows to send an Add payload.
-// If successfull (torrent added or duplicate) torrent return value will have only
-// HashString, ID and Name set up.
+// TorrentAdd allows to send an Add payload. If successfull (torrent added or duplicate) torrent
+// return value will only have HashString, ID and Name fields set up.
 func (c *Controller) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err error) {
 	// Validate
 	if payload == nil {
@@ -61,28 +62,26 @@ func (c *Controller) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, e
 	return
 }
 
+// TorrentAddPayload represents the data to send in order to add a torrent.
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L362
+type TorrentAddPayload struct {
+	Cookies           *string `json:"cookies,omitempty"`
+	DownloadDir       *string `json:"download-dir,omitempty"`
+	Filename          *string `json:"filename,omitempty"`
+	MetaInfo          *string `json:"metainfo,omitempty"`
+	Paused            *bool   `json:"paused,omitempty"`
+	PeerLimit         *int64  `json:"peer-limit,omitempty"`
+	BandwidthPriority *int64  `json:"bandwidthPriority,omitempty"` // mm can't it be equals to 0 ? need custom marshalling with reflect
+	FilesWanted       []int64 `json:"files-wanted,omitempty"`
+	FilesUnwanted     []int64 `json:"files-unwanted,omitempty"`
+	PriorityHigh      []int64 `json:"priority-high,omitempty"`
+	PriorityLow       []int64 `json:"priority-low,omitempty"`
+	PriorityNormal    []int64 `json:"priority-normal,omitempty"`
+}
+
 type torrentAddAnswer struct {
 	TorrentAdded     *Torrent `json:"torrent-added"`
 	TorrentDuplicate *Torrent `json:"torrent-duplicate"`
-}
-
-// TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding).
-// If successfull (torrent added or duplicate) torrent return value will have only
-// HashString, ID and Name set up.
-func (c *Controller) TorrentAddFile(filename string) (torrent *Torrent, err error) {
-	// Validate
-	if filename == "" {
-		err = errors.New("filename can't be empty")
-		return
-	}
-	// Get base64 encoded file content
-	b64, err := file2Base64(filename)
-	if err != nil {
-		err = fmt.Errorf("can't encode '%s' content as base64: %v", filename, err)
-		return
-	}
-	// Prepare and send payload
-	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64})
 }
 
 func file2Base64(filename string) (b64 string, err error) {
