@@ -46,11 +46,12 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	req.Header.Set(csrfHeader, c.getSessionID())
 	req.SetBasicAuth(c.user, c.password)
 	// Prepare the marshalling goroutine
-	tag := c.rnd.Int()
+	var tag int
 	var encErr error
 	var mg sync.WaitGroup
 	mg.Add(1)
 	go func() {
+		tag = c.rnd.Int()
 		encErr = json.NewEncoder(pIn).Encode(&requestPayload{
 			Method:    method,
 			Arguments: arguments,
