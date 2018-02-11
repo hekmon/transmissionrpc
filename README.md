@@ -91,7 +91,24 @@ if err != nil {
 
 #### Torrent Mutators
 
-* torrent-set _(done)_
+* torrent-set
+Example: apply a 1Mo/s limit to a torrent.
+```golang
+uploadLimited := true
+uploadLimitKbps := int64(1024)
+err := transmissionbt.TorrentSet(&transmissionrpc.TorrentSetPayload{
+	IDs:           []int64{55},
+	UploadLimited: &uploadLimited,
+	UploadLimit:   &uploadLimitKbps,
+})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
+
+There is a lot more [mutators](https://godoc.org/github.com/hekmon/transmissionrpc#TorrentSetPayload).
 
 #### Torrent Accessors
 
