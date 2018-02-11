@@ -10,7 +10,7 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 ## Implementation
 
-First the main client object must be [instancied](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [new](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
 ```golang
 transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
@@ -41,7 +41,7 @@ transmissionbt.TorrentXXXXRecentlyActive()
 
 * torrent-start
 ```golang
-err := btserv.TorrentStartIDs([]int64{55})
+err := transmissionbt.TorrentStartIDs([]int64{55})
 if err != nil {
 	fmt.Fprintln(os.Stderr, err)
 } else {
@@ -52,7 +52,7 @@ if err != nil {
 * torrent-start-now _(done)_
 * torrent-stop
 ```golang
-err := btserv.TorrentStopIDs([]int64{55})
+err := transmissionbt.TorrentStopIDs([]int64{55})
 if err != nil {
 	fmt.Fprintln(os.Stderr, err)
 } else {
@@ -73,7 +73,7 @@ if err != nil {
 
 #### Adding a Torrent
 
-* torrent-add _(done)_
+* torrent-add
 
 Adding a torrent from a file (using [TorrentAddFile](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAddFile) wrapper):
 
