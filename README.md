@@ -96,11 +96,11 @@ if err != nil {
 Example: apply a 1Mo/s limit to a torrent.
 ```golang
 uploadLimited := true
-uploadLimitKbps := int64(1024)
+uploadLimitKBps := int64(1024)
 err := transmissionbt.TorrentSet(&transmissionrpc.TorrentSetPayload{
 	IDs:           []int64{55},
 	UploadLimited: &uploadLimited,
-	UploadLimit:   &uploadLimitKbps,
+	UploadLimit:   &uploadLimitKBps,
 })
 if err != nil {
 	fmt.Fprintln(os.Stderr, err)
