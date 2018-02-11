@@ -23,11 +23,11 @@ type answerPayload struct {
 	Tag       *int        `json:"tag"`
 }
 
-func (c *Controller) rpcCall(method string, arguments interface{}, result interface{}) (err error) {
+func (c *Client) rpcCall(method string, arguments interface{}, result interface{}) (err error) {
 	return c.request(method, arguments, result, true)
 }
 
-func (c *Controller) request(method string, arguments interface{}, result interface{}, retry bool) (err error) {
+func (c *Client) request(method string, arguments interface{}, result interface{}, retry bool) (err error) {
 	// Let's avoid crashing
 	if c.httpC == nil {
 		err = errors.New("this controller is not initialized, please use the New() function")
@@ -127,13 +127,13 @@ func (c *Controller) request(method string, arguments interface{}, result interf
 	return
 }
 
-func (c *Controller) getSessionID() string {
+func (c *Client) getSessionID() string {
 	defer c.sessionIDAccess.RUnlock()
 	c.sessionIDAccess.RLock()
 	return c.sessionID
 }
 
-func (c *Controller) updateSessionID(newID string) {
+func (c *Client) updateSessionID(newID string) {
 	defer c.sessionIDAccess.Unlock()
 	c.sessionIDAccess.Lock()
 	c.sessionID = newID

@@ -12,12 +12,12 @@ const (
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
 	defaultTimeout   = 30 * time.Second
-	defaultUserAgent = "github.com/Hekmon/transmissionrpc"
+	defaultUserAgent = "github.com/hekmon/transmissionrpc"
 )
 
 // Controller is the base object to interract with a remote transmission rpc endpoint.
 // It must be created with New().
-type Controller struct {
+type Client struct {
 	url             string
 	user            string
 	password        string
@@ -40,7 +40,7 @@ type AdvancedConfig struct {
 }
 
 // New returns an initialized and ready to use Controller
-func New(host, user, password string, conf *AdvancedConfig) *Controller {
+func New(host, user, password string, conf *AdvancedConfig) *Client {
 	// Config
 	if conf != nil {
 		// Check custom config
@@ -73,7 +73,7 @@ func New(host, user, password string, conf *AdvancedConfig) *Controller {
 		scheme = "http"
 	}
 	// Initialize & return
-	return &Controller{
+	return &Client{
 		url:       fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI),
 		user:      user,
 		password:  password,

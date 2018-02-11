@@ -14,7 +14,7 @@ import (
 */
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
-func (c *Controller) TorrentSet(payload *TorrentSetPayload) (err error) {
+func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
 	// Validate
 	if payload == nil {
 		return errors.New("payload can't be nil")

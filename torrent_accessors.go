@@ -22,18 +22,18 @@ func init() {
 }
 
 // TorrentGetAll returns all the known fields for all the torrents.
-func (c *Controller) TorrentGetAll() (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetAll() (torrents []*Torrent, err error) {
 	// Send already validated fields to the low level fx
 	return c.torrentGet(validTorrentFields, nil)
 }
 
 // TorrentGetAllFrom returns all known fields for the given torrent's ids.
-func (c *Controller) TorrentGetAllFrom(ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetAllFrom(ids []int64) (torrents []*Torrent, err error) {
 	return c.torrentGet(validTorrentFields, ids)
 }
 
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
-func (c *Controller) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
 	// Validate fields
 	var fieldInvalid bool
 	var knownField string
@@ -54,7 +54,7 @@ func (c *Controller) TorrentGet(fields []string, ids []int64) (torrents []*Torre
 	return c.torrentGet(fields, ids)
 }
 
-func (c *Controller) torrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) torrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
 	arguments := torrentGetParams{
 		Fields: fields,
 		IDs:    ids,

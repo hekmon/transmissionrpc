@@ -11,7 +11,7 @@ import (
 */
 
 // TorrentDelete allows to delete one or more torrents only or with their data.
-func (c *Controller) TorrentDelete(payload *TorrentDeletePayload) (err error) {
+func (c *Client) TorrentDelete(payload *TorrentDeletePayload) (err error) {
 	// Validate
 	if payload == nil {
 		err = errors.New("payload can't be nil")

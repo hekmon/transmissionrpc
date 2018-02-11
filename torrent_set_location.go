@@ -12,7 +12,7 @@ import (
 
 // TorrentSetLocation allows to set a new location for one or more torrents.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L408
-func (c *Controller) TorrentSetLocation(payload *TorrentSetLocationPayload) (err error) {
+func (c *Client) TorrentSetLocation(payload *TorrentSetLocationPayload) (err error) {
 	// Validate
 	if payload == nil {
 		return errors.New("payload can't be nil")
