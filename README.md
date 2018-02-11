@@ -50,7 +50,6 @@ if err != nil {
 ```
 
 * torrent-start-now
-TorrentStartNowHashes
 ```golang
 err := transmissionbt.TorrentStartNowHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {

@@ -51,7 +51,7 @@ type TorrentSetPayload struct {
 	SeedRatioMode       *int64         `json:"seedRatioMode"`       // which ratio to use
 	TrackerAdd          []string       `json:"trackerAdd"`          // strings of announce URLs to add
 	TrackerRemove       []int64        `json:"trackerRemove"`       // ids of trackers to remove
-	TrackerReplace      []string       `json:"trackerReplace"`      // pairs of <trackerId/new announce URLs>
+	TrackerReplace      []string       `json:"trackerReplace"`      // pairs of <trackerId/new announce URLs> (TODO: validate string value usable as is)
 	UploadLimit         *int64         `json:"uploadLimit"`         // maximum upload speed (KBps)
 	UploadLimited       *bool          `json:"uploadLimited"`       // true if "uploadLimit" is honored
 }
