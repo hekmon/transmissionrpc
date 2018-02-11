@@ -10,7 +10,7 @@ https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 ## Implementation
 
-First the main client object must be instantiated with [new](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [New()](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
 ```golang
 transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
@@ -49,7 +49,17 @@ if err != nil {
 }
 ```
 
-* torrent-start-now _(done)_
+* torrent-start-now
+TorrentStartNowHashes
+```golang
+err := transmissionbt.TorrentStartNowHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
+
 * torrent-stop
 ```golang
 err := transmissionbt.TorrentStopIDs([]int64{55})
@@ -60,8 +70,25 @@ if err != nil {
 }
 ```
 
-* torrent-verify _(done)_
-* torrent-reannounce _(done)_
+* torrent-verify
+```golang
+err := transmissionbt.TorrentVerifyHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
+
+* torrent-reannounce
+```golang
+err := transmissionbt.TorrentReannounceRecentlyActive()
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
 
 #### Torrent Mutators
 
@@ -93,7 +120,7 @@ if err != nil {
 Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAdd) method:
 
 ```golang
-magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
+magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&dn=ubuntu-17.10.1-desktop-amd64.iso&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
 torrent, err := btserv.TorrentAdd(&transmissionrpc.TorrentAddPayload{
 	Filename: &magnet,
 })
