@@ -31,9 +31,35 @@ transmissionbt := transmissionrpc.New("bt.mydomain.net", "rpcuser", "rpcpass",
 
 #### Torrent Action Requests
 
-* torrent-start _(done)_
+Each rpc methods here can work with ID list, hash list or `recently-active` magic word. Therefor, there is 3 golang method variants for each of them.
+
+```golang
+transmissionbt.TorrentXXXXIDs(...)
+transmissionbt.TorrentXXXXHashes(...)
+transmissionbt.TorrentXXXXRecentlyActive()
+```
+
+* torrent-start
+```golang
+err := btserv.TorrentStartIDs([]int64{55})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
+
 * torrent-start-now _(done)_
-* torrent-stop _(done)_
+* torrent-stop
+```golang
+err := btserv.TorrentStopIDs([]int64{55})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println("yay")
+}
+```
+
 * torrent-verify _(done)_
 * torrent-reannounce _(done)_
 
@@ -52,7 +78,8 @@ transmissionbt := transmissionrpc.New("bt.mydomain.net", "rpcuser", "rpcpass",
 Adding a torrent from a file (using [TorrentAddFile](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAddFile) wrapper):
 
 ```golang
-torrent, err := transmissionbt.TorrentAddFile("/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent")
+filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
+torrent, err := transmissionbt.TorrentAddFile(filepath)
 if err != nil {
 	fmt.Fprintln(os.Stderr, err)
 } else {
@@ -78,6 +105,13 @@ if err != nil {
 	fmt.Println(*torrent.Name)
 	fmt.Println(*torrent.HashString)
 }
+```
+
+Which would output:
+```
+55
+ubuntu-17.10.1-desktop-amd64.iso
+f07e0b0584745b7bcb35e98097488d34e68623d0
 ```
 
 #### Removing a Torrent
