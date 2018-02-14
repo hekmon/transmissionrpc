@@ -27,8 +27,8 @@ func (c *Client) TorrentGetAll() (torrents []*Torrent, err error) {
 	return c.torrentGet(validTorrentFields, nil)
 }
 
-// TorrentGetAllFrom returns all known fields for the given torrent's ids.
-func (c *Client) TorrentGetAllFrom(ids []int64) (torrents []*Torrent, err error) {
+// TorrentGetAllFor returns all known fields for the given torrent's ids.
+func (c *Client) TorrentGetAllFor(ids []int64) (torrents []*Torrent, err error) {
 	return c.torrentGet(validTorrentFields, ids)
 }
 
