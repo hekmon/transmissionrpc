@@ -5,7 +5,9 @@ Golang bindings to Transmission (bittorent) RPC interface (Work in Progress).
 
 Even if there is some high level wrappers/helpers, the goal of this lib is to stay close to the original API in terms of methods and payloads while enhancing certain types to be more "golangish": timestamps are converted from/to time.Time, numeric durations in time.Duration, booleans in numeric form are converted to real bool, etc...
 
-Reference:
+Also payload generation aims to be precise: when several values can be added to a payload, only instanciated values will be forwarded (and kept !) to the final payload. This means that the default JSON marshalling (with omitempty) can't always be used and therefor a manual, reflect based, approach is used to build the final payload and accurately send what the user have instanciated, even if a value is at its default type value.
+
+This lib follow the transmission rpc version 15:
 https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
 ## Implementation
@@ -113,7 +115,56 @@ There is a lot more [mutators](https://godoc.org/github.com/hekmon/transmissionr
 
 #### Torrent Accessors
 
-* torrent-get _(done)_
+* torrent-get
+
+All fields for all torrents with [TorrentGetAll()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+```golang
+torrents, err := transmissionbt.TorrentGetAll()
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println(torrents) // meh it's full of pointers
+}
+```
+
+All fields for a restricted list of ids with [TorrentGetAllFor()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+```golang
+torrents, err := transmissionbt.TorrentGetAllFor([]int64{31})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	fmt.Println(torrents) // meh it's still full of pointers
+}
+```
+
+Some fields for some torrents with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+```golang
+torrents, err := transmissionbt.TorrentGet([]string{"status"}, []int64{54, 55})
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	for _, torrent := range torrents {
+		fmt.Println(torrent.Status) // the only instanciated field, as requested
+	}
+}
+```
+
+Some fields for all torrents, still with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+```golang
+torrents, err := transmissionbt.TorrentGet([]string{"id", "name", "hashString"}, nil)
+if err != nil {
+	fmt.Fprintln(os.Stderr, err)
+} else {
+	for _, torrent := range torrents {
+		fmt.Println(torrent.ID)
+		fmt.Println(torrent.Name)
+		fmt.Println(torrent.HashString)
+	}
+}
+```
+
+Valid fields name can be found as JSON tag on the [Torrent](https://godoc.org/github.com/hekmon/transmissionrpc#Torrent) struct.
+
 
 #### Adding a Torrent
 
