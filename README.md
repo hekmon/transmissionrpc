@@ -241,7 +241,17 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 #### Port Checking
 
-* port-test _(to do)_
+* port-test
+
+```golang
+	st, err := transmissionbt.CheckPort()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+	if st {
+		fmt.Println("Open!")
+	}
+```
 
 #### Session shutdown
 
@@ -256,4 +266,15 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 #### Free Space
 
-* free-space _(done)_
+* free-space
+
+Example: Get the space available in bytes for /data.
+```golang
+	spaceInfo, err := transmissionbt.FreeSpace("/data/")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+	fmt.Println(spaceInfo.Path)
+	fmt.Println(spaceInfo.Size)
+}
+```
