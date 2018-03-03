@@ -17,8 +17,8 @@ func (c *Client) FreeSpace(path string) (freeBytes int64, err error) {
 		err = fmt.Errorf("'free-space' rpc method failed: %v", err)
 		return
 	}
-	if space == nil {
-		err = fmt.Errorf("answer payload is nil")
+	if space.Path != path {
+		err = fmt.Errorf("returned path '%s' does not match with requested path '%s'", space.Path, path)
 		return
 	}
 	freeBytes = space.Size
