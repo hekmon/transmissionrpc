@@ -1,9 +1,44 @@
 package transmissionrpc
 
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+)
+
 /*
 	Session Arguments
 	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L446
 */
+
+// SessionArgumentsSet returns global/session values.
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L517
+func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
+	// Checks
+	if payload == nil {
+		err = fmt.Errorf("payload can't be nil")
+		return
+	}
+	payload.BlocklistSize = nil
+	payload.ConfigDir = nil
+	payload.RPCVersion = nil
+	payload.RPCVersionMinimum = nil
+	payload.Version = nil
+	// Exec
+	if err = c.rpcCall("session-set", payload, nil); err != nil {
+		err = fmt.Errorf("'session-set' rpc method failed: %v", err)
+	}
+	return
+}
+
+// SessionArgumentsGet returns global/session values.
+// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L525
+func (c *Client) SessionArgumentsGet() (sessionArgs *SessionArguments, err error) {
+	if err = c.rpcCall("session-get", nil, &sessionArgs); err != nil {
+		err = fmt.Errorf("'session-get' rpc method failed: %v", err)
+	}
+	return
+}
 
 // SessionArguments represents all the global/session values.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L448
@@ -17,7 +52,7 @@ type SessionArguments struct {
 	AltSpeedUp                *int64   `json:"alt-speed-up"`                 // max global upload speed (KBps)
 	BlocklistURL              *string  `json:"blocklist-url"`                // location of the blocklist to use for "blocklist-update"
 	BlocklistEnabled          *bool    `json:"blocklist-enabled"`            // true means enabled
-	BlacklistSize             *int64   `json:"blocklist-size"`               // number of rules in the blocklist
+	BlocklistSize             *int64   `json:"blocklist-size"`               // number of rules in the blocklist
 	CacheSizeMB               *int64   `json:"cache-size-mb"`                // maximum size of the disk cache (MB)
 	ConfigDir                 *string  `json:"config-dir"`                   // location of transmission's configuration directory
 	DownloadDir               *string  `json:"download-dir"`                 // default path to download torrents
@@ -56,6 +91,28 @@ type SessionArguments struct {
 	Units                     *Units   `json:"units"`                        // see units below
 	UTPEnabled                *bool    `json:"utp-enabled"`                  // true means allow utp
 	Version                   *string  `json:"version"`                      // long version string "$version ($revision)"
+}
+
+// MarshalJSON allows to marshall into JSON only the non nil fields.
+// It differs from 'omitempty' which also skip default values
+// (as 0 or false which can be valid here).
+func (sa *SessionArguments) MarshalJSON() (data []byte, err error) {
+	// Build a payload with only the non nil fields
+	tspv := reflect.ValueOf(*sa)
+	tspt := tspv.Type()
+	cleanPayload := make(map[string]interface{}, tspt.NumField())
+	var currentValue, nestedStruct, currentNestedValue reflect.Value
+	var currentStructField, currentNestedStructField reflect.StructField
+	var j int
+	for i := 0; i < tspv.NumField(); i++ {
+		currentValue = tspv.Field(i)
+		currentStructField = tspt.Field(i)
+		if !currentValue.IsNil() {
+			cleanPayload[currentStructField.Tag.Get("json")] = currentValue.Interface()
+		}
+	}
+	// Marshall the clean payload
+	return json.Marshal(cleanPayload)
 }
 
 // Units is subset of SessionArguments.

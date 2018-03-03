@@ -223,13 +223,10 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 ### Session Requests
 
-#### Mutators
+#### Session Session Arguments
 
-* session-set _(to do)_
-
-#### Accessors
-
-* session-get _(to do)_
+* session-set _(done)_
+* session-get _(done)_
 
 #### Session Statistics
 
