@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	RPCVersion       = 15
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
 	defaultTimeout   = 30 * time.Second
