@@ -15,7 +15,7 @@ const (
 	defaultUserAgent = "github.com/hekmon/transmissionrpc"
 )
 
-// Controller is the base object to interract with a remote transmission rpc endpoint.
+// Client is the base object to interract with a remote transmission rpc endpoint.
 // It must be created with New().
 type Client struct {
 	url             string
