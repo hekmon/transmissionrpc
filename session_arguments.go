@@ -11,6 +11,27 @@ import (
 	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L446
 */
 
+// RPCVersion returns true if the lib RPC version is greater or equals to the remote server rpc minimum version.
+func (c *Client) RPCVersion() (ok bool, serverVersion int64, serverMinimumVersion int64, err error) {
+	payload, err := c.SessionArgumentsGet()
+	if err != nil {
+		err = fmt.Errorf("can't get session values: %v", err)
+		return
+	}
+	if payload.RPCVersion == nil {
+		err = fmt.Errorf("payload RPC Version is nil")
+		return
+	}
+	if payload.RPCVersionMinimum == nil {
+		err = fmt.Errorf("payload RPC Version minimum is nil")
+		return
+	}
+	serverVersion = *payload.RPCVersion
+	serverMinimumVersion = *payload.RPCVersionMinimum
+	ok = RPCVersion >= serverMinimumVersion
+	return
+}
+
 // SessionArgumentsSet returns global/session values.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L517
 func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
@@ -101,9 +122,8 @@ func (sa *SessionArguments) MarshalJSON() (data []byte, err error) {
 	tspv := reflect.ValueOf(*sa)
 	tspt := tspv.Type()
 	cleanPayload := make(map[string]interface{}, tspt.NumField())
-	var currentValue, nestedStruct, currentNestedValue reflect.Value
-	var currentStructField, currentNestedStructField reflect.StructField
-	var j int
+	var currentValue reflect.Value
+	var currentStructField reflect.StructField
 	for i := 0; i < tspv.NumField(); i++ {
 		currentValue = tspv.Field(i)
 		currentStructField = tspt.Field(i)
