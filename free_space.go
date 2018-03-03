@@ -10,12 +10,18 @@ import (
 */
 
 // FreeSpace allow to see how much free space is available in a client-specified folder.
-func (c *Client) FreeSpace(path string) (space *TransmissionFreeSpace, err error) {
+func (c *Client) FreeSpace(path string) (freeBytes int64, err error) {
 	payload := &transmissionFreeSpacePayload{Path: path}
+	var space TransmissionFreeSpace
 	if err = c.rpcCall("free-space", payload, &space); err != nil {
 		err = fmt.Errorf("'free-space' rpc method failed: %v", err)
 		return
 	}
+	if space == nil {
+		err = fmt.Errorf("answer payload is nil")
+		return
+	}
+	freeBytes = space.Size
 	return
 }
 
