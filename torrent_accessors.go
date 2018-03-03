@@ -78,7 +78,7 @@ type torrentGetResults struct {
 }
 
 // Torrent represents all the possible fields of data for a torrent.
-// All fields are point64ers to detect if the value is nil (field not requested) or default real default value.
+// All fields are pointers to detect if the value is nil (field not requested) or default real default value.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L148
 type Torrent struct {
 	ActivityDate            *time.Time         `json:"activityDate"`
