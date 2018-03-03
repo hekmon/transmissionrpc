@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	// RPCVersion indicates the exact transmission RPC version this library is build against
 	RPCVersion       = 15
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
