@@ -267,11 +267,11 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 Example: Get the space available in bytes for /data.
 ```golang
-	spaceInfo, err := transmissionbt.FreeSpace("/data/")
+	sizeBytes, err := transmissionbt.FreeSpace("/data")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
+	} else  {
+		fmt.Printd("%fGB", float64(sizeBytes)/1024/1024/1024)
 	}
-	fmt.Println(spaceInfo.Path)
-	fmt.Println(spaceInfo.Size)
 }
 ```
