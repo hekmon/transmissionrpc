@@ -230,7 +230,7 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 #### Session Statistics
 
-* session-stats _(to do)_
+* session-stats _(done)_
 
 #### Blocklist
 
