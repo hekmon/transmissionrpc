@@ -29,6 +29,15 @@ func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
 	return
 }
 
+const (
+	// SeedRatioModeGlobal represents the use of the global ratio for a torrent
+	SeedRatioModeGlobal = int64(0)
+	// SeedRatioModeCustom represents the use of a custom ratio for a torrent
+	SeedRatioModeCustom = int64(1)
+	// SeedRatioModeNoRatio represents the absence of ratio for a torrent
+	SeedRatioModeNoRatio = int64(2)
+)
+
 // TorrentSetPayload contains all the mutators appliable on one torrent.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L96
 type TorrentSetPayload struct {
