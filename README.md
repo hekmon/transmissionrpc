@@ -1,4 +1,5 @@
 # TransmissionRPC
+
 [![GoDoc](https://godoc.org/github.com/hekmon/transmissionrpc?status.svg)](https://godoc.org/github.com/hekmon/transmissionrpc)
 
 Golang bindings to Transmission (bittorent) RPC interface (Work in Progress).
@@ -23,10 +24,10 @@ Each value of `AdvancedConfig` with a type default value will be replaced by the
 
 ```golang
 transmissionbt := transmissionrpc.New("bt.mydomain.net", "rpcuser", "rpcpass",
-	&transmissionrpc.AdvancedConfig{
-		HTTPS: true,
-		Port:  443,
-	})
+    &transmissionrpc.AdvancedConfig{
+        HTTPS: true,
+        Port:  443,
+    })
 ```
 
 ### Torrent Requests
@@ -42,52 +43,57 @@ transmissionbt.TorrentXXXXRecentlyActive()
 ```
 
 * torrent-start
+
 ```golang
 err := transmissionbt.TorrentStartIDs([]int64{55})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
 * torrent-start-now
+
 ```golang
 err := transmissionbt.TorrentStartNowHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
 * torrent-stop
+
 ```golang
 err := transmissionbt.TorrentStopIDs([]int64{55})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
 * torrent-verify
+
 ```golang
 err := transmissionbt.TorrentVerifyHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
 * torrent-reannounce
+
 ```golang
 err := transmissionbt.TorrentReannounceRecentlyActive()
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
@@ -96,18 +102,19 @@ if err != nil {
 * torrent-set
 
 Example: apply a 1Mo/s limit to a torrent.
+
 ```golang
 uploadLimited := true
 uploadLimitKBps := int64(1024)
 err := transmissionbt.TorrentSet(&transmissionrpc.TorrentSetPayload{
-	IDs:           []int64{55},
-	UploadLimited: &uploadLimited,
-	UploadLimit:   &uploadLimitKBps,
+    IDs:           []int64{55},
+    UploadLimited: &uploadLimited,
+    UploadLimit:   &uploadLimitKBps,
 })
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println("yay")
+    fmt.Println("yay")
 }
 ```
 
@@ -118,53 +125,56 @@ There is a lot more [mutators](https://godoc.org/github.com/hekmon/transmissionr
 * torrent-get
 
 All fields for all torrents with [TorrentGetAll()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+
 ```golang
 torrents, err := transmissionbt.TorrentGetAll()
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println(torrents) // meh it's full of pointers
+    fmt.Println(torrents) // meh it's full of pointers
 }
 ```
 
 All fields for a restricted list of ids with [TorrentGetAllFor()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+
 ```golang
 torrents, err := transmissionbt.TorrentGetAllFor([]int64{31})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	fmt.Println(torrents) // meh it's still full of pointers
+    fmt.Println(torrents) // meh it's still full of pointers
 }
 ```
 
 Some fields for some torrents with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+
 ```golang
 torrents, err := transmissionbt.TorrentGet([]string{"status"}, []int64{54, 55})
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	for _, torrent := range torrents {
-		fmt.Println(torrent.Status) // the only instanciated field, as requested
-	}
+    for _, torrent := range torrents {
+        fmt.Println(torrent.Status) // the only instanciated field, as requested
+    }
 }
 ```
 
 Some fields for all torrents, still with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+
 ```golang
 torrents, err := transmissionbt.TorrentGet([]string{"id", "name", "hashString"}, nil)
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	for _, torrent := range torrents {
-		fmt.Println(torrent.ID)
-		fmt.Println(torrent.Name)
-		fmt.Println(torrent.HashString)
-	}
+    for _, torrent := range torrents {
+        fmt.Println(torrent.ID)
+        fmt.Println(torrent.Name)
+        fmt.Println(torrent.HashString)
+    }
 }
 ```
 
 Valid fields name can be found as JSON tag on the [Torrent](https://godoc.org/github.com/hekmon/transmissionrpc#Torrent) struct.
-
 
 #### Adding a Torrent
 
@@ -176,12 +186,12 @@ Adding a torrent from a file (using [TorrentAddFile](https://godoc.org/github.co
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
 torrent, err := transmissionbt.TorrentAddFile(filepath)
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	// Only 3 fields will be returned/set in the Torrent struct
-	fmt.Println(*torrent.ID)
-	fmt.Println(*torrent.Name)
-	fmt.Println(*torrent.HashString)
+    // Only 3 fields will be returned/set in the Torrent struct
+    fmt.Println(*torrent.ID)
+    fmt.Println(*torrent.Name)
+    fmt.Println(*torrent.HashString)
 }
 ```
 
@@ -190,19 +200,20 @@ Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://g
 ```golang
 magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&dn=ubuntu-17.10.1-desktop-amd64.iso&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
 torrent, err := btserv.TorrentAdd(&transmissionrpc.TorrentAddPayload{
-	Filename: &magnet,
+    Filename: &magnet,
 })
 if err != nil {
-	fmt.Fprintln(os.Stderr, err)
+    fmt.Fprintln(os.Stderr, err)
 } else {
-	// Only 3 fields will be returned/set in the Torrent struct
-	fmt.Println(*torrent.ID)
-	fmt.Println(*torrent.Name)
-	fmt.Println(*torrent.HashString)
+    // Only 3 fields will be returned/set in the Torrent struct
+    fmt.Println(*torrent.ID)
+    fmt.Println(*torrent.Name)
+    fmt.Println(*torrent.HashString)
 }
 ```
 
 Which would output:
+
 ```
 55
 ubuntu-17.10.1-desktop-amd64.iso
@@ -241,13 +252,13 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 * port-test
 
 ```golang
-	st, err := transmissionbt.CheckPort()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
-	if st {
-		fmt.Println("Open!")
-	}
+    st, err := transmissionbt.CheckPort()
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+    }
+    if st {
+        fmt.Println("Open!")
+    }
 ```
 
 #### Session shutdown
@@ -266,12 +277,13 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 * free-space
 
 Example: Get the space available in bytes for /data.
+
 ```golang
-	sizeBytes, err := transmissionbt.FreeSpace("/data")
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else  {
-		fmt.Printd("%fGB", float64(sizeBytes)/1024/1024/1024)
-	}
+    sizeBytes, err := transmissionbt.FreeSpace("/data")
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+    } else  {
+        fmt.Printd("%fGB", float64(sizeBytes)/1024/1024/1024)
+    }
 }
 ```
