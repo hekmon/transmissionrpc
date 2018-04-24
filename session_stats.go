@@ -2,6 +2,8 @@ package transmissionrpc
 
 import (
 	"fmt"
+
+	"github.com/hekmon/cunits"
 )
 
 /*
@@ -39,6 +41,16 @@ type CumulativeStats struct {
 	UploadedBytes   int64 `json:"uploadedBytes"`
 }
 
+// GetDownloaded returns cumulative stats downloaded size in a handy format
+func (cs *CumulativeStats) GetDownloaded() (downloaded cunits.Bit) {
+	return cunits.ImportFromByte(float64(cs.DownloadedBytes))
+}
+
+// GetUploaded returns cumulative stats uploaded size in a handy format
+func (cs *CumulativeStats) GetUploaded() (uploaded cunits.Bit) {
+	return cunits.ImportFromByte(float64(cs.UploadedBytes))
+}
+
 // CurrentStats is subset of SessionStats.
 // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L555
 type CurrentStats struct {
@@ -47,4 +59,14 @@ type CurrentStats struct {
 	SecondsActive   int64 `json:"secondsActive"`
 	SessionCount    int64 `json:"sessionCount"`
 	UploadedBytes   int64 `json:"uploadedBytes"`
+}
+
+// GetDownloaded returns current stats downloaded size in a handy format
+func (cs *CurrentStats) GetDownloaded() (downloaded cunits.Bit) {
+	return cunits.ImportFromByte(float64(cs.DownloadedBytes))
+}
+
+// GetUploaded returns current stats uploaded size in a handy format
+func (cs *CurrentStats) GetUploaded() (uploaded cunits.Bit) {
+	return cunits.ImportFromByte(float64(cs.UploadedBytes))
 }
