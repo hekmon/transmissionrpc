@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+
+	"github.com/hekmon/cunits"
 )
 
 var validTorrentFields []string
@@ -149,6 +151,22 @@ type Torrent struct {
 	Wanted                  []bool             `json:"wanted"`   //https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
 	WebSeeds                []string           `json:"webseeds"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L314
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
+}
+
+// ConvertDownloadSpeed will return the download speed as cunits.Bits/second
+func (t *Torrent) ConvertDownloadSpeed() (speed cunits.Bit) {
+	if t.RateDownload != nil {
+		speed = cunits.ImportFromByte(float64(*t.RateDownload))
+	}
+	return
+}
+
+// ConvertUploadSpeed will return the upload speed as cunits.Bits/second
+func (t *Torrent) ConvertUploadSpeed() (speed cunits.Bit) {
+	if t.RateUpload != nil {
+		speed = cunits.ImportFromByte(float64(*t.RateUpload))
+	}
+	return
 }
 
 // UnmarshalJSON allows to convert timestamps to golang time.Time values.
@@ -299,6 +317,16 @@ type Peer struct {
 	Progress             float64 `json:"progress"`
 	RateToClient         int64   `json:"rateToClient"` // B/s
 	RateToPeer           int64   `json:"rateToPeer"`   // B/s
+}
+
+// ConvertDownloadSpeed will return the download speed from peer as cunits.Bit/second
+func (p *Peer) ConvertDownloadSpeed() (speed cunits.Bit) {
+	return cunits.ImportFromByte(float64(p.RateToClient))
+}
+
+// ConvertUploadSpeed will return the upload speed to peer as cunits.Bit/second
+func (p *Peer) ConvertUploadSpeed() (speed cunits.Bit) {
+	return cunits.ImportFromByte(float64(p.RateToPeer))
 }
 
 // TorrentPeersFrom represents the peers statistics of a torrent.
