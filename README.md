@@ -36,15 +36,13 @@ The remote RPC version can be checked against this library before starting to op
 ok, serverVersion, serverMinimumVersion, err := transmission.RPCVersion()
 if err != nil {
     panic(err)
-} else {
-    if ok {
-        fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmissionrpc library (v%d)\n",
-            serverVersion, transmissionrpc.RPCVersion)
-    } else {
-        panic(fmt.Sprintf("Remote transmission RPC version (v%d) is incompatible with the transmission library (v%d): remote needs at least v%d",
-            serverVersion, transmissionrpc.RPCVersion, serverMinimumVersion))
-    }
 }
+if !ok {
+    panic(fmt.Sprintf("Remote transmission RPC version (v%d) is incompatible with the transmission library (v%d): remote needs at least v%d",
+        serverVersion, transmissionrpc.RPCVersion, serverMinimumVersion))
+}
+fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmissionrpc library (v%d)\n",
+    serverVersion, transmissionrpc.RPCVersion)
 ```
 
 ### Torrent Requests
