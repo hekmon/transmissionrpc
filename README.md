@@ -101,7 +101,7 @@ if err != nil {
 
 * torrent-set
 
-Example: apply a 1Mo/s limit to a torrent.
+Example: apply a 1 MiB/s limit to a torrent.
 
 ```golang
 uploadLimited := true
