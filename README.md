@@ -276,14 +276,16 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 * free-space
 
-Example: Get the space available in bytes for /data.
+Example: Get the space available for /data.
 
 ```golang
-    sizeBytes, err := transmissionbt.FreeSpace("/data")
+    freeSpace, err := transmissionbt.FreeSpace("/data")
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
     } else  {
-        fmt.Printd("%fGB", float64(sizeBytes)/1024/1024/1024)
+        fmt.Printd("%s | %d | %v", freeSpace, freeSpace, freeSpace)
     }
 }
 ```
+
+For more information about the freeSpace type, check the [ComputerUnits](https://github.com/hekmon/cunits) library.
