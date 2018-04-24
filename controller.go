@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"sync"
 	"time"
 )
@@ -42,7 +43,7 @@ type AdvancedConfig struct {
 }
 
 // New returns an initialized and ready to use Controller
-func New(host, user, password string, conf *AdvancedConfig) *Client {
+func New(host, user, password string, conf *AdvancedConfig) (c *Client, err error) {
 	// Config
 	if conf != nil {
 		// Check custom config
@@ -68,15 +69,21 @@ func New(host, user, password string, conf *AdvancedConfig) *Client {
 			UserAgent:   defaultUserAgent,
 		}
 	}
+	// Build & validate URL
 	var scheme string
 	if conf.HTTPS {
 		scheme = "https"
 	} else {
 		scheme = "http"
 	}
-	// Initialize & return
-	return &Client{
-		url:       fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI),
+	remoteURL, err := url.Parse(fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI))
+	if err != nil {
+		err = fmt.Errorf("can't build a valid URL: %v", err)
+		return
+	}
+	// Initialize & return ready to use client
+	c = &Client{
+		url:       remoteURL.String(),
 		user:      user,
 		password:  password,
 		userAgent: conf.UserAgent,
@@ -85,4 +92,5 @@ func New(host, user, password string, conf *AdvancedConfig) *Client {
 			Timeout: conf.HTTPTimeout,
 		},
 	}
+	return
 }
