@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+
+	"github.com/hekmon/cunits"
 )
 
 /*
@@ -143,5 +145,20 @@ type Units struct {
 	SizeUnits   []string `json:"size-units"`   // 4 strings: KB/s, MB/s, GB/s, TB/s
 	SizeBytes   int64    `json:"size-bytes"`   // number of bytes in a KB (1000 for kB; 1024 for KiB)
 	MemoryUnits []string `json:"memory-units"` // 4 strings: KB/s, MB/s, GB/s, TB/s
-	MemoryBytes int64    `json:"memory-bytes"` // number of bytes in a KB (1000 for kB; 1024 for KiB)speed-units  | array  | 4 strings: KB/s, MB/s, GB/s, TB/s
+	MemoryBytes int64    `json:"memory-bytes"` // number of bytes in a KB (1000 for kB; 1024 for KiB)
+}
+
+// GetSpeed returns the speed in a handy format
+func (u *Units) GetSpeed() (speed cunits.Bit) {
+	return cunits.ImportFromByte(float64(u.SpeedBytes))
+}
+
+// GetSize returns the size in a handy format
+func (u *Units) GetSize() (size cunits.Bit) {
+	return cunits.ImportFromByte(float64(u.SizeBytes))
+}
+
+// GetMemory returns the memory in a handy format
+func (u *Units) GetMemory() (memory cunits.Bit) {
+	return cunits.ImportFromByte(float64(u.MemoryBytes))
 }
