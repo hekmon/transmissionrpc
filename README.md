@@ -49,7 +49,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
 
 * Torrent Requests
   * Torrent Action Requests
-    - [x] torrent-start
+    * [x] torrent-start
     - [x] torrent-start-now
     - [x] torrent-stop
     - [x] torrent-verify
@@ -79,10 +79,10 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * Session Shutdown
     - [ ] session-close
   * Queue Movement Requests
-    - [  ] queue-move-top
-    - [  ] queue-move-up
-    - [  ] queue-move-down
-    - [  ] queue-move-bottom
+    - [ ] queue-move-top
+    - [ ] queue-move-up
+    - [ ] queue-move-down
+    - [ ] queue-move-bottom
   * Free Space
     - [x] free-space
 
