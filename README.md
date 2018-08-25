@@ -47,7 +47,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
 
 ## Features
 
-* Torrent Requests
+* [Torrent Requests](#torrent-requests)
   * Torrent Action Requests
     * [x] torrent-start
     * [x] torrent-start-now
@@ -64,7 +64,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
     * [x] torrent-remove
   * Moving a Torrent
     * [x] torrent-set-location
-  * Renaming a Torrent's path
+  * Renaming a Torrent path
     * [ ] torrent-rename-path
 * Session Requests
   * Session Session Arguments
