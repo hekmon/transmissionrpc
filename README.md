@@ -50,41 +50,41 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
 * Torrent Requests
   * Torrent Action Requests
     * [x] torrent-start
-    - [x] torrent-start-now
-    - [x] torrent-stop
-    - [x] torrent-verify
-    - [x] torrent-reannounce
+    * [x] torrent-start-now
+    * [x] torrent-stop
+    * [x] torrent-verify
+    * [x] torrent-reannounce
   * Torrent Mutators
-    - [x] torrent-set
+    * [x] torrent-set
   * Torrent Accessors
-    - [x] torrent-get
+    * [x] torrent-get
   * Adding a Torrent
-    - [x] torrent-add
+    * [x] torrent-add
   * Removing a Torrent
-    - [x] torrent-remove
+    * [x] torrent-remove
   * Moving a Torrent
-    - [x] torrent-set-location
+    * [x] torrent-set-location
   * Renaming a Torrent's path
-    - [ ] torrent-rename-path
+    * [ ] torrent-rename-path
 * Session Requests
   * Session Session Arguments
-    - [x] session-set
-    - [x] session-get
+    * [x] session-set
+    * [x] session-get
   * Session Statistics
-    - [x] session-stats
+    * [x] session-stats
   * Blocklist
-    - [ ] blocklist-update
+    * [ ] blocklist-update
   * Port Checking
-    - [x] port-test
+    * [x] port-test
   * Session Shutdown
-    - [ ] session-close
+    * [ ] session-close
   * Queue Movement Requests
-    - [ ] queue-move-top
-    - [ ] queue-move-up
-    - [ ] queue-move-down
-    - [ ] queue-move-bottom
+    * [ ] queue-move-top
+    * [ ] queue-move-up
+    * [ ] queue-move-down
+    * [ ] queue-move-bottom
   * Free Space
-    - [x] free-space
+    * [x] free-space
 
 ### Torrent Requests
 
