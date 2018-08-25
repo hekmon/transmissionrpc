@@ -48,42 +48,42 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
 ## Features
 
 * [Torrent Requests](#torrent-requests)
-  * Torrent Action Requests
+  * [Torrent Action Requests](#torrent-action-requests)
     * [x] torrent-start
     * [x] torrent-start-now
     * [x] torrent-stop
     * [x] torrent-verify
     * [x] torrent-reannounce
-  * Torrent Mutators
+  * [Torrent Mutators](#torrent-mutators)
     * [x] torrent-set
-  * Torrent Accessors
+  * [Torrent Accessors](#torrent-accessors)
     * [x] torrent-get
-  * Adding a Torrent
+  * [Adding a Torrent](#adding-a-torrent)
     * [x] torrent-add
-  * Removing a Torrent
+  * [Removing a Torrent](#removing-a-torrent)
     * [x] torrent-remove
-  * Moving a Torrent
+  * [Moving a Torrent](#moving-a-torrent)
     * [x] torrent-set-location
-  * Renaming a Torrent path
+  * [Renaming a Torrent path](#renaming-a-torrent-path)
     * [ ] torrent-rename-path
-* Session Requests
-  * Session Session Arguments
+* [Session Requests](#session-requests)
+  * [Session Arguments](#session-session-arguments)
     * [x] session-set
     * [x] session-get
-  * Session Statistics
+  * [Session Statistics](#session-statistics)
     * [x] session-stats
-  * Blocklist
+  * [Blocklist](#blocklist)
     * [ ] blocklist-update
-  * Port Checking
+  * [Port Checking](#port-checking)
     * [x] port-test
-  * Session Shutdown
+  * [Session Shutdown](#session-shutdown)
     * [ ] session-close
-  * Queue Movement Requests
+  * [Queue Movement Requests](#queue-movement-requests)
     * [ ] queue-move-top
     * [ ] queue-move-up
     * [ ] queue-move-down
     * [ ] queue-move-bottom
-  * Free Space
+  * [Free Space](#free-space)
     * [x] free-space
 
 ### Torrent Requests
@@ -290,7 +290,7 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 ### Session Requests
 
-#### Session Session Arguments
+#### Session Arguments
 
 * session-set _(done)_
 * session-get _(done)_
