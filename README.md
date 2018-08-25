@@ -11,7 +11,7 @@ Also payload generation aims to be precise: when several values can be added to 
 This lib follow the transmission rpc version 15:
 https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714
 
-## Implementation
+## Getting started
 
 First the main client object must be instantiated with [New()](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
@@ -44,6 +44,47 @@ if !ok {
 fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmissionrpc library (v%d)\n",
     serverVersion, transmissionrpc.RPCVersion)
 ```
+
+## Features
+
+* Torrent Requests
+  * Torrent Action Requests
+    - [x] torrent-start
+    - [x] torrent-start-now
+    - [x] torrent-stop
+    - [x] torrent-verify
+    - [x] torrent-reannounce
+  * Torrent Mutators
+    - [x] torrent-set
+  * Torrent Accessors
+    - [x] torrent-get
+  * Adding a Torrent
+    - [x] torrent-add
+  * Removing a Torrent
+    - [x] torrent-remove
+  * Moving a Torrent
+    - [x] torrent-set-location
+  * Renaming a Torrent's path
+    - [ ] torrent-rename-path
+* Session Requests
+  * Session Session Arguments
+    - [x] session-set
+    - [x] session-get
+  * Session Statistics
+    - [x] session-stats
+  * Blocklist
+    - [ ] blocklist-update
+  * Port Checking
+    - [x] port-test
+  * Session Shutdown
+    - [ ] session-close
+  * Queue Movement Requests
+    - [  ] queue-move-top
+    - [  ] queue-move-up
+    - [  ] queue-move-down
+    - [  ] queue-move-bottom
+  * Free Space
+    - [x] free-space
 
 ### Torrent Requests
 
@@ -229,7 +270,7 @@ if err != nil {
 
 Which would output:
 
-```
+```raw
 55
 ubuntu-17.10.1-desktop-amd64.iso
 f07e0b0584745b7bcb35e98097488d34e68623d0
@@ -243,7 +284,7 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 * torrent-set-location _(done)_
 
-#### Renaming a Torrent's Path
+#### Renaming a Torrent path
 
 * torrent-rename-path _(to do)_
 
@@ -276,7 +317,7 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
     }
 ```
 
-#### Session shutdown
+#### Session Shutdown
 
 * session-close _(to do)_
 
