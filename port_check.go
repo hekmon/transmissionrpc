@@ -6,7 +6,7 @@ import (
 
 /*
 	Port Checking
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L569
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L584
 */
 
 // CheckPort allows tests to see if your incoming peer port is accessible from the outside world.

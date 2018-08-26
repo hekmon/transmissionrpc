@@ -8,7 +8,7 @@ import (
 
 /*
 	Free Space
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L603
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L618
 */
 
 // FreeSpace allow to see how much free space is available in a client-specified folder.
@@ -32,7 +32,7 @@ type transmissionFreeSpacePayload struct {
 }
 
 // TransmissionFreeSpace represents the freespace available in bytes for a specific path.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L616
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L631
 type TransmissionFreeSpace struct {
 	Path string `json:"path"`
 	Size int64  `json:"size-bytes"`

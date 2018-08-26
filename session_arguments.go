@@ -10,7 +10,7 @@ import (
 
 /*
 	Session Arguments
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L446
+	hhttps://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L461
 */
 
 // RPCVersion returns true if the lib RPC version is greater or equals to the remote server rpc minimum version.
@@ -34,8 +34,8 @@ func (c *Client) RPCVersion() (ok bool, serverVersion int64, serverMinimumVersio
 	return
 }
 
-// SessionArgumentsSet returns global/session values.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L517
+// SessionArgumentsSet allows to modify global/session values.
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L534
 func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
 	// Checks
 	if payload == nil {
@@ -55,7 +55,7 @@ func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
 }
 
 // SessionArgumentsGet returns global/session values.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L525
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L542
 func (c *Client) SessionArgumentsGet() (sessionArgs *SessionArguments, err error) {
 	if err = c.rpcCall("session-get", nil, &sessionArgs); err != nil {
 		err = fmt.Errorf("'session-get' rpc method failed: %v", err)
@@ -64,7 +64,7 @@ func (c *Client) SessionArgumentsGet() (sessionArgs *SessionArguments, err error
 }
 
 // SessionArguments represents all the global/session values.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L448
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L461
 type SessionArguments struct {
 	AltSpeedDown              *int64   `json:"alt-speed-down"`               // max global download speed (KBps)
 	AltSpeedEnabled           *bool    `json:"alt-speed-enabled"`            // true means use the alt speeds
@@ -138,7 +138,7 @@ func (sa *SessionArguments) MarshalJSON() (data []byte, err error) {
 }
 
 // Units is subset of SessionArguments.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L499
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L514
 type Units struct {
 	SpeedUnits  []string `json:"speed-units"`  // 4 strings: KB/s, MB/s, GB/s, TB/s
 	SpeedBytes  int64    `json:"speed-bytes"`  // number of bytes in a KB (1000 for kB; 1024 for KiB)

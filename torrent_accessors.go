@@ -2,7 +2,7 @@ package transmissionrpc
 
 /*
 	Torrent Accessors
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L127
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L142
 */
 
 import (
@@ -35,6 +35,7 @@ func (c *Client) TorrentGetAllFor(ids []int64) (torrents []*Torrent, err error) 
 }
 
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L144
 func (c *Client) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
 	// Validate fields
 	var fieldInvalid bool
@@ -81,7 +82,7 @@ type torrentGetResults struct {
 
 // Torrent represents all the possible fields of data for a torrent.
 // All fields are pointers to detect if the value is nil (field not requested) or default real default value.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L148
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L163
 type Torrent struct {
 	ActivityDate            *time.Time         `json:"activityDate"`
 	AddedDate               *time.Time         `json:"addedDate"`
@@ -123,10 +124,10 @@ type Torrent struct {
 	PeersGettingFromUs      *int64             `json:"peersGettingFromUs"`
 	PeersSendingToUs        *int64             `json:"peersSendingToUs"`
 	PercentDone             *float64           `json:"percentDone"`
-	Pieces                  *string            `json:"pieces"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L264
+	Pieces                  *string            `json:"pieces"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L279
 	PieceCount              *int64             `json:"pieceCount"`
 	PieceSize               *int64             `json:"pieceSize"`
-	Priorities              []int64            `json:"priorities"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L270
+	Priorities              []int64            `json:"priorities"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L285
 	QueuePosition           *int64             `json:"queuePosition"`
 	RateDownload            *int64             `json:"rateDownload"` // B/s
 	RateUpload              *int64             `json:"rateUpload"`   // B/s
@@ -148,8 +149,8 @@ type Torrent struct {
 	UploadLimit             *int64             `json:"uploadLimit"`
 	UploadLimited           *bool              `json:"uploadLimited"`
 	UploadRatio             *float64           `json:"uploadRatio"`
-	Wanted                  []bool             `json:"wanted"`   //https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L310
-	WebSeeds                []string           `json:"webseeds"` // https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L314
+	Wanted                  []bool             `json:"wanted"`   //https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L325
+	WebSeeds                []string           `json:"webseeds"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L329
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
 }
 
@@ -283,7 +284,7 @@ func (t *Torrent) MarshalJSON() (data []byte, err error) {
 }
 
 // TorrentFile represent one file from a Torrent.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L221
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L236
 type TorrentFile struct {
 	BytesCompleted int64  `json:"bytesCompleted"`
 	Length         int64  `json:"length"`
@@ -291,7 +292,7 @@ type TorrentFile struct {
 }
 
 // TorrentFileStat represents the metadata of a torrent's file.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L227
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L242
 type TorrentFileStat struct {
 	BytesCompleted int64 `json:"bytesCompleted"`
 	Wanted         bool  `json:"wanted"`
@@ -299,7 +300,7 @@ type TorrentFileStat struct {
 }
 
 // Peer represent a peer metadata of a torrent's peer list.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L235
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L250
 type Peer struct {
 	Address              string  `json:"address"`
 	ClientName           string  `json:"clientName"`
@@ -330,7 +331,7 @@ func (p *Peer) ConvertUploadSpeed() (speed cunits.Bit) {
 }
 
 // TorrentPeersFrom represents the peers statistics of a torrent.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L254
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L269
 type TorrentPeersFrom struct {
 	FromCache    int64 `json:"fromCache"`
 	FromDHT      int64 `json:"fromDht"`
@@ -342,7 +343,7 @@ type TorrentPeersFrom struct {
 }
 
 // Tracker represent the base data of a torrent's tracker.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L274
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L289
 type Tracker struct {
 	Announce string `json:"announce"`
 	ID       int64  `json:"id"`
@@ -351,7 +352,7 @@ type Tracker struct {
 }
 
 // TrackerStats represent the extended data of a torrent's tracker.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L281
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L296
 type TrackerStats struct {
 	Announce              string    `json:"announce"`
 	AnnounceState         int64     `json:"announceState"`

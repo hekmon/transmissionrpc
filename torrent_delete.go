@@ -7,7 +7,7 @@ import (
 
 /*
 	Removing a Torrent
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L392
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L407
 */
 
 // TorrentDelete allows to delete one or more torrents only or with their data.
@@ -26,7 +26,7 @@ func (c *Client) TorrentDelete(payload *TorrentDeletePayload) (err error) {
 }
 
 // TorrentDeletePayload holds the torrent id(s) to delete with a data deletion flag.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L398
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L413
 type TorrentDeletePayload struct {
 	IDs             []int64 `json:"ids"`
 	DeleteLocalData bool    `json:"delete-local-data"`

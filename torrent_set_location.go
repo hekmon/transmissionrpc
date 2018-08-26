@@ -7,11 +7,11 @@ import (
 
 /*
 	Moving a torrent
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L406
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L421
 */
 
 // TorrentSetLocation allows to set a new location for one or more torrents.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L408
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L423
 func (c *Client) TorrentSetLocation(payload *TorrentSetLocationPayload) (err error) {
 	// Validate
 	if payload == nil {
@@ -28,7 +28,7 @@ func (c *Client) TorrentSetLocation(payload *TorrentSetLocationPayload) (err err
 }
 
 // TorrentSetLocationPayload describes the torrents' id(s) and other options.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L412
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L427
 type TorrentSetLocationPayload struct {
 	IDs      []int64 `json:"ids"`      // torrent list
 	Location string  `json:"location"` // the new torrent location

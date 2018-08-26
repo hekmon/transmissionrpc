@@ -8,10 +8,11 @@ import (
 
 /*
 	Session Statistics
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L531
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L546
 */
 
 // SessionStats returns all (current/cumulative) statistics.
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L548
 func (c *Client) SessionStats() (stats *SessionStats, err error) {
 	if err = c.rpcCall("session-stats", nil, &stats); err != nil {
 		err = fmt.Errorf("'session-stats' rpc method failed: %v", err)
@@ -20,7 +21,7 @@ func (c *Client) SessionStats() (stats *SessionStats, err error) {
 }
 
 // SessionStats represents all (current/cumulative) statistics.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L539
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L554
 type SessionStats struct {
 	ActiveTorrentCount int64            `json:"activeTorrentCount"`
 	CumulativeStats    *CumulativeStats `json:"cumulative-stats"`
@@ -32,7 +33,7 @@ type SessionStats struct {
 }
 
 // CumulativeStats is subset of SessionStats.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L547
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L562
 type CumulativeStats struct {
 	DownloadedBytes int64 `json:"downloadedBytes"`
 	FilesAdded      int64 `json:"filesAdded"`
@@ -52,7 +53,7 @@ func (cs *CumulativeStats) GetUploaded() (uploaded cunits.Bit) {
 }
 
 // CurrentStats is subset of SessionStats.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L555
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L570
 type CurrentStats struct {
 	DownloadedBytes int64 `json:"downloadedBytes"`
 	FilesAdded      int64 `json:"filesAdded"`

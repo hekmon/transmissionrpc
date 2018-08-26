@@ -13,7 +13,7 @@ import (
 
 /*
 	Adding a Torrent
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L356
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L371
 */
 
 // TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
@@ -37,6 +37,7 @@ func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
 
 // TorrentAdd allows to send an Add payload. If successfull (torrent added or duplicate) torrent
 // return value will only have HashString, ID and Name fields set up.
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L373
 func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err error) {
 	// Validate
 	if payload == nil {
@@ -65,7 +66,7 @@ func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err e
 }
 
 // TorrentAddPayload represents the data to send in order to add a torrent.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L362
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L37762
 type TorrentAddPayload struct {
 	Cookies           *string `json:"cookies"`           // pointer to a string of one or more cookies
 	DownloadDir       *string `json:"download-dir"`      // path to download the torrent to

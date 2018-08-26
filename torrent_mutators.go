@@ -10,10 +10,11 @@ import (
 
 /*
 	Torrent Mutators
-	https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L90
+	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L105
 */
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L107
 func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
 	// Validate
 	if payload == nil {
@@ -39,7 +40,7 @@ const (
 )
 
 // TorrentSetPayload contains all the mutators appliable on one torrent.
-// https://trac.transmissionbt.com/browser/tags/2.92/extras/rpc-spec.txt?rev=14714#L96
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L111
 type TorrentSetPayload struct {
 	BandwidthPriority   *int64         `json:"bandwidthPriority"`   // this torrent's bandwidth tr_priority_t
 	DownloadLimit       *int64         `json:"downloadLimit"`       // maximum download speed (KBps)
