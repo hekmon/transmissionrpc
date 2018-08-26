@@ -14,13 +14,11 @@ import (
 func (c *Client) TorrentDelete(payload *TorrentDeletePayload) (err error) {
 	// Validate
 	if payload == nil {
-		err = errors.New("payload can't be nil")
-		return
+		return errors.New("payload can't be nil")
 	}
 	// Send payload
 	if err = c.rpcCall("torrent-remove", payload, nil); err != nil {
-		err = fmt.Errorf("'torrent-remove' rpc method failed: %v", err)
-		return
+		return fmt.Errorf("'torrent-remove' rpc method failed: %v", err)
 	}
 	return
 }
