@@ -9,9 +9,9 @@ import (
 	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L584
 */
 
-// CheckPort allows tests to see if your incoming peer port is accessible from the outside world.
-func (c *Client) CheckPort() (open bool, err error) {
-	var result transmissionCheckPortAnswer
+// PortTest allows tests to see if your incoming peer port is accessible from the outside world.
+func (c *Client) PortTest() (open bool, err error) {
+	var result portTestAnswer
 	// Send request
 	if err = c.rpcCall("port-test", nil, &result); err == nil {
 		open = result.PortOpen
@@ -21,6 +21,6 @@ func (c *Client) CheckPort() (open bool, err error) {
 	return
 }
 
-type transmissionCheckPortAnswer struct {
+type portTestAnswer struct {
 	PortOpen bool `json:"port-is-open"`
 }
