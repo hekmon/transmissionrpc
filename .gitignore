@@ -1,6 +1,9 @@
 # VSCode local settings
 .vscode
 
+# Vendoring
+vendor/
+
 ## Github ignore
 
 # Binaries for programs and plugins
