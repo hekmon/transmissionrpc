@@ -66,7 +66,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * [Renaming a Torrent path](#renaming-a-torrent-path)
     * [ ] torrent-rename-path
 * [Session Requests](#session-requests)
-  * [Session Arguments](#session-session-arguments)
+  * [Session Arguments](#session-arguments)
     * [x] session-set
     * [x] session-get
   * [Session Statistics](#session-statistics)
