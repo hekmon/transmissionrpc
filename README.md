@@ -99,6 +99,10 @@ transmissionbt.TorrentXXXXRecentlyActive()
 
 * torrent-start
 
+Check [TorrentStartIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartIDs), [TorrentStartHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartHashes) and [TorrentStartRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartRecentlyActive).
+
+Ex:
+
 ```golang
 err := transmissionbt.TorrentStartIDs([]int64{55})
 if err != nil {
@@ -109,6 +113,10 @@ if err != nil {
 ```
 
 * torrent-start-now
+
+Check [TorrentStartNowIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowIDs), [TorrentStartNowHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowHashes) and [TorrentStartNowRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowRecentlyActive).
+
+Ex:
 
 ```golang
 err := transmissionbt.TorrentStartNowHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
@@ -121,6 +129,10 @@ if err != nil {
 
 * torrent-stop
 
+Check [TorrentStopIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopIDs), [TorrentStopHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopHashes) and [TorrentStopRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopRecentlyActive).
+
+Ex:
+
 ```golang
 err := transmissionbt.TorrentStopIDs([]int64{55})
 if err != nil {
@@ -132,6 +144,10 @@ if err != nil {
 
 * torrent-verify
 
+Check [TorrentVerifyIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyIDs), [TorrentVerifyHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyHashes) and [TorrentVerifyRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyRecentlyActive).
+
+Ex:
+
 ```golang
 err := transmissionbt.TorrentVerifyHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {
@@ -142,6 +158,10 @@ if err != nil {
 ```
 
 * torrent-reannounce
+
+Check [TorrentReannounceIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceIDs), [TorrentReannounceHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceHashes) and [TorrentReannounceRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceRecentlyActive).
+
+Ex:
 
 ```golang
 err := transmissionbt.TorrentReannounceRecentlyActive()
@@ -156,11 +176,13 @@ if err != nil {
 
 * torrent-set
 
-Example: apply a 1 MiB/s limit to a torrent.
+Mapped as [TorrentSet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentSet).
+
+Example: apply a 1 MB/s limit to a torrent.
 
 ```golang
 uploadLimited := true
-uploadLimitKBps := int64(1024)
+uploadLimitKBps := int64(1000)
 err := transmissionbt.TorrentSet(&transmissionrpc.TorrentSetPayload{
     IDs:           []int64{55},
     UploadLimited: &uploadLimited,
@@ -277,11 +299,15 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 #### Removing a Torrent
 
-* torrent-remove _(done)_
+* torrent-remove
+
+Mapped as [TorrentRemove()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentRemove).
 
 #### Moving a Torrent
 
-* torrent-set-location _(done)_
+* torrent-set-location
+
+Mapped as [TorrentSetLocation()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentSetLocation).
 
 #### Renaming a Torrent path
 
@@ -291,12 +317,19 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 #### Session Arguments
 
-* session-set _(done)_
-* session-get _(done)_
+* session-set
+
+Mapped as [SessionArgumentsSet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionArgumentsSet).
+
+* session-get
+
+Mapped as [SessionArgumentsGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionArgumentsGet).
 
 #### Session Statistics
 
-* session-stats _(done)_
+* session-stats
+
+Mapped as [SessionStats()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionStats).
 
 #### Blocklist
 
@@ -306,8 +339,12 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 * port-test
 
+Mapped as [PortTest()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.PortTest).
+
+Ex:
+
 ```golang
-    st, err := transmissionbt.CheckPort()
+    st, err := transmissionbt.PortTest()
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
     }
@@ -330,6 +367,8 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 #### Free Space
 
 * free-space
+
+Mappped as [FreeSpace()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.FreeSpace).
 
 Example: Get the space available for /data.
 
