@@ -178,7 +178,7 @@ if err != nil {
 
 Mapped as [TorrentSet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentSet).
 
-Example: apply a 1 MB/s limit to a torrent.
+Ex: apply a 1 MB/s limit to a torrent.
 
 ```golang
 uploadLimited := true
@@ -370,7 +370,7 @@ Ex:
 
 Mappped as [FreeSpace()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.FreeSpace).
 
-Example: Get the space available for /data.
+Ex: Get the space available for /data.
 
 ```golang
     freeSpace, err := transmissionbt.FreeSpace("/data")
