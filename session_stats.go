@@ -43,13 +43,13 @@ type CumulativeStats struct {
 }
 
 // GetDownloaded returns cumulative stats downloaded size in a handy format
-func (cs *CumulativeStats) GetDownloaded() (downloaded cunits.Bit) {
-	return cunits.ImportFromByte(float64(cs.DownloadedBytes))
+func (cs *CumulativeStats) GetDownloaded() (downloaded cunits.Bits) {
+	return cunits.ImportInByte(float64(cs.DownloadedBytes))
 }
 
 // GetUploaded returns cumulative stats uploaded size in a handy format
-func (cs *CumulativeStats) GetUploaded() (uploaded cunits.Bit) {
-	return cunits.ImportFromByte(float64(cs.UploadedBytes))
+func (cs *CumulativeStats) GetUploaded() (uploaded cunits.Bits) {
+	return cunits.ImportInByte(float64(cs.UploadedBytes))
 }
 
 // CurrentStats is subset of SessionStats.
@@ -63,11 +63,11 @@ type CurrentStats struct {
 }
 
 // GetDownloaded returns current stats downloaded size in a handy format
-func (cs *CurrentStats) GetDownloaded() (downloaded cunits.Bit) {
-	return cunits.ImportFromByte(float64(cs.DownloadedBytes))
+func (cs *CurrentStats) GetDownloaded() (downloaded cunits.Bits) {
+	return cunits.ImportInByte(float64(cs.DownloadedBytes))
 }
 
 // GetUploaded returns current stats uploaded size in a handy format
-func (cs *CurrentStats) GetUploaded() (uploaded cunits.Bit) {
-	return cunits.ImportFromByte(float64(cs.UploadedBytes))
+func (cs *CurrentStats) GetUploaded() (uploaded cunits.Bits) {
+	return cunits.ImportInByte(float64(cs.UploadedBytes))
 }

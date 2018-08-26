@@ -154,18 +154,18 @@ type Torrent struct {
 	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
 }
 
-// ConvertDownloadSpeed will return the download speed as cunits.Bits/second
-func (t *Torrent) ConvertDownloadSpeed() (speed cunits.Bit) {
+// ConvertDownloadSpeed will return the download speed as cunits.Bitss/second
+func (t *Torrent) ConvertDownloadSpeed() (speed cunits.Bits) {
 	if t.RateDownload != nil {
-		speed = cunits.ImportFromByte(float64(*t.RateDownload))
+		speed = cunits.ImportInByte(float64(*t.RateDownload))
 	}
 	return
 }
 
-// ConvertUploadSpeed will return the upload speed as cunits.Bits/second
-func (t *Torrent) ConvertUploadSpeed() (speed cunits.Bit) {
+// ConvertUploadSpeed will return the upload speed as cunits.Bitss/second
+func (t *Torrent) ConvertUploadSpeed() (speed cunits.Bits) {
 	if t.RateUpload != nil {
-		speed = cunits.ImportFromByte(float64(*t.RateUpload))
+		speed = cunits.ImportInByte(float64(*t.RateUpload))
 	}
 	return
 }
@@ -320,14 +320,14 @@ type Peer struct {
 	RateToPeer           int64   `json:"rateToPeer"`   // B/s
 }
 
-// ConvertDownloadSpeed will return the download speed from peer as cunits.Bit/second
-func (p *Peer) ConvertDownloadSpeed() (speed cunits.Bit) {
-	return cunits.ImportFromByte(float64(p.RateToClient))
+// ConvertDownloadSpeed will return the download speed from peer as cunits.Bits/second
+func (p *Peer) ConvertDownloadSpeed() (speed cunits.Bits) {
+	return cunits.ImportInByte(float64(p.RateToClient))
 }
 
-// ConvertUploadSpeed will return the upload speed to peer as cunits.Bit/second
-func (p *Peer) ConvertUploadSpeed() (speed cunits.Bit) {
-	return cunits.ImportFromByte(float64(p.RateToPeer))
+// ConvertUploadSpeed will return the upload speed to peer as cunits.Bits/second
+func (p *Peer) ConvertUploadSpeed() (speed cunits.Bits) {
+	return cunits.ImportInByte(float64(p.RateToPeer))
 }
 
 // TorrentPeersFrom represents the peers statistics of a torrent.

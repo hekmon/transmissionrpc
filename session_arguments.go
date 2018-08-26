@@ -149,16 +149,16 @@ type Units struct {
 }
 
 // GetSpeed returns the speed in a handy format
-func (u *Units) GetSpeed() (speed cunits.Bit) {
-	return cunits.ImportFromByte(float64(u.SpeedBytes))
+func (u *Units) GetSpeed() (speed cunits.Bits) {
+	return cunits.ImportInByte(float64(u.SpeedBytes))
 }
 
 // GetSize returns the size in a handy format
-func (u *Units) GetSize() (size cunits.Bit) {
-	return cunits.ImportFromByte(float64(u.SizeBytes))
+func (u *Units) GetSize() (size cunits.Bits) {
+	return cunits.ImportInByte(float64(u.SizeBytes))
 }
 
 // GetMemory returns the memory in a handy format
-func (u *Units) GetMemory() (memory cunits.Bit) {
-	return cunits.ImportFromByte(float64(u.MemoryBytes))
+func (u *Units) GetMemory() (memory cunits.Bits) {
+	return cunits.ImportInByte(float64(u.MemoryBytes))
 }

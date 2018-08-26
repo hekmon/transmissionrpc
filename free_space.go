@@ -12,12 +12,12 @@ import (
 */
 
 // FreeSpace allow to see how much free space is available in a client-specified folder.
-func (c *Client) FreeSpace(path string) (freeSpace cunits.Bit, err error) {
+func (c *Client) FreeSpace(path string) (freeSpace cunits.Bits, err error) {
 	payload := &transmissionFreeSpacePayload{Path: path}
 	var space TransmissionFreeSpace
 	if err = c.rpcCall("free-space", payload, &space); err == nil {
 		if space.Path == path {
-			freeSpace = cunits.ImportFromByte(float64(space.Size))
+			freeSpace = cunits.ImportInByte(float64(space.Size))
 		} else {
 			err = fmt.Errorf("returned path '%s' does not match with requested path '%s'", space.Path, path)
 		}
