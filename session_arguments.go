@@ -71,7 +71,7 @@ type SessionArguments struct {
 	AltSpeedTimeBegin         *int64   `json:"alt-speed-time-begin"`         // when to turn on alt speeds (units: minutes after midnight)
 	AltSpeedTimeEnabled       *bool    `json:"alt-speed-time-enabled"`       // true means the scheduled on/off times are used
 	AltSpeedTimeEnd           *int64   `json:"alt-speed-time-end"`           // when to turn off alt speeds (units: same)
-	AltSeepdTimeDay           *int64   `json:"alt-speed-time-day"`           // what day(s) to turn on alt speeds (look at tr_sched_day)
+	AltSpeedTimeDay           *int64   `json:"alt-speed-time-day"`           // what day(s) to turn on alt speeds (look at tr_sched_day)
 	AltSpeedUp                *int64   `json:"alt-speed-up"`                 // max global upload speed (KBps)
 	BlocklistURL              *string  `json:"blocklist-url"`                // location of the blocklist to use for "blocklist-update"
 	BlocklistEnabled          *bool    `json:"blocklist-enabled"`            // true means enabled
