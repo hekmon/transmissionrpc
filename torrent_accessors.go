@@ -137,7 +137,7 @@ type Torrent struct {
 	SeedIdleLimit           *int64             `json:"seedIdleLimit"`
 	SeedIdleMode            *int64             `json:"seedIdleMode"`
 	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
-	SeedRatioMode           *int64             `json:"seedRatioMode"`
+	SeedRatioMode           *SeedRatioMode     `json:"seedRatioMode"`
 	SizeWhenDone            *int64             `json:"sizeWhenDone"`
 	StartDate               *time.Time         `json:"startDate"`
 	Status                  *TorrentStatus     `json:"status"`
@@ -340,6 +340,45 @@ type TorrentPeersFrom struct {
 	FromLTEP     int64 `json:"fromLtep"`
 	FromPEX      int64 `json:"fromPex"`
 	FromTracker  int64 `json:"fromTracker"`
+}
+
+// SeedRatioMode represents a torrent current seeding mode
+type SeedRatioMode int64
+
+const (
+	// SeedRatioModeGlobal represents the use of the global ratio for a torrent
+	SeedRatioModeGlobal SeedRatioMode = 0
+	// SeedRatioModeCustom represents the use of a custom ratio for a torrent
+	SeedRatioModeCustom SeedRatioMode = 1
+	// SeedRatioModeNoRatio represents the absence of ratio for a torrent
+	SeedRatioModeNoRatio SeedRatioMode = 2
+)
+
+func (srm SeedRatioMode) String() string {
+	switch srm {
+	case SeedRatioModeGlobal:
+		return "global"
+	case SeedRatioModeCustom:
+		return "custom"
+	case SeedRatioModeNoRatio:
+		return "no ratio"
+	default:
+		return "<unknown>"
+	}
+}
+
+// GoString implements the GoStringer interface from the stdlib fmt package
+func (srm SeedRatioMode) GoString() string {
+	switch srm {
+	case SeedRatioModeGlobal:
+		return fmt.Sprintf("global (%d)", srm)
+	case SeedRatioModeCustom:
+		return fmt.Sprintf("custom (%d)", srm)
+	case SeedRatioModeNoRatio:
+		return fmt.Sprintf("no ratio (%d)", srm)
+	default:
+		return fmt.Sprintf("<unknown> (%d)", srm)
+	}
 }
 
 // TorrentStatus binds torrent status to a status code
