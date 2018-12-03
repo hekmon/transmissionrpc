@@ -140,7 +140,7 @@ type Torrent struct {
 	SeedRatioMode           *int64             `json:"seedRatioMode"`
 	SizeWhenDone            *int64             `json:"sizeWhenDone"`
 	StartDate               *time.Time         `json:"startDate"`
-	Status                  *int64             `json:"status"`
+	Status                  *TorrentStatus     `json:"status"`
 	Trackers                []*Tracker         `json:"trackers"`
 	TrackerStats            []*TrackerStats    `json:"trackerStats"`
 	TotalSize               *int64             `json:"totalSize"`
@@ -340,6 +340,75 @@ type TorrentPeersFrom struct {
 	FromLTEP     int64 `json:"fromLtep"`
 	FromPEX      int64 `json:"fromPex"`
 	FromTracker  int64 `json:"fromTracker"`
+}
+
+// TorrentStatus binds torrent status to a status code
+type TorrentStatus int64
+
+const (
+	// TorrentStatusStopped represents a stopped torrent
+	TorrentStatusStopped TorrentStatus = 0
+	// TorrentStatusCheckWait represents a torrent queued for files checking
+	TorrentStatusCheckWait TorrentStatus = 1
+	// TorrentStatusCheck represents a torrent which files are currently checked
+	TorrentStatusCheck TorrentStatus = 2
+	// TorrentStatusDownloadWait represents a torrent queue to download
+	TorrentStatusDownloadWait TorrentStatus = 3
+	// TorrentStatusDownload represents a torrent currently downloading
+	TorrentStatusDownload TorrentStatus = 4
+	// TorrentStatusSeedWait represents a torrent queued to seed
+	TorrentStatusSeedWait TorrentStatus = 5
+	// TorrentStatusSeed represents a torrent currently seeding
+	TorrentStatusSeed TorrentStatus = 6
+	// TorrentStatusIsolated represents a torrent which can't find peers
+	TorrentStatusIsolated TorrentStatus = 7
+)
+
+func (status TorrentStatus) String() string {
+	switch status {
+	case TorrentStatusStopped:
+		return "stopped"
+	case TorrentStatusCheckWait:
+		return "waiting to check files"
+	case TorrentStatusCheck:
+		return "checking files"
+	case TorrentStatusDownloadWait:
+		return "waiting to download"
+	case TorrentStatusDownload:
+		return "downloading"
+	case TorrentStatusSeedWait:
+		return "waiting to seed"
+	case TorrentStatusSeed:
+		return "seeding"
+	case TorrentStatusIsolated:
+		return "can't find peers"
+	default:
+		return "<unknown>"
+	}
+}
+
+// GoString implements the GoStringer interface from the stdlib fmt package
+func (status TorrentStatus) GoString() string {
+	switch status {
+	case TorrentStatusStopped:
+		return fmt.Sprintf("stopped (%d)", status)
+	case TorrentStatusCheckWait:
+		return fmt.Sprintf("waiting to check files (%d)", status)
+	case TorrentStatusCheck:
+		return fmt.Sprintf("checking files (%d)", status)
+	case TorrentStatusDownloadWait:
+		return fmt.Sprintf("waiting to download (%d)", status)
+	case TorrentStatusDownload:
+		return fmt.Sprintf("downloading (%d)", status)
+	case TorrentStatusSeedWait:
+		return fmt.Sprintf("waiting to seed (%d)", status)
+	case TorrentStatusSeed:
+		return fmt.Sprintf("seeding (%d)", status)
+	case TorrentStatusIsolated:
+		return fmt.Sprintf("can't find peers (%d)", status)
+	default:
+		return fmt.Sprintf("<unknown> (%d)", status)
+	}
 }
 
 // Tracker represent the base data of a torrent's tracker.
