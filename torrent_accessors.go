@@ -126,7 +126,7 @@ type Torrent struct {
 	PercentDone             *float64           `json:"percentDone"`
 	Pieces                  *string            `json:"pieces"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L279
 	PieceCount              *int64             `json:"pieceCount"`
-	PieceSize               *int64             `json:"pieceSize"`
+	PieceSize               *cunits.Bits       `json:"pieceSize"`
 	Priorities              []int64            `json:"priorities"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L285
 	QueuePosition           *int64             `json:"queuePosition"`
 	RateDownload            *int64             `json:"rateDownload"` // B/s
@@ -138,12 +138,12 @@ type Torrent struct {
 	SeedIdleMode            *int64             `json:"seedIdleMode"`
 	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
 	SeedRatioMode           *SeedRatioMode     `json:"seedRatioMode"`
-	SizeWhenDone            *int64             `json:"sizeWhenDone"`
+	SizeWhenDone            *cunits.Bits       `json:"sizeWhenDone"`
 	StartDate               *time.Time         `json:"startDate"`
 	Status                  *TorrentStatus     `json:"status"`
 	Trackers                []*Tracker         `json:"trackers"`
 	TrackerStats            []*TrackerStats    `json:"trackerStats"`
-	TotalSize               *int64             `json:"totalSize"`
+	TotalSize               *cunits.Bits       `json:"totalSize"`
 	TorrentFile             *string            `json:"torrentFile"`
 	UploadedEver            *int64             `json:"uploadedEver"`
 	UploadLimit             *int64             `json:"uploadLimit"`
@@ -179,8 +179,11 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		AddedDate      *int64  `json:"addedDate"`
 		DateCreated    *int64  `json:"dateCreated"`
 		DoneDate       *int64  `json:"doneDate"`
+		PieceSize      *int64  `json:"pieceSize"`
 		SecondsSeeding *int64  `json:"secondsSeeding"`
+		SizeWhenDone   *int64  `json:"sizeWhenDone"`
 		StartDate      *int64  `json:"startDate"`
+		TotalSize      *int64  `json:"totalSize"`
 		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
@@ -207,13 +210,25 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		dd := time.Unix(*tmp.DoneDate, 0)
 		t.DoneDate = &dd
 	}
+	if tmp.PieceSize != nil {
+		ps := cunits.ImportInByte(float64(*tmp.PieceSize))
+		t.PieceSize = &ps
+	}
 	if tmp.SecondsSeeding != nil {
 		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
 		t.SecondsSeeding = &dur
 	}
+	if tmp.SizeWhenDone != nil {
+		swd := cunits.ImportInByte(float64(*tmp.SizeWhenDone))
+		t.SizeWhenDone = &swd
+	}
 	if tmp.StartDate != nil {
 		st := time.Unix(*tmp.StartDate, 0)
 		t.StartDate = &st
+	}
+	if tmp.TotalSize != nil {
+		ts := cunits.ImportInByte(float64(*tmp.TotalSize))
+		t.TotalSize = &ts
 	}
 	// Boolean slice in decimal form
 	if tmp.Wanted != nil {
