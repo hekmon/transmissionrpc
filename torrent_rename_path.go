@@ -32,5 +32,5 @@ func (c *Client) TorrentRenamePath(payload *TorrentRenamePathPayload) (err error
 type TorrentRenamePathPayload struct {
 	IDs      []int64	`json:"ids"`	// torrent list
 	Path 	 string 	`json:"path"`	// the new torrent path
-	Name     string		`json:"move"`	// new torrent name
+	Name     string		`json:"name"`	// new torrent name
 }
