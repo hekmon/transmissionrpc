@@ -64,7 +64,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * [Moving a Torrent](#moving-a-torrent)
     * [x] torrent-set-location
   * [Renaming a Torrent path](#renaming-a-torrent-path)
-    * [ ] torrent-rename-path
+    * [x] torrent-rename-path
 * [Session Requests](#session-requests)
   * [Session Arguments](#session-arguments)
     * [x] session-set
@@ -311,7 +311,7 @@ Mapped as [TorrentSetLocation()](https://godoc.org/github.com/hekmon/transmissio
 
 #### Renaming a Torrent path
 
-* torrent-rename-path _(to do)_
+* torrent-rename-path _(done, without doc)_
 
 ### Session Requests
 
