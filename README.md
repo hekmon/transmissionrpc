@@ -311,7 +311,9 @@ Mapped as [TorrentSetLocation()](https://godoc.org/github.com/hekmon/transmissio
 
 #### Renaming a Torrent path
 
-* torrent-rename-path _(done, without doc)_
+* torrent-rename-path
+
+Mapped as [TorrentRenamePath()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentRenamePath).
 
 ### Session Requests
 
