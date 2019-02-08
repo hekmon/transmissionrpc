@@ -89,7 +89,7 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 		err = errors.New("CSRF token invalid 2 times in a row: stopping to avoid infinite loop")
 		return
 	}
-	// Is request successfull ?
+	// Is request successful ?
 	if resp.StatusCode != 200 {
 		err = fmt.Errorf("HTTP error %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		return

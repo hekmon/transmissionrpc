@@ -17,7 +17,7 @@ import (
 */
 
 // TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
-// and payload generation). If successfull (torrent added or duplicate) torrent return value
+// and payload generation). If successful (torrent added or duplicate) torrent return value
 // will only have HashString, ID and Name fields set up.
 func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
 	// Validate
@@ -35,7 +35,7 @@ func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
 	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64})
 }
 
-// TorrentAdd allows to send an Add payload. If successfull (torrent added or duplicate) torrent
+// TorrentAdd allows to send an Add payload. If successful (torrent added or duplicate) torrent
 // return value will only have HashString, ID and Name fields set up.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L373
 func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err error) {
