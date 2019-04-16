@@ -112,7 +112,7 @@ func file2Base64(filename string) (b64 string, err error) {
 	// Try to open file
 	file, err := os.Open(filename)
 	if err != nil {
-		err = fmt.Errorf("open error: %v", err)
+		err = fmt.Errorf("can't open file: %v", err)
 		return
 	}
 	defer file.Close()
@@ -126,7 +126,7 @@ func file2Base64(filename string) (b64 string, err error) {
 	}
 	// Flush last bytes
 	if err = encoder.Close(); err != nil {
-		err = fmt.Errorf("can't flush last bytes into the B64 encoder: %v", err)
+		err = fmt.Errorf("can't flush last bytes of the base64 encoder: %v", err)
 		return
 	}
 	// Get the string form
