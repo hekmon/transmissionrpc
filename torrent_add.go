@@ -119,12 +119,17 @@ func file2Base64(filename string) (b64 string, err error) {
 	// Prepare encoder
 	buffer := new(bytes.Buffer)
 	encoder := base64.NewEncoder(base64.StdEncoding, buffer)
-	defer encoder.Close()
-	// Read file & encode
+	// Stream file to the encoder
 	if _, err = io.Copy(encoder, file); err != nil {
 		err = fmt.Errorf("can't copy file content into the base64 encoder: %v", err)
+		return
 	}
-	// Read it
+	// Flush last bytes
+	if err = encoder.Close(); err != nil {
+		err = fmt.Errorf("can't flush last bytes into the B64 encoder: %v", err)
+		return
+	}
+	// Get the string form
 	b64 = buffer.String()
 	return
 }
