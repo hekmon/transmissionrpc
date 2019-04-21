@@ -81,93 +81,86 @@ type torrentGetResults struct {
 }
 
 // Torrent represents all the possible fields of data for a torrent.
-// All fields are pointers to detect if the value is nil (field not requested) or default real default value.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L163
 type Torrent struct {
-	ActivityDate            *time.Time         `json:"activityDate"`
-	AddedDate               *time.Time         `json:"addedDate"`
-	BandwidthPriority       *int64             `json:"bandwidthPriority"`
-	Comment                 *string            `json:"comment"`
-	CorruptEver             *int64             `json:"corruptEver"`
-	Creator                 *string            `json:"creator"`
-	DateCreated             *time.Time         `json:"dateCreated"`
-	DesiredAvailable        *int64             `json:"desiredAvailable"`
-	DoneDate                *time.Time         `json:"doneDate"`
-	DownloadDir             *string            `json:"downloadDir"`
-	DownloadedEver          *int64             `json:"downloadedEver"`
-	DownloadLimit           *int64             `json:"downloadLimit"`
-	DownloadLimited         *bool              `json:"downloadLimited"`
-	Error                   *int64             `json:"error"`
-	ErrorString             *string            `json:"errorString"`
-	Eta                     *int64             `json:"eta"`
-	EtaIdle                 *int64             `json:"etaIdle"`
-	Files                   []*TorrentFile     `json:"files"`
-	FileStats               []*TorrentFileStat `json:"fileStats"`
-	HashString              *string            `json:"hashString"`
-	HaveUnchecked           *int64             `json:"haveUnchecked"`
-	HaveValid               *int64             `json:"haveValid"`
-	HonorsSessionLimits     *bool              `json:"honorsSessionLimits"`
-	ID                      *int64             `json:"id"`
-	IsFinished              *bool              `json:"isFinished"`
-	IsPrivate               *bool              `json:"isPrivate"`
-	IsStalled               *bool              `json:"isStalled"`
-	LeftUntilDone           *int64             `json:"leftUntilDone"`
-	MagnetLink              *string            `json:"magnetLink"`
-	ManualAnnounceTime      *int64             `json:"manualAnnounceTime"`
-	MaxConnectedPeers       *int64             `json:"maxConnectedPeers"`
-	MetadataPercentComplete *float64           `json:"metadataPercentComplete"`
-	Name                    *string            `json:"name"`
-	PeerLimit               *int64             `json:"peer-limit"`
-	Peers                   []*Peer            `json:"peers"`
-	PeersConnected          *int64             `json:"peersConnected"`
-	PeersFrom               *TorrentPeersFrom  `json:"peersFrom"`
-	PeersGettingFromUs      *int64             `json:"peersGettingFromUs"`
-	PeersSendingToUs        *int64             `json:"peersSendingToUs"`
-	PercentDone             *float64           `json:"percentDone"`
-	Pieces                  *string            `json:"pieces"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L279
-	PieceCount              *int64             `json:"pieceCount"`
-	PieceSize               *cunits.Bits       `json:"pieceSize"`
-	Priorities              []int64            `json:"priorities"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L285
-	QueuePosition           *int64             `json:"queuePosition"`
-	RateDownload            *int64             `json:"rateDownload"` // B/s
-	RateUpload              *int64             `json:"rateUpload"`   // B/s
-	RecheckProgress         *float64           `json:"recheckProgress"`
-	SecondsDownloading      *int64             `json:"secondsDownloading"`
-	SecondsSeeding          *time.Duration     `json:"secondsSeeding"`
-	SeedIdleLimit           *int64             `json:"seedIdleLimit"`
-	SeedIdleMode            *int64             `json:"seedIdleMode"`
-	SeedRatioLimit          *float64           `json:"seedRatioLimit"`
-	SeedRatioMode           *SeedRatioMode     `json:"seedRatioMode"`
-	SizeWhenDone            *cunits.Bits       `json:"sizeWhenDone"`
-	StartDate               *time.Time         `json:"startDate"`
-	Status                  *TorrentStatus     `json:"status"`
-	Trackers                []*Tracker         `json:"trackers"`
-	TrackerStats            []*TrackerStats    `json:"trackerStats"`
-	TotalSize               *cunits.Bits       `json:"totalSize"`
-	TorrentFile             *string            `json:"torrentFile"`
-	UploadedEver            *int64             `json:"uploadedEver"`
-	UploadLimit             *int64             `json:"uploadLimit"`
-	UploadLimited           *bool              `json:"uploadLimited"`
-	UploadRatio             *float64           `json:"uploadRatio"`
-	Wanted                  []bool             `json:"wanted"`   //https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L325
-	WebSeeds                []string           `json:"webseeds"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L329
-	WebSeedsSendingToUs     *int64             `json:"webseedsSendingToUs"`
+	ActivityDate            time.Time         `json:"activityDate"`
+	AddedDate               time.Time         `json:"addedDate"`
+	BandwidthPriority       int64             `json:"bandwidthPriority"`
+	Comment                 string            `json:"comment"`
+	CorruptEver             int64             `json:"corruptEver"`
+	Creator                 string            `json:"creator"`
+	DateCreated             time.Time         `json:"dateCreated"`
+	DesiredAvailable        int64             `json:"desiredAvailable"`
+	DoneDate                time.Time         `json:"doneDate"`
+	DownloadDir             string            `json:"downloadDir"`
+	DownloadedEver          int64             `json:"downloadedEver"`
+	DownloadLimit           int64             `json:"downloadLimit"`
+	DownloadLimited         bool              `json:"downloadLimited"`
+	Error                   int64             `json:"error"`
+	ErrorString             string            `json:"errorString"`
+	Eta                     int64             `json:"eta"`
+	EtaIdle                 int64             `json:"etaIdle"`
+	Files                   []TorrentFile     `json:"files"`
+	FileStats               []TorrentFileStat `json:"fileStats"`
+	HashString              string            `json:"hashString"`
+	HaveUnchecked           int64             `json:"haveUnchecked"`
+	HaveValid               int64             `json:"haveValid"`
+	HonorsSessionLimits     bool              `json:"honorsSessionLimits"`
+	ID                      int64             `json:"id"`
+	IsFinished              bool              `json:"isFinished"`
+	IsPrivate               bool              `json:"isPrivate"`
+	IsStalled               bool              `json:"isStalled"`
+	LeftUntilDone           int64             `json:"leftUntilDone"`
+	MagnetLink              string            `json:"magnetLink"`
+	ManualAnnounceTime      int64             `json:"manualAnnounceTime"`
+	MaxConnectedPeers       int64             `json:"maxConnectedPeers"`
+	MetadataPercentComplete float64           `json:"metadataPercentComplete"`
+	Name                    string            `json:"name"`
+	PeerLimit               int64             `json:"peer-limit"`
+	Peers                   []Peer            `json:"peers"`
+	PeersConnected          int64             `json:"peersConnected"`
+	PeersFrom               TorrentPeersFrom  `json:"peersFrom"`
+	PeersGettingFromUs      int64             `json:"peersGettingFromUs"`
+	PeersSendingToUs        int64             `json:"peersSendingToUs"`
+	PercentDone             float64           `json:"percentDone"`
+	Pieces                  string            `json:"pieces"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L279
+	PieceCount              int64             `json:"pieceCount"`
+	PieceSize               cunits.Bits       `json:"pieceSize"`
+	Priorities              []int64           `json:"priorities"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L285
+	QueuePosition           int64             `json:"queuePosition"`
+	RateDownload            int64             `json:"rateDownload"` // B/s
+	RateUpload              int64             `json:"rateUpload"`   // B/s
+	RecheckProgress         float64           `json:"recheckProgress"`
+	SecondsDownloading      int64             `json:"secondsDownloading"`
+	SecondsSeeding          time.Duration     `json:"secondsSeeding"`
+	SeedIdleLimit           int64             `json:"seedIdleLimit"`
+	SeedIdleMode            int64             `json:"seedIdleMode"`
+	SeedRatioLimit          float64           `json:"seedRatioLimit"`
+	SeedRatioMode           SeedRatioMode     `json:"seedRatioMode"`
+	SizeWhenDone            cunits.Bits       `json:"sizeWhenDone"`
+	StartDate               time.Time         `json:"startDate"`
+	Status                  TorrentStatus     `json:"status"`
+	Trackers                []Tracker         `json:"trackers"`
+	TrackerStats            []TrackerStats    `json:"trackerStats"`
+	TotalSize               cunits.Bits       `json:"totalSize"`
+	TorrentFile             string            `json:"torrentFile"`
+	UploadedEver            int64             `json:"uploadedEver"`
+	UploadLimit             int64             `json:"uploadLimit"`
+	UploadLimited           bool              `json:"uploadLimited"`
+	UploadRatio             float64           `json:"uploadRatio"`
+	Wanted                  []bool            `json:"wanted"`   //https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L325
+	WebSeeds                []string          `json:"webseeds"` // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L329
+	WebSeedsSendingToUs     int64             `json:"webseedsSendingToUs"`
 }
 
 // ConvertDownloadSpeed will return the download speed as cunits.Bitss/second
-func (t *Torrent) ConvertDownloadSpeed() (speed cunits.Bits) {
-	if t.RateDownload != nil {
-		speed = cunits.ImportInByte(float64(*t.RateDownload))
-	}
-	return
+func (t *Torrent) ConvertDownloadSpeed() cunits.Bits {
+	return cunits.ImportInByte(float64(t.RateDownload))
 }
 
 // ConvertUploadSpeed will return the upload speed as cunits.Bitss/second
-func (t *Torrent) ConvertUploadSpeed() (speed cunits.Bits) {
-	if t.RateUpload != nil {
-		speed = cunits.ImportInByte(float64(*t.RateUpload))
-	}
-	return
+func (t *Torrent) ConvertUploadSpeed() cunits.Bits {
+	return cunits.ImportInByte(float64(t.RateUpload))
 }
 
 // UnmarshalJSON allows to convert timestamps to golang time.Time values.
@@ -175,15 +168,15 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
 	tmp := &struct {
-		ActivityDate   *int64  `json:"activityDate"`
-		AddedDate      *int64  `json:"addedDate"`
-		DateCreated    *int64  `json:"dateCreated"`
-		DoneDate       *int64  `json:"doneDate"`
-		PieceSize      *int64  `json:"pieceSize"`
-		SecondsSeeding *int64  `json:"secondsSeeding"`
-		SizeWhenDone   *int64  `json:"sizeWhenDone"`
-		StartDate      *int64  `json:"startDate"`
-		TotalSize      *int64  `json:"totalSize"`
+		ActivityDate   int64   `json:"activityDate"`
+		AddedDate      int64   `json:"addedDate"`
+		DateCreated    int64   `json:"dateCreated"`
+		DoneDate       int64   `json:"doneDate"`
+		PieceSize      int64   `json:"pieceSize"`
+		SecondsSeeding int64   `json:"secondsSeeding"`
+		SizeWhenDone   int64   `json:"sizeWhenDone"`
+		StartDate      int64   `json:"startDate"`
+		TotalSize      int64   `json:"totalSize"`
 		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
@@ -194,51 +187,24 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		return
 	}
 	// Create the real time & duration from timsteamps and seconds
-	if tmp.ActivityDate != nil {
-		ad := time.Unix(*tmp.ActivityDate, 0)
-		t.ActivityDate = &ad
-	}
-	if tmp.AddedDate != nil {
-		ad := time.Unix(*tmp.AddedDate, 0)
-		t.AddedDate = &ad
-	}
-	if tmp.DateCreated != nil {
-		dc := time.Unix(*tmp.DateCreated, 0)
-		t.DateCreated = &dc
-	}
-	if tmp.DoneDate != nil {
-		dd := time.Unix(*tmp.DoneDate, 0)
-		t.DoneDate = &dd
-	}
-	if tmp.PieceSize != nil {
-		ps := cunits.ImportInByte(float64(*tmp.PieceSize))
-		t.PieceSize = &ps
-	}
-	if tmp.SecondsSeeding != nil {
-		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
-		t.SecondsSeeding = &dur
-	}
-	if tmp.SizeWhenDone != nil {
-		swd := cunits.ImportInByte(float64(*tmp.SizeWhenDone))
-		t.SizeWhenDone = &swd
-	}
-	if tmp.StartDate != nil {
-		st := time.Unix(*tmp.StartDate, 0)
-		t.StartDate = &st
-	}
-	if tmp.TotalSize != nil {
-		ts := cunits.ImportInByte(float64(*tmp.TotalSize))
-		t.TotalSize = &ts
-	}
+	t.ActivityDate = time.Unix(tmp.ActivityDate, 0)
+	t.AddedDate = time.Unix(tmp.AddedDate, 0)
+	t.DateCreated = time.Unix(tmp.DateCreated, 0)
+	t.DoneDate = time.Unix(tmp.DoneDate, 0)
+	t.SecondsSeeding = time.Duration(tmp.SecondsSeeding) * time.Second
+	t.StartDate = time.Unix(tmp.StartDate, 0)
+
+	t.PieceSize = cunits.ImportInByte(float64(tmp.PieceSize))
+	t.SizeWhenDone = cunits.ImportInByte(float64(tmp.SizeWhenDone))
+	t.TotalSize = cunits.ImportInByte(float64(tmp.TotalSize))
+
 	// Boolean slice in decimal form
-	if tmp.Wanted != nil {
-		t.Wanted = make([]bool, len(tmp.Wanted))
-		for index, value := range tmp.Wanted {
-			if value == 1 {
-				t.Wanted[index] = true
-			} else if value != 0 {
-				return fmt.Errorf("Can't convert Wanted index %d value '%d' as boolean", index, value)
-			}
+	t.Wanted = make([]bool, len(tmp.Wanted))
+	for index, value := range tmp.Wanted {
+		if value == 1 {
+			t.Wanted[index] = true
+		} else if value != 0 {
+			return fmt.Errorf("Can't convert Wanted index %d value '%d' as boolean", index, value)
 		}
 	}
 	return
@@ -249,49 +215,30 @@ func (t *Torrent) MarshalJSON() (data []byte, err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
 	tmp := &struct {
-		ActivityDate   *int64  `json:"activityDate"`
-		AddedDate      *int64  `json:"addedDate"`
-		DateCreated    *int64  `json:"dateCreated"`
-		DoneDate       *int64  `json:"doneDate"`
-		SecondsSeeding *int64  `json:"secondsSeeding"`
-		StartDate      *int64  `json:"startDate"`
+		ActivityDate   int64   `json:"activityDate"`
+		AddedDate      int64   `json:"addedDate"`
+		DateCreated    int64   `json:"dateCreated"`
+		DoneDate       int64   `json:"doneDate"`
+		SecondsSeeding int64   `json:"secondsSeeding"`
+		StartDate      int64   `json:"startDate"`
 		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
 		RawTorrent: (*RawTorrent)(t),
 	}
 	// Timestamps & Duration
-	if t.ActivityDate != nil {
-		ad := t.ActivityDate.Unix()
-		tmp.ActivityDate = &ad
-	}
-	if t.AddedDate != nil {
-		ad := t.AddedDate.Unix()
-		tmp.AddedDate = &ad
-	}
-	if t.DateCreated != nil {
-		dc := t.DateCreated.Unix()
-		tmp.DateCreated = &dc
-	}
-	if t.DoneDate != nil {
-		dd := t.DoneDate.Unix()
-		tmp.DoneDate = &dd
-	}
-	if t.SecondsSeeding != nil {
-		ss := int64(*t.SecondsSeeding / time.Second)
-		tmp.SecondsSeeding = &ss
-	}
-	if t.StartDate != nil {
-		st := t.StartDate.Unix()
-		tmp.StartDate = &st
-	}
+	tmp.ActivityDate = t.ActivityDate.Unix()
+	tmp.AddedDate = t.AddedDate.Unix()
+	tmp.DateCreated = t.DateCreated.Unix()
+	tmp.DoneDate = t.DoneDate.Unix()
+	tmp.SecondsSeeding = int64(t.SecondsSeeding / time.Second)
+	tmp.StartDate = t.StartDate.Unix()
+
 	// Boolean as number
-	if t.Wanted != nil {
-		tmp.Wanted = make([]int64, len(t.Wanted))
-		for index, value := range t.Wanted {
-			if value {
-				tmp.Wanted[index] = 1
-			}
+	tmp.Wanted = make([]int64, len(t.Wanted))
+	for index, value := range t.Wanted {
+		if value {
+			tmp.Wanted[index] = 1
 		}
 	}
 	// Marshall original values within the tmp payload

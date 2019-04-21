@@ -208,7 +208,7 @@ torrents, err := transmissionbt.TorrentGetAll()
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
-    fmt.Println(torrents) // meh it's full of pointers
+    fmt.Println(torrents)
 }
 ```
 
@@ -219,7 +219,7 @@ torrents, err := transmissionbt.TorrentGetAllFor([]int64{31})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
-    fmt.Println(torrents) // meh it's still full of pointers
+    fmt.Println(torrents)
 }
 ```
 
