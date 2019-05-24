@@ -34,9 +34,38 @@ func (c *Client) TorrentGetAllFor(ids []int64) (torrents []*Torrent, err error) 
 	return c.torrentGet(validTorrentFields, ids)
 }
 
+// TorrentGetAllForHashes returns all known fields for the given torrent's ids by string (usually hash).
+func (c *Client) TorrentGetAllForHashes(ids []string) (torrents []*Torrent, err error) {
+	return c.torrentGetHash(validTorrentFields, ids)
+}
+
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L144
 func (c *Client) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
+	err = c.validateFields(fields)
+
+	if err != nil {
+		return
+	}
+
+	// Forward to real method
+	return c.torrentGet(fields, ids)
+}
+
+// TorrentGetHashes returns the given of fields (mandatory) for each ids (optionnal).
+// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L144
+func (c *Client) TorrentGetHashes(fields []string, ids []string) (torrents []*Torrent, err error) {
+	err = c.validateFields(fields)
+
+	if err != nil {
+		return
+	}
+
+	// Forward to real method
+	return c.torrentGetHash(fields, ids)
+}
+
+func (c *Client) validateFields(fields []string) (err error) {
 	// Validate fields
 	var fieldInvalid bool
 	var knownField string
@@ -53,8 +82,8 @@ func (c *Client) TorrentGet(fields []string, ids []int64) (torrents []*Torrent, 
 			return
 		}
 	}
-	// Forward to real method
-	return c.torrentGet(fields, ids)
+
+	return
 }
 
 func (c *Client) torrentGet(fields []string, ids []int64) (torrents []*Torrent, err error) {
@@ -71,9 +100,28 @@ func (c *Client) torrentGet(fields []string, ids []int64) (torrents []*Torrent, 
 	return
 }
 
+func (c *Client) torrentGetHash(fields []string, ids []string) (torrents []*Torrent, err error) {
+	arguments := torrentGetHashParams{
+		Fields: fields,
+		IDs:    ids,
+	}
+	var result torrentGetResults
+	if err = c.rpcCall("torrent-get", &arguments, &result); err != nil {
+		err = fmt.Errorf("'torrent-get' rpc method failed: %v", err)
+		return
+	}
+	torrents = result.Torrents
+	return
+}
+
 type torrentGetParams struct {
 	Fields []string `json:"fields"`
 	IDs    []int64  `json:"ids,omitempty"`
+}
+
+type torrentGetHashParams struct {
+	Fields []string `json:"fields"`
+	IDs    []string `json:"ids,mittempty"`
 }
 
 type torrentGetResults struct {
