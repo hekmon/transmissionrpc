@@ -1,7 +1,6 @@
 package transmissionrpc
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -11,51 +10,45 @@ import (
 */
 
 // TorrentSetLocation allows to set a new location for one or more torrents.
+// 'location' is the new torrent location.
+// 'move' if true, move from previous location. Otherwise, search "location" for file.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L423
-func (c *Client) TorrentSetLocation(payload *TorrentSetLocationPayload) (err error) {
-	// Validate
-	if payload == nil {
-		return errors.New("payload can't be nil")
-	}
-	if len(payload.IDs) == 0 {
-		return errors.New("there must be at least one ID")
-	}
-	// Send payload
-	if err = c.rpcCall("torrent-set-location", payload, nil); err != nil {
+func (c *Client) TorrentSetLocation(id int64, location string, move bool) (err error) {
+	if err = c.rpcCall("torrent-set-location", torrentSetLocationPayload{
+		IDs:      []int64{id},
+		Location: location,
+		Move:     move,
+	}, nil); err != nil {
 		err = fmt.Errorf("'torrent-set-location' rpc method failed: %v", err)
 	}
 	return
 }
 
 // TorrentSetLocationHash allows to set a new location for one or more torrents.
+// 'location' is the new torrent location.
+// 'move' if true, move from previous location. Otherwise, search "location" for file.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L423
-func (c *Client) TorrentSetLocationHash(payload *TorrentSetLocationHashPayload) (err error) {
-	// Validate
-	if payload == nil {
-		return errors.New("payload can't be nil")
-	}
-	if len(payload.IDs) == 0 {
-		return errors.New("there must be at least one ID")
-	}
-	// Send payload
-	if err = c.rpcCall("torrent-set-location", payload, nil); err != nil {
+func (c *Client) TorrentSetLocationHash(hash, location string, move bool) (err error) {
+	if err = c.rpcCall("torrent-set-location", torrentSetLocationHashPayload{
+		Hashes:   []string{hash},
+		Location: location,
+		Move:     move,
+	}, nil); err != nil {
 		err = fmt.Errorf("'torrent-set-location' rpc method failed: %v", err)
 	}
 	return
 }
 
-// TorrentSetLocationPayload describes the torrents' id(s) and other options.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L427
-type TorrentSetLocationPayload struct {
+type torrentSetLocationPayload struct {
 	IDs      []int64 `json:"ids"`      // torrent list
 	Location string  `json:"location"` // the new torrent location
 	Move     bool    `json:"move"`     // if true, move from previous location. Otherwise, search "location" for files
 }
 
-// TorrentSetLocationHashPayload describes the torrent id (by hash) and other options.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L427
-type TorrentSetLocationHashPayload struct {
-	IDs      []string `json:"ids"`      // torrent list
+type torrentSetLocationHashPayload struct {
+	Hashes   []string `json:"ids"`      // torrent list
 	Location string   `json:"location"` // the new torrent location
 	Move     bool     `json:"move"`     // if true, move from previous location. Otherwise, search "location" for files
 }
