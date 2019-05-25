@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"sync"
 	"time"
+
+	cleanhttp "github.com/hashicorp/go-cleanhttp"
 )
 
 const (
@@ -88,9 +90,8 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		password:  password,
 		userAgent: conf.UserAgent,
 		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
-		httpC: &http.Client{
-			Timeout: conf.HTTPTimeout,
-		},
+		httpC:     cleanhttp.DefaultPooledClient(),
 	}
+	c.httpC.Timeout = conf.HTTPTimeout
 	return
 }
