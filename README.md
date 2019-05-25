@@ -12,7 +12,7 @@ This lib follow the [transmission v15 RPC specification](https://github.com/tran
 
 ## Getting started
 
-First the main client object must be instantiated with [New()](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic from only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [New()](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
 ```golang
 transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
