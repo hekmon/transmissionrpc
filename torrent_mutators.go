@@ -41,7 +41,7 @@ type TorrentSetPayload struct {
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"` // true if session upload limits are honored
 	IDs                 []int64        `json:"ids"`                 // torrent list
 	Location            *string        `json:"location"`            // new location of the torrent's content
-	Peerlimit           *int64         `json:"peer-limit"`          // maximum number of peers
+	PeerLimit           *int64         `json:"peer-limit"`          // maximum number of peers
 	PriorityHigh        []int64        `json:"priority-high"`       // indices of high-priority file(s)
 	PriorityLow         []int64        `json:"priority-low"`        // indices of low-priority file(s)
 	PriorityNormal      []int64        `json:"priority-normal"`     // indices of normal-priority file(s)
