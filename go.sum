@@ -1,0 +1,4 @@
+github.com/hashicorp/go-cleanhttp v0.5.1 h1:dH3aiDG9Jvb5r5+bYHsikaOUIpcM0xvgMXVoDkXMzJM=
+github.com/hashicorp/go-cleanhttp v0.5.1/go.mod h1:JpRdi6/HCYpAwUzNwuwqhbovhLtngrth3wmdIIUrZ80=
+github.com/hekmon/cunits/v2 v2.0.2 h1:qnZMfVxBiTgtAXVSMLKxzV1nihS6KzdjDHgh+nS4RgI=
+github.com/hekmon/cunits/v2 v2.0.2/go.mod h1:9r1TycXYXaTmEWlAIfFV8JT+Xo59U96yUJAYHxzii2M=

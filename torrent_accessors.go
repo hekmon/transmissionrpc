@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/hekmon/cunits"
+	"github.com/hekmon/cunits/v2"
 )
 
 var validTorrentFields []string

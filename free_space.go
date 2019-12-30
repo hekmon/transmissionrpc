@@ -3,7 +3,7 @@ package transmissionrpc
 import (
 	"fmt"
 
-	"github.com/hekmon/cunits"
+	"github.com/hekmon/cunits/v2"
 )
 
 /*

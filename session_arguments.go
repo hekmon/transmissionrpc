@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/hekmon/cunits"
+	"github.com/hekmon/cunits/v2"
 )
 
 /*
