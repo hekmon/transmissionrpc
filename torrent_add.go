@@ -16,6 +16,30 @@ import (
 	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L371
 */
 
+// TorrentAddFileDownloadDir is wrapper to directly add a torrent file (it handles the base64 encoding
+// and payload generation) to a DownloadDir (not the default download dir). If successful (torrent added
+// or duplicate) torrent return value will only have HashString, ID and Name fields set up.
+func (c *Client) TorrentAddFileDownloadDir(filepath, downloaddir string) (torrent *Torrent, err error) {
+	// Validate filepath
+	if filepath == "" {
+		err = errors.New("filepath can't be empty")
+		return
+	}
+	// Validate downloaddir
+	if downloaddir == "" {
+		err = errors.New("downloaddir can't be empty")
+		return
+	}
+	// Get base64 encoded file content
+	b64, err := file2Base64(filepath)
+	if err != nil {
+		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
+		return
+	}
+	// Prepare and send payload
+	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64, DownloadDir: &downloaddir})
+}
+
 // TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
 // and payload generation). If successful (torrent added or duplicate) torrent return value
 // will only have HashString, ID and Name fields set up.
