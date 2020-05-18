@@ -14,7 +14,7 @@ func (c *Client) BlocklistUpdate() (nbEntries int64, err error) {
 	var answer blocklistUpdateAnswer
 	// Send request
 	if err = c.rpcCall("blocklist-update", nil, &answer); err == nil {
-		nbEntries = answer.nbEntries
+		nbEntries = answer.NbEntries
 	} else {
 		err = fmt.Errorf("'blocklist-update' rpc method failed: %v", err)
 	}
@@ -22,5 +22,5 @@ func (c *Client) BlocklistUpdate() (nbEntries int64, err error) {
 }
 
 type blocklistUpdateAnswer struct {
-	nbEntries int64 `json:"blocklist-size"`
+	NbEntries int64 `json:"blocklist-size"`
 }
