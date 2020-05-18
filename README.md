@@ -372,7 +372,9 @@ Ex:
 
 #### Session Shutdown
 
-* session-close _(to do)_
+* session-close
+
+Mapped as [SessionClose()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.SessionClose).
 
 #### Queue Movement Requests
 
