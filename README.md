@@ -12,13 +12,13 @@ This lib follow the [transmission v15 RPC specification](https://github.com/tran
 
 ## Getting started
 
-First the main client object must be instantiated with [New()](https://godoc.org/github.com/hekmon/transmissionrpc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
 ```golang
 transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
 ```
 
-But advanced values can also be configured to your liking using [AdvancedConfig](https://godoc.org/github.com/hekmon/transmissionrpc#AdvancedConfig).
+But advanced values can also be configured to your liking using [AdvancedConfig](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#AdvancedConfig).
 Each value of `AdvancedConfig` with a type default value will be replaced by the lib default value, so you can set only the ones you want:
 
 ```golang
@@ -99,7 +99,7 @@ transmissionbt.TorrentXXXXRecentlyActive()
 
 * torrent-start
 
-Check [TorrentStartIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartIDs), [TorrentStartHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartHashes) and [TorrentStartRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartRecentlyActive).
+Check [TorrentStartIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartIDs), [TorrentStartHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartHashes) and [TorrentStartRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartRecentlyActive).
 
 Ex:
 
@@ -114,7 +114,7 @@ if err != nil {
 
 * torrent-start-now
 
-Check [TorrentStartNowIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowIDs), [TorrentStartNowHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowHashes) and [TorrentStartNowRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStartNowRecentlyActive).
+Check [TorrentStartNowIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartNowIDs), [TorrentStartNowHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartNowHashes) and [TorrentStartNowRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStartNowRecentlyActive).
 
 Ex:
 
@@ -129,7 +129,7 @@ if err != nil {
 
 * torrent-stop
 
-Check [TorrentStopIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopIDs), [TorrentStopHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopHashes) and [TorrentStopRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentStopRecentlyActive).
+Check [TorrentStopIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStopIDs), [TorrentStopHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStopHashes) and [TorrentStopRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentStopRecentlyActive).
 
 Ex:
 
@@ -144,7 +144,7 @@ if err != nil {
 
 * torrent-verify
 
-Check [TorrentVerifyIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyIDs), [TorrentVerifyHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyHashes) and [TorrentVerifyRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentVerifyRecentlyActive).
+Check [TorrentVerifyIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentVerifyIDs), [TorrentVerifyHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentVerifyHashes) and [TorrentVerifyRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentVerifyRecentlyActive).
 
 Ex:
 
@@ -159,7 +159,7 @@ if err != nil {
 
 * torrent-reannounce
 
-Check [TorrentReannounceIDs()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceIDs), [TorrentReannounceHashes()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceHashes) and [TorrentReannounceRecentlyActive()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentReannounceRecentlyActive).
+Check [TorrentReannounceIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentReannounceIDs), [TorrentReannounceHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentReannounceHashes) and [TorrentReannounceRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentReannounceRecentlyActive).
 
 Ex:
 
@@ -176,7 +176,7 @@ if err != nil {
 
 * torrent-set
 
-Mapped as [TorrentSet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentSet).
+Mapped as [TorrentSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentSet).
 
 Ex: apply a 1 MB/s limit to a torrent.
 
@@ -195,13 +195,13 @@ if err != nil {
 }
 ```
 
-There is a lot more [mutators](https://godoc.org/github.com/hekmon/transmissionrpc#TorrentSetPayload) available.
+There is a lot more [mutators](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#TorrentSetPayload) available.
 
 #### Torrent Accessors
 
 * torrent-get
 
-All fields for all torrents with [TorrentGetAll()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+All fields for all torrents with [TorrentGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGetAll):
 
 ```golang
 torrents, err := transmissionbt.TorrentGetAll()
@@ -212,7 +212,7 @@ if err != nil {
 }
 ```
 
-All fields for a restricted list of ids with [TorrentGetAllFor()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGetAll):
+All fields for a restricted list of ids with [TorrentGetAllFor()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGetAll):
 
 ```golang
 torrents, err := transmissionbt.TorrentGetAllFor([]int64{31})
@@ -223,7 +223,7 @@ if err != nil {
 }
 ```
 
-Some fields for some torrents with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+Some fields for some torrents with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGet):
 
 ```golang
 torrents, err := transmissionbt.TorrentGet([]string{"status"}, []int64{54, 55})
@@ -236,7 +236,7 @@ if err != nil {
 }
 ```
 
-Some fields for all torrents, still with the low level accessor [TorrentGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentGet):
+Some fields for all torrents, still with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGet):
 
 ```golang
 torrents, err := transmissionbt.TorrentGet([]string{"id", "name", "hashString"}, nil)
@@ -251,13 +251,13 @@ if err != nil {
 }
 ```
 
-Valid fields name can be found as JSON tag on the [Torrent](https://godoc.org/github.com/hekmon/transmissionrpc#Torrent) struct.
+Valid fields name can be found as JSON tag on the [Torrent](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Torrent) struct.
 
 #### Adding a Torrent
 
 * torrent-add
 
-Adding a torrent from a file (using [TorrentAddFile](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAddFile) wrapper):
+Adding a torrent from a file (using [TorrentAddFile](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentAddFile) wrapper):
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
@@ -272,7 +272,7 @@ if err != nil {
 }
 ```
 
-Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAddFileDownloadDir) wrapper) to a specified DownloadDir (this allows for separation of downloads to target folders):
+Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentAddFileDownloadDir) wrapper) to a specified DownloadDir (this allows for separation of downloads to target folders):
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
@@ -287,7 +287,7 @@ if err != nil {
 }
 ```
 
-Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAdd) method:
+Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentAdd) method:
 
 ```golang
 magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&dn=ubuntu-17.10.1-desktop-amd64.iso&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
@@ -316,19 +316,19 @@ f07e0b0584745b7bcb35e98097488d34e68623d0
 
 * torrent-remove
 
-Mapped as [TorrentRemove()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentRemove).
+Mapped as [TorrentRemove()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentRemove).
 
 #### Moving a Torrent
 
 * torrent-set-location
 
-Mapped as [TorrentSetLocation()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentSetLocation).
+Mapped as [TorrentSetLocation()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentSetLocation).
 
 #### Renaming a Torrent path
 
 * torrent-rename-path
 
-Mapped as [TorrentRenamePath()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentRenamePath).
+Mapped as [TorrentRenamePath()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentRenamePath).
 
 ### Session Requests
 
@@ -336,17 +336,17 @@ Mapped as [TorrentRenamePath()](https://godoc.org/github.com/hekmon/transmission
 
 * session-set
 
-Mapped as [SessionArgumentsSet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionArgumentsSet).
+Mapped as [SessionArgumentsSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.SessionArgumentsSet).
 
 * session-get
 
-Mapped as [SessionArgumentsGet()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionArgumentsGet).
+Mapped as [SessionArgumentsGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.SessionArgumentsGet).
 
 #### Session Statistics
 
 * session-stats
 
-Mapped as [SessionStats()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.SessionStats).
+Mapped as [SessionStats()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.SessionStats).
 
 #### Blocklist
 
@@ -356,7 +356,7 @@ Mapped as [SessionStats()](https://godoc.org/github.com/hekmon/transmissionrpc#C
 
 * port-test
 
-Mapped as [PortTest()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.PortTest).
+Mapped as [PortTest()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.PortTest).
 
 Ex:
 
@@ -385,7 +385,7 @@ Ex:
 
 * free-space
 
-Mappped as [FreeSpace()](https://godoc.org/github.com/hekmon/transmissionrpc#Client.FreeSpace).
+Mappped as [FreeSpace()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.FreeSpace).
 
 Ex: Get the space available for /data.
 
