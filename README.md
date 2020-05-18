@@ -276,7 +276,7 @@ Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://godoc.or
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
-torrent, err := transmissionbt.TorrentAddFileDownloadDir(filepath, "/Ubuntu")
+torrent, err := transmissionbt.TorrentAddFileDownloadDir(filepath, "/path/to/other/download/dir")
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
