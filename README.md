@@ -72,7 +72,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * [Session Statistics](#session-statistics)
     * [x] session-stats
   * [Blocklist](#blocklist)
-    * [ ] blocklist-update
+    * [x] blocklist-update
   * [Port Checking](#port-checking)
     * [x] port-test
   * [Session Shutdown](#session-shutdown)
@@ -350,7 +350,9 @@ Mapped as [SessionStats()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?
 
 #### Blocklist
 
-* blocklist-update _(to do)_
+* blocklist-update
+
+Mapped as [BlocklistUpdate()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.BlocklistUpdate).
 
 #### Port Checking
 
