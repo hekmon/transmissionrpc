@@ -8,7 +8,7 @@ Even if there is some high level wrappers/helpers, the goal of this lib is to st
 
 Also payload generation aims to be precise: when several values can be added to a payload, only instanciated values will be forwarded (and kept !) to the final payload. This means that the default JSON marshalling (with omitempty) can't always be used and therefor a manual, reflect based, approach is used to build the final payload and accurately send what the user have instanciated, even if a value is at its default type value.
 
-This lib follow the [transmission v15 RPC specification](https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L639).
+This lib follows the [transmission v15 RPC specification](https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L639).
 
 ## Getting started
 
