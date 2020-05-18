@@ -78,10 +78,10 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * [Session Shutdown](#session-shutdown)
     * [x] session-close
   * [Queue Movement Requests](#queue-movement-requests)
-    * [ ] queue-move-top
-    * [ ] queue-move-up
-    * [ ] queue-move-down
-    * [ ] queue-move-bottom
+    * [x] queue-move-top
+    * [x] queue-move-up
+    * [x] queue-move-down
+    * [x] queue-move-bottom
   * [Free Space](#free-space)
     * [x] free-space
 
@@ -380,10 +380,21 @@ Mapped as [SessionClose()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?
 
 #### Queue Movement Requests
 
-* queue-move-top _(to do)_
-* queue-move-up _(to do)_
-* queue-move-down _(to do)_
-* queue-move-bottom _(to do)_
+* queue-move-top
+
+Mapped as [QueueMoveTop()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.QueueMoveTop).
+
+* queue-move-up
+
+Mapped as [QueueMoveUp()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.QueueMoveUp).
+
+* queue-move-down
+
+Mapped as [QueueMoveDown()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.QueueMoveDown).
+
+* queue-move-bottom
+
+Mapped as [QueueMoveBottom()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.QueueMoveBottom).
 
 #### Free Space
 
