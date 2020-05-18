@@ -272,6 +272,21 @@ if err != nil {
 }
 ```
 
+Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAddFileDownloadDir) wrapper) to a specified DownloadDir (this allows for separation of downloads to target folders):
+
+```golang
+filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
+torrent, err := transmissionbt.TorrentAddFileDownloadDir(filepath, "/Ubuntu")
+if err != nil {
+    fmt.Fprintln(os.Stderr, err)
+} else {
+    // Only 3 fields will be returned/set in the Torrent struct
+    fmt.Println(*torrent.ID)
+    fmt.Println(*torrent.Name)
+    fmt.Println(*torrent.HashString)
+}
+```
+
 Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://godoc.org/github.com/hekmon/transmissionrpc#Client.TorrentAdd) method:
 
 ```golang
