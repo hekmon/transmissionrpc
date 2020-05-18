@@ -76,7 +76,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
   * [Port Checking](#port-checking)
     * [x] port-test
   * [Session Shutdown](#session-shutdown)
-    * [ ] session-close
+    * [x] session-close
   * [Queue Movement Requests](#queue-movement-requests)
     * [ ] queue-move-top
     * [ ] queue-move-up
