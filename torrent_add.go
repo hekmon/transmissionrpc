@@ -31,7 +31,7 @@ func (c *Client) TorrentAddFileDownloadDir(filepath, downloaddir string) (torren
 		return
 	}
 	// Get base64 encoded file content
-	b64, err := file2Base64(filepath)
+	b64, err := File2Base64(filepath)
 	if err != nil {
 		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
 		return
@@ -50,7 +50,7 @@ func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
 		return
 	}
 	// Get base64 encoded file content
-	b64, err := file2Base64(filepath)
+	b64, err := File2Base64(filepath)
 	if err != nil {
 		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
 		return
@@ -132,7 +132,9 @@ type torrentAddAnswer struct {
 	TorrentDuplicate *Torrent `json:"torrent-duplicate"`
 }
 
-func file2Base64(filename string) (b64 string, err error) {
+// File2Base64 returns the base64 encoding of the file provided by filename.
+// This can then be passed as MetaInfo in TorrentAddPayload.
+func File2Base64(filename string) (b64 string, err error) {
 	// Try to open file
 	file, err := os.Open(filename)
 	if err != nil {
