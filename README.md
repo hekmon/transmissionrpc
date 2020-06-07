@@ -312,6 +312,20 @@ ubuntu-17.10.1-desktop-amd64.iso
 f07e0b0584745b7bcb35e98097488d34e68623d0
 ```
 
+Adding a torrent from a file, starting it paused:
+
+```golang
+filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
+b64, err := transmissionrpc.File2Base64(filepath)
+if err != nil {
+	fmt.Fprintf(os.Stderr, "can't encode '%s' content as base64: %v", filepath, err)
+} else {
+	// Prepare and send payload
+	paused := true
+	torrent, err := transmissionbt.TorrentAdd(&transmissionrpc.TorrentAddPayload{MetaInfo: &b64, Paused: &paused})
+}
+```
+
 #### Removing a Torrent
 
 * torrent-remove
