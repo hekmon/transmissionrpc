@@ -135,6 +135,7 @@ type Torrent struct {
 	DownloadedEver          *int64             `json:"downloadedEver"`
 	DownloadLimit           *int64             `json:"downloadLimit"`
 	DownloadLimited         *bool              `json:"downloadLimited"`
+	EditDate                *time.Time         `json:"editDate"`
 	Error                   *int64             `json:"error"`
 	ErrorString             *string            `json:"errorString"`
 	Eta                     *int64             `json:"eta"`
@@ -218,6 +219,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		AddedDate      *int64  `json:"addedDate"`
 		DateCreated    *int64  `json:"dateCreated"`
 		DoneDate       *int64  `json:"doneDate"`
+		EditDate       *int64  `json:"editDate"`
 		PieceSize      *int64  `json:"pieceSize"`
 		SecondsSeeding *int64  `json:"secondsSeeding"`
 		SizeWhenDone   *int64  `json:"sizeWhenDone"`
@@ -248,6 +250,10 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	if tmp.DoneDate != nil {
 		dd := time.Unix(*tmp.DoneDate, 0)
 		t.DoneDate = &dd
+	}
+	if tmp.EditDate != nil {
+		dd := time.Unix(*tmp.EditDate, 0)
+		t.EditDate = &dd
 	}
 	if tmp.PieceSize != nil {
 		ps := cunits.ImportInByte(float64(*tmp.PieceSize))
