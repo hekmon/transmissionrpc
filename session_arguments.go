@@ -46,6 +46,7 @@ func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
 	payload.ConfigDir = nil
 	payload.RPCVersion = nil
 	payload.RPCVersionMinimum = nil
+	payload.SessionID = nil
 	payload.Version = nil
 	// Exec
 	if err = c.rpcCall("session-set", payload, nil); err != nil {
@@ -105,6 +106,7 @@ type SessionArguments struct {
 	SeedRatioLimited          *bool    `json:"seedRatioLimited"`             // true if seedRatioLimit is honored by default
 	SeedQueueSize             *int64   `json:"seed-queue-size"`              // max number of torrents to uploaded at once (see seed-queue-enabled)
 	SeedQueueEnabled          *bool    `json:"seed-queue-enabled"`           // if true, limit how many torrents can be uploaded at once
+	SessionID                 *string  `json:"session-id"`                   // the current session ID
 	SpeedLimitDown            *int64   `json:"speed-limit-down"`             // max global download speed (KBps)
 	SpeedLimitDownEnabled     *bool    `json:"speed-limit-down-enabled"`     // true means enabled
 	SpeedLimitUp              *int64   `json:"speed-limit-up"`               // max global upload speed (KBps)
