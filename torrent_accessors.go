@@ -549,13 +549,13 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTrackerStats TrackerStats
 	tmp := struct {
-		LastAnnounceStartTime int64 `json:"lastAnnounceStartTime"`
-		LastAnnounceTime      int64 `json:"lastAnnounceTime"`
-		LastScrapeStartTime   int64 `json:"lastScrapeStartTime"`
-		LastScrapeTime        int64 `json:"lastScrapeTime"`
-		LastScrapeTimedOut    int64 `json:"lastScrapeTimedOut"`
-		NextAnnounceTime      int64 `json:"nextAnnounceTime"`
-		NextScrapeTime        int64 `json:"nextScrapeTime"`
+		LastAnnounceStartTime int64       `json:"lastAnnounceStartTime"`
+		LastAnnounceTime      int64       `json:"lastAnnounceTime"`
+		LastScrapeStartTime   int64       `json:"lastScrapeStartTime"`
+		LastScrapeTime        int64       `json:"lastScrapeTime"`
+		LastScrapeTimedOut    interface{} `json:"lastScrapeTimedOut"`
+		NextAnnounceTime      int64       `json:"nextAnnounceTime"`
+		NextScrapeTime        int64       `json:"nextScrapeTime"`
 		*RawTrackerStats
 	}{
 		RawTrackerStats: (*RawTrackerStats)(ts),
@@ -565,9 +565,20 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 		return
 	}
 	// Convert to real boolean
-	if tmp.LastScrapeTimedOut == 1 {
-		ts.LastScrapeTimedOut = true
-	} else if tmp.LastScrapeTimedOut != 0 {
+	// transmission rpc version 15 returns 1 or 0
+	// transmission rpc version 16 returns true or false
+	switch v := tmp.LastScrapeTimedOut.(type) {
+	case bool:
+		ts.LastScrapeTimedOut = v
+	case float64:
+		if v == 1. {
+			ts.LastScrapeTimedOut = true
+		} else if v == 0. {
+			ts.LastScrapeTimedOut = false
+		} else {
+			return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
+		}
+	default:
 		return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
 	}
 	// Create the real time value from the timestamps
