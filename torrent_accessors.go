@@ -120,6 +120,7 @@ type torrentGetResults struct {
 // Torrent represents all the possible fields of data for a torrent.
 // All fields are pointers to detect if the value is nil (field not requested) or default real default value.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L163
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L178
 type Torrent struct {
 	ActivityDate            *time.Time         `json:"activityDate"`
 	AddedDate               *time.Time         `json:"addedDate"`
@@ -148,6 +149,7 @@ type Torrent struct {
 	IsFinished              *bool              `json:"isFinished"`
 	IsPrivate               *bool              `json:"isPrivate"`
 	IsStalled               *bool              `json:"isStalled"`
+	Labels                  []string           `json:"labels"` // RPC v16
 	LeftUntilDone           *int64             `json:"leftUntilDone"`
 	MagnetLink              *string            `json:"magnetLink"`
 	ManualAnnounceTime      *int64             `json:"manualAnnounceTime"`

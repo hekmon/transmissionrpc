@@ -32,6 +32,7 @@ func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
 
 // TorrentSetPayload contains all the mutators appliable on one torrent.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L111
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L111
 type TorrentSetPayload struct {
 	BandwidthPriority   *int64         `json:"bandwidthPriority"`   // this torrent's bandwidth tr_priority_t
 	DownloadLimit       *int64         `json:"downloadLimit"`       // maximum download speed (KBps)
@@ -40,6 +41,7 @@ type TorrentSetPayload struct {
 	FilesUnwanted       []int64        `json:"files-unwanted"`      // indices of file(s) to not download
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"` // true if session upload limits are honored
 	IDs                 []int64        `json:"ids"`                 // torrent list
+	Labels              []string       `json:"labels"`              // RPC v16: strings of user-defined labels
 	Location            *string        `json:"location"`            // new location of the torrent's content
 	PeerLimit           *int64         `json:"peer-limit"`          // maximum number of peers
 	PriorityHigh        []int64        `json:"priority-high"`       // indices of high-priority file(s)
