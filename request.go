@@ -1,11 +1,14 @@
 package transmissionrpc
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -94,13 +97,14 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 		err = fmt.Errorf("HTTP error %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
 		return
 	}
-	// // Debug
-	// {
-	// 	var data []byte
-	// 	data, err = ioutil.ReadAll(resp.Body)
-	// 	fmt.Println(string(data))
-	// 	return
-	// }
+	// Debug
+	if c.debug {
+		var data []byte
+		data, err = ioutil.ReadAll(resp.Body)
+		fmt.Fprintln(os.Stderr, string(data))
+		resp.Body.Close()
+		resp.Body = ioutil.NopCloser(bytes.NewBuffer(data))
+	}
 	// Decode body
 	answer := answerPayload{
 		Arguments: result,

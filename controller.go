@@ -31,6 +31,7 @@ type Client struct {
 	userAgent       string
 	rnd             *rand.Rand
 	httpC           *http.Client
+	debug           bool
 }
 
 // AdvancedConfig handles options that are not mandatory for New().
@@ -42,6 +43,7 @@ type AdvancedConfig struct {
 	RPCURI      string
 	HTTPTimeout time.Duration
 	UserAgent   string
+	Debug       bool
 }
 
 // New returns an initialized and ready to use Controller
@@ -91,6 +93,7 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		userAgent: conf.UserAgent,
 		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
 		httpC:     cleanhttp.DefaultPooledClient(),
+		debug:     conf.Debug,
 	}
 	c.httpC.Timeout = conf.HTTPTimeout
 	return
