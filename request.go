@@ -100,8 +100,11 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 	// Debug
 	if c.debug {
 		var data []byte
-		data, err = ioutil.ReadAll(resp.Body)
-		fmt.Fprintln(os.Stderr, string(data))
+		if data, err = ioutil.ReadAll(resp.Body); err == nil {
+			fmt.Fprintln(os.Stderr, string(data))
+		} else {
+			fmt.Fprintln(os.Stderr, err.Error())
+		}
 		resp.Body.Close()
 		resp.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 	}
