@@ -29,7 +29,6 @@ type Client struct {
 	sessionID       string
 	sessionIDAccess sync.RWMutex
 	userAgent       string
-	rnd             *rand.Rand
 	httpC           *http.Client
 	debug           bool
 }
@@ -85,13 +84,14 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		err = fmt.Errorf("can't build a valid URL: %v", err)
 		return
 	}
+	rand.Seed(time.Now().UnixNano())
+
 	// Initialize & return ready to use client
 	c = &Client{
 		url:       remoteURL.String(),
 		user:      user,
 		password:  password,
 		userAgent: conf.UserAgent,
-		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
 		httpC:     cleanhttp.DefaultPooledClient(),
 		debug:     conf.Debug,
 	}
