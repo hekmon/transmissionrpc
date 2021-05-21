@@ -85,7 +85,6 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		err = fmt.Errorf("can't build a valid URL: %v", err)
 		return
 	}
-
 	// Initialize & return ready to use client
 	c = &Client{
 		url:       remoteURL.String(),
