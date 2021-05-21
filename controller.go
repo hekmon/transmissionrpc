@@ -99,7 +99,6 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 	return
 }
 
-
 // rand.NewSource is not thread-safe, so access should be serialized
 type lockedRandomSource struct {
 	sync.Mutex
