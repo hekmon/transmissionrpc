@@ -29,6 +29,7 @@ type Client struct {
 	sessionID       string
 	sessionIDAccess sync.RWMutex
 	userAgent       string
+	rnd             *rand.Rand
 	httpC           *http.Client
 	debug           bool
 }
@@ -85,18 +86,41 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		return
 	}
 
-	// Seed random generator to be used by Client
-	rand.Seed(time.Now().UnixNano())
-
 	// Initialize & return ready to use client
 	c = &Client{
 		url:       remoteURL.String(),
 		user:      user,
 		password:  password,
 		userAgent: conf.UserAgent,
+		rnd:       rand.New(newLockedRandomSource(time.Now().Unix())),
 		httpC:     cleanhttp.DefaultPooledClient(),
 		debug:     conf.Debug,
 	}
 	c.httpC.Timeout = conf.HTTPTimeout
 	return
+}
+
+
+// rand.NewSource is not thread-safe, so access should be serialized
+type lockedRandomSource struct {
+	sync.Mutex
+	rand.Source
+}
+
+func newLockedRandomSource(seed int64) rand.Source {
+	return &lockedRandomSource{
+		Source: rand.NewSource(seed),
+	}
+}
+
+func (s *lockedRandomSource) Int63() int64 {
+	s.Lock()
+	defer s.Unlock()
+	return s.Source.Int63()
+}
+
+func (s *lockedRandomSource) Seed(seed int64) {
+	s.Lock()
+	defer s.Unlock()
+	s.Source.Seed(seed)
 }

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"os"
 	"sync"
@@ -55,7 +54,7 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 	var mg sync.WaitGroup
 	mg.Add(1)
 	go func() {
-		tag = rand.Int()
+		tag = c.rnd.Int()
 		encErr = json.NewEncoder(pIn).Encode(&requestPayload{
 			Method:    method,
 			Arguments: arguments,
