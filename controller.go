@@ -101,7 +101,7 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 
 // rand.NewSource is not thread-safe, so access should be serialized
 type lockedRandomSource struct {
-	sync.Mutex
+	mut sync.Mutex
 	rand.Source
 }
 
@@ -112,14 +112,14 @@ func newLockedRandomSource(seed int64) rand.Source {
 }
 
 func (s *lockedRandomSource) Int63() (rnd int64) {
-	s.Lock()
+	s.mut.Lock()
 	rnd = s.Source.Int63()
-	s.Unlock()
+	s.mut.Unlock()
 	return
 }
 
 func (s *lockedRandomSource) Seed(seed int64) {
-	s.Lock()
+	s.mut.Lock()
 	s.Source.Seed(seed)
-	s.Unlock()
+	s.mut.Unlock()
 }
