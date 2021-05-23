@@ -318,11 +318,11 @@ Adding a torrent from a file, starting it paused:
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
 b64, err := transmissionrpc.File2Base64(filepath)
 if err != nil {
-	fmt.Fprintf(os.Stderr, "can't encode '%s' content as base64: %v", filepath, err)
+    fmt.Fprintf(os.Stderr, "can't encode '%s' content as base64: %v", filepath, err)
 } else {
-	// Prepare and send payload
-	paused := true
-	torrent, err := transmissionbt.TorrentAdd(&transmissionrpc.TorrentAddPayload{MetaInfo: &b64, Paused: &paused})
+    // Prepare and send payload
+    paused := true
+    torrent, err := transmissionbt.TorrentAdd(&transmissionrpc.TorrentAddPayload{MetaInfo: &b64, Paused: &paused})
 }
 ```
 
