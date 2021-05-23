@@ -111,14 +111,15 @@ func newLockedRandomSource(seed int64) rand.Source {
 	}
 }
 
-func (s *lockedRandomSource) Int63() int64 {
+func (s *lockedRandomSource) Int63() (rnd int64) {
 	s.Lock()
-	defer s.Unlock()
-	return s.Source.Int63()
+	rnd = s.Source.Int63()
+	s.Unlock()
+	return
 }
 
 func (s *lockedRandomSource) Seed(seed int64) {
 	s.Lock()
-	defer s.Unlock()
 	s.Source.Seed(seed)
+	s.Unlock()
 }
