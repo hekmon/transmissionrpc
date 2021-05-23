@@ -91,10 +91,34 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 		user:      user,
 		password:  password,
 		userAgent: conf.UserAgent,
-		rnd:       rand.New(rand.NewSource(time.Now().Unix())),
+		rnd:       rand.New(newLockedRandomSource(time.Now().Unix())),
 		httpC:     cleanhttp.DefaultPooledClient(),
 		debug:     conf.Debug,
 	}
 	c.httpC.Timeout = conf.HTTPTimeout
 	return
+}
+
+// rand.NewSource is not thread-safe, so access should be serialized
+type lockedRandomSource struct {
+	sync.Mutex
+	rand.Source
+}
+
+func newLockedRandomSource(seed int64) rand.Source {
+	return &lockedRandomSource{
+		Source: rand.NewSource(seed),
+	}
+}
+
+func (s *lockedRandomSource) Int63() int64 {
+	s.Lock()
+	defer s.Unlock()
+	return s.Source.Int63()
+}
+
+func (s *lockedRandomSource) Seed(seed int64) {
+	s.Lock()
+	defer s.Unlock()
+	s.Source.Seed(seed)
 }
