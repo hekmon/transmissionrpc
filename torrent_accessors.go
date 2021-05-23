@@ -282,7 +282,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 			if value == 1 {
 				t.Wanted[index] = true
 			} else if value != 0 {
-				return fmt.Errorf("Can't convert Wanted index %d value '%d' as boolean", index, value)
+				return fmt.Errorf("can't convert wanted index %d value '%d' as boolean", index, value)
 			}
 		}
 	}

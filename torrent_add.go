@@ -69,7 +69,7 @@ func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err e
 		return
 	}
 	if payload.Filename == nil && payload.MetaInfo == nil {
-		err = errors.New("Filename and MetaInfo can't be both nil")
+		err = errors.New("fields Filename and MetaInfo can't be both nil")
 		return
 	}
 	// Send payload
