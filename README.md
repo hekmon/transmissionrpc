@@ -1,6 +1,6 @@
 # TransmissionRPC
 
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/hekmon/transmissionrpc) [![Go report card](https://goreportcard.com/badge/github.com/hekmon/transmissionrpc)](https://goreportcard.com/report/github.com/hekmon/transmissionrpc)
+[![Go Reference](https://pkg.go.dev/badge/github.com/hekmon/transmissionrpc.svg)](https://pkg.go.dev/github.com/hekmon/transmissionrpc) [![Go report card](https://goreportcard.com/badge/github.com/hekmon/transmissionrpc)](https://goreportcard.com/report/github.com/hekmon/transmissionrpc)
 
 Golang bindings to Transmission (bittorrent) RPC interface.
 
