@@ -26,25 +26,25 @@ func init() {
 
 // TorrentGetAll returns all the known fields for all the torrents.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
-func (c *Client) TorrentGetAll(ctx context.Context) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetAll(ctx context.Context) (torrents []Torrent, err error) {
 	// Send already validated fields to the low level fx
 	return c.torrentGet(ctx, validTorrentFields, nil)
 }
 
 // TorrentGetAllFor returns all known fields for the given torrent's ids.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
-func (c *Client) TorrentGetAllFor(ctx context.Context, ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetAllFor(ctx context.Context, ids []int64) (torrents []Torrent, err error) {
 	return c.torrentGet(ctx, validTorrentFields, ids)
 }
 
 // TorrentGetAllForHashes returns all known fields for the given torrent's ids by string (usually hash).
-func (c *Client) TorrentGetAllForHashes(ctx context.Context, hashes []string) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetAllForHashes(ctx context.Context, hashes []string) (torrents []Torrent, err error) {
 	return c.torrentGetHash(ctx, validTorrentFields, hashes)
 }
 
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
-func (c *Client) TorrentGet(ctx context.Context, fields []string, ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGet(ctx context.Context, fields []string, ids []int64) (torrents []Torrent, err error) {
 	if err = c.validateTorrentFields(fields); err != nil {
 		return
 	}
@@ -53,7 +53,7 @@ func (c *Client) TorrentGet(ctx context.Context, fields []string, ids []int64) (
 
 // TorrentGetHashes returns the given of fields (mandatory) for each ids (optionnal).
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
-func (c *Client) TorrentGetHashes(ctx context.Context, fields []string, hashes []string) (torrents []*Torrent, err error) {
+func (c *Client) TorrentGetHashes(ctx context.Context, fields []string, hashes []string) (torrents []Torrent, err error) {
 	if err = c.validateTorrentFields(fields); err != nil {
 		return
 	}
@@ -80,7 +80,7 @@ func (c *Client) validateTorrentFields(fields []string) (err error) {
 	return
 }
 
-func (c *Client) torrentGet(ctx context.Context, fields []string, ids []int64) (torrents []*Torrent, err error) {
+func (c *Client) torrentGet(ctx context.Context, fields []string, ids []int64) (torrents []Torrent, err error) {
 	var result torrentGetResults
 	if err = c.rpcCall(ctx, "torrent-get", &torrentGetParams{
 		Fields: fields,
@@ -93,7 +93,7 @@ func (c *Client) torrentGet(ctx context.Context, fields []string, ids []int64) (
 	return
 }
 
-func (c *Client) torrentGetHash(ctx context.Context, fields []string, hashes []string) (torrents []*Torrent, err error) {
+func (c *Client) torrentGetHash(ctx context.Context, fields []string, hashes []string) (torrents []Torrent, err error) {
 	var result torrentGetResults
 	if err = c.rpcCall(ctx, "torrent-get", &torrentGetHashParams{
 		Fields: fields,
@@ -117,7 +117,7 @@ type torrentGetHashParams struct {
 }
 
 type torrentGetResults struct {
-	Torrents []*Torrent `json:"torrents"`
+	Torrents []Torrent `json:"torrents"`
 }
 
 // Torrent represents all the possible fields of data for a torrent.

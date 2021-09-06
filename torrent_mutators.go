@@ -16,11 +16,8 @@ import (
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L107
-func (c *Client) TorrentSet(ctx context.Context, payload *TorrentSetPayload) (err error) {
+func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err error) {
 	// Validate
-	if payload == nil {
-		return errors.New("payload can't be nil")
-	}
 	if len(payload.IDs) == 0 {
 		return errors.New("there must be at least one ID")
 	}

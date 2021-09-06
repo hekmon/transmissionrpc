@@ -14,7 +14,7 @@ import (
 
 // SessionStats returns all (current/cumulative) statistics.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L570
-func (c *Client) SessionStats(ctx context.Context) (stats *SessionStats, err error) {
+func (c *Client) SessionStats(ctx context.Context) (stats SessionStats, err error) {
 	if err = c.rpcCall(ctx, "session-stats", nil, &stats); err != nil {
 		err = fmt.Errorf("'session-stats' rpc method failed: %w", err)
 	}
@@ -24,13 +24,13 @@ func (c *Client) SessionStats(ctx context.Context) (stats *SessionStats, err err
 // SessionStats represents all (current/cumulative) statistics.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L576
 type SessionStats struct {
-	ActiveTorrentCount int64            `json:"activeTorrentCount"`
-	CumulativeStats    *CumulativeStats `json:"cumulative-stats"`
-	CurrentStats       *CurrentStats    `json:"current-stats"`
-	DownloadSpeed      int64            `json:"downloadSpeed"`
-	PausedTorrentCount int64            `json:"pausedTorrentCount"`
-	TorrentCount       int64            `json:"torrentCount"`
-	UploadSpeed        int64            `json:"uploadSpeed"`
+	ActiveTorrentCount int64           `json:"activeTorrentCount"`
+	CumulativeStats    CumulativeStats `json:"cumulative-stats"`
+	CurrentStats       CurrentStats    `json:"current-stats"`
+	DownloadSpeed      int64           `json:"downloadSpeed"`
+	PausedTorrentCount int64           `json:"pausedTorrentCount"`
+	TorrentCount       int64           `json:"torrentCount"`
+	UploadSpeed        int64           `json:"uploadSpeed"`
 }
 
 // CumulativeStats is subset of SessionStats.

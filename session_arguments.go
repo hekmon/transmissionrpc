@@ -47,12 +47,7 @@ func (c *Client) RPCVersion(ctx context.Context) (ok bool, serverVersion int64, 
 
 // SessionArgumentsSet allows to modify global/session values.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L555
-func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArguments) (err error) {
-	// Checks
-	if payload == nil {
-		err = errors.New("payload can't be nil")
-		return
-	}
+func (c *Client) SessionArgumentsSet(ctx context.Context, payload SessionArguments) (err error) {
 	payload.BlocklistSize = nil
 	payload.ConfigDir = nil
 	payload.RPCVersion = nil
@@ -68,7 +63,7 @@ func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArgume
 
 // SessionArgumentsGet returns global/session values.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L563
-func (c *Client) SessionArgumentsGetAll(ctx context.Context) (sessionArgs *SessionArguments, err error) {
+func (c *Client) SessionArgumentsGetAll(ctx context.Context) (sessionArgs SessionArguments, err error) {
 	if err = c.rpcCall(ctx, "session-get", nil, &sessionArgs); err != nil {
 		err = fmt.Errorf("'session-get' rpc method failed: %w", err)
 	}
@@ -82,7 +77,7 @@ type sessionGetParams struct {
 // SessionArgumentsGet returns global/session values for specified fields.
 // See the JSON tags of the SessionArguments struct for valid fields.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L563
-func (c *Client) SessionArgumentsGet(ctx context.Context, fields []string) (sessionArgs *SessionArguments, err error) {
+func (c *Client) SessionArgumentsGet(ctx context.Context, fields []string) (sessionArgs SessionArguments, err error) {
 	if err = c.validateSessionFields(fields); err != nil {
 		return
 	}

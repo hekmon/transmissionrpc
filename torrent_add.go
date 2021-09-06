@@ -20,7 +20,7 @@ import (
 // TorrentAddFileDownloadDir is wrapper to directly add a torrent file (it handles the base64 encoding
 // and payload generation) to a DownloadDir (not the default download dir). If successful (torrent added
 // or duplicate) torrent return value will only have HashString, ID and Name fields set up.
-func (c *Client) TorrentAddFileDownloadDir(ctx context.Context, filepath, downloaddir string) (torrent *Torrent, err error) {
+func (c *Client) TorrentAddFileDownloadDir(ctx context.Context, filepath, downloaddir string) (torrent Torrent, err error) {
 	// Validate filepath
 	if filepath == "" {
 		err = errors.New("filepath can't be empty")
@@ -38,13 +38,13 @@ func (c *Client) TorrentAddFileDownloadDir(ctx context.Context, filepath, downlo
 		return
 	}
 	// Prepare and send payload
-	return c.TorrentAdd(ctx, &TorrentAddPayload{MetaInfo: &b64, DownloadDir: &downloaddir})
+	return c.TorrentAdd(ctx, TorrentAddPayload{MetaInfo: &b64, DownloadDir: &downloaddir})
 }
 
 // TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
 // and payload generation). If successful (torrent added or duplicate) torrent return value
 // will only have HashString, ID and Name fields set up.
-func (c *Client) TorrentAddFile(ctx context.Context, filepath string) (torrent *Torrent, err error) {
+func (c *Client) TorrentAddFile(ctx context.Context, filepath string) (torrent Torrent, err error) {
 	// Validate
 	if filepath == "" {
 		err = errors.New("filepath can't be empty")
@@ -57,18 +57,14 @@ func (c *Client) TorrentAddFile(ctx context.Context, filepath string) (torrent *
 		return
 	}
 	// Prepare and send payload
-	return c.TorrentAdd(ctx, &TorrentAddPayload{MetaInfo: &b64})
+	return c.TorrentAdd(ctx, TorrentAddPayload{MetaInfo: &b64})
 }
 
 // TorrentAdd allows to send an Add payload. If successful (torrent added or duplicate) torrent
 // return value will only have HashString, ID and Name fields set up.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L394
-func (c *Client) TorrentAdd(ctx context.Context, payload *TorrentAddPayload) (torrent *Torrent, err error) {
+func (c *Client) TorrentAdd(ctx context.Context, payload TorrentAddPayload) (torrent Torrent, err error) {
 	// Validate
-	if payload == nil {
-		err = errors.New("payload can't be nil")
-		return
-	}
 	if payload.Filename == nil && payload.MetaInfo == nil {
 		err = errors.New("fields Filename and MetaInfo can't be both nil")
 		return
@@ -81,9 +77,9 @@ func (c *Client) TorrentAdd(ctx context.Context, payload *TorrentAddPayload) (to
 	}
 	// Extract results
 	if result.TorrentAdded != nil {
-		torrent = result.TorrentAdded
+		torrent = *result.TorrentAdded
 	} else if result.TorrentDuplicate != nil {
-		torrent = result.TorrentDuplicate
+		torrent = *result.TorrentDuplicate
 	} else {
 		err = errors.New("RPC call went fine but neither 'torrent-added' nor 'torrent-duplicate' result payload were found")
 	}
