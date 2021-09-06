@@ -19,7 +19,7 @@ func (c *Client) TorrentRemove(ctx context.Context, payload *TorrentRemovePayloa
 	}
 	// Send payload
 	if err = c.rpcCall(ctx, "torrent-remove", payload, nil); err != nil {
-		return fmt.Errorf("'torrent-remove' rpc method failed: %v", err)
+		return fmt.Errorf("'torrent-remove' rpc method failed: %w", err)
 	}
 	return
 }

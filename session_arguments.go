@@ -3,6 +3,7 @@ package transmissionrpc
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 
@@ -18,15 +19,15 @@ import (
 func (c *Client) RPCVersion(ctx context.Context) (ok bool, serverVersion int64, serverMinimumVersion int64, err error) {
 	payload, err := c.SessionArgumentsGet(ctx)
 	if err != nil {
-		err = fmt.Errorf("can't get session values: %v", err)
+		err = fmt.Errorf("can't get session values: %w", err)
 		return
 	}
 	if payload.RPCVersion == nil {
-		err = fmt.Errorf("payload RPC Version is nil")
+		err = errors.New("payload RPC Version is nil")
 		return
 	}
 	if payload.RPCVersionMinimum == nil {
-		err = fmt.Errorf("payload RPC Version minimum is nil")
+		err = errors.New("payload RPC Version minimum is nil")
 		return
 	}
 	serverVersion = *payload.RPCVersion
@@ -40,7 +41,7 @@ func (c *Client) RPCVersion(ctx context.Context) (ok bool, serverVersion int64, 
 func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArguments) (err error) {
 	// Checks
 	if payload == nil {
-		err = fmt.Errorf("payload can't be nil")
+		err = errors.New("payload can't be nil")
 		return
 	}
 	payload.BlocklistSize = nil
@@ -51,7 +52,7 @@ func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArgume
 	payload.Version = nil
 	// Exec
 	if err = c.rpcCall(ctx, "session-set", payload, nil); err != nil {
-		err = fmt.Errorf("'session-set' rpc method failed: %v", err)
+		err = fmt.Errorf("'session-set' rpc method failed: %w", err)
 	}
 	return
 }
@@ -60,7 +61,7 @@ func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArgume
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L542
 func (c *Client) SessionArgumentsGet(ctx context.Context) (sessionArgs *SessionArguments, err error) {
 	if err = c.rpcCall(ctx, "session-get", nil, &sessionArgs); err != nil {
-		err = fmt.Errorf("'session-get' rpc method failed: %v", err)
+		err = fmt.Errorf("'session-get' rpc method failed: %w", err)
 	}
 	return
 }

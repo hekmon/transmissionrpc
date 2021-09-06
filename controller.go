@@ -82,7 +82,7 @@ func New(host, user, password string, conf *AdvancedConfig) (c *Client, err erro
 	}
 	remoteURL, err := url.Parse(fmt.Sprintf("%s://%s:%d%s", scheme, host, conf.Port, conf.RPCURI))
 	if err != nil {
-		err = fmt.Errorf("can't build a valid URL: %v", err)
+		err = fmt.Errorf("can't build a valid URL: %w", err)
 		return
 	}
 	// Initialize & return ready to use client

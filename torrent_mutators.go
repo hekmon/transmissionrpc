@@ -26,7 +26,7 @@ func (c *Client) TorrentSet(ctx context.Context, payload *TorrentSetPayload) (er
 	}
 	// Send payload
 	if err = c.rpcCall(ctx, "torrent-set", payload, nil); err != nil {
-		err = fmt.Errorf("'torrent-set' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-set' rpc method failed: %w", err)
 	}
 	return
 }

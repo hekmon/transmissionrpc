@@ -84,7 +84,7 @@ func (c *Client) torrentGet(ctx context.Context, fields []string, ids []int64) (
 		Fields: fields,
 		IDs:    ids,
 	}, &result); err != nil {
-		err = fmt.Errorf("'torrent-get' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-get' rpc method failed: %w", err)
 		return
 	}
 	torrents = result.Torrents
@@ -97,7 +97,7 @@ func (c *Client) torrentGetHash(ctx context.Context, fields []string, hashes []s
 		Fields: fields,
 		Hashes: hashes,
 	}, &result); err != nil {
-		err = fmt.Errorf("'torrent-get' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-get' rpc method failed: %w", err)
 		return
 	}
 	torrents = result.Torrents

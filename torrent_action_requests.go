@@ -26,7 +26,7 @@ type torrentActionRecentlyActiveParam struct {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStartIDs(ctx context.Context, ids []int64) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start' rpc method failed: %w", err)
 	}
 	return
 }
@@ -35,7 +35,7 @@ func (c *Client) TorrentStartIDs(ctx context.Context, ids []int64) (err error) {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStartHashes(ctx context.Context, hashes []string) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start' rpc method failed: %w", err)
 	}
 	return
 }
@@ -43,7 +43,7 @@ func (c *Client) TorrentStartHashes(ctx context.Context, hashes []string) (err e
 // TorrentStartRecentlyActive starts torrent(s) which have been recently active.
 func (c *Client) TorrentStartRecentlyActive(ctx context.Context) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start' rpc method failed: %w", err)
 	}
 	return
 }
@@ -52,7 +52,7 @@ func (c *Client) TorrentStartRecentlyActive(ctx context.Context) (err error) {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStartNowIDs(ctx context.Context, ids []int64) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start-now", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start-now' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start-now' rpc method failed: %w", err)
 	}
 	return
 }
@@ -61,7 +61,7 @@ func (c *Client) TorrentStartNowIDs(ctx context.Context, ids []int64) (err error
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStartNowHashes(ctx context.Context, hashes []string) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start-now", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start-now' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start-now' rpc method failed: %w", err)
 	}
 	return
 }
@@ -69,7 +69,7 @@ func (c *Client) TorrentStartNowHashes(ctx context.Context, hashes []string) (er
 // TorrentStartNowRecentlyActive starts (now) torrent(s) which have been recently active.
 func (c *Client) TorrentStartNowRecentlyActive(ctx context.Context) (err error) {
 	if err = c.rpcCall(ctx, "torrent-start-now", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
-		err = fmt.Errorf("'torrent-start-now' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-start-now' rpc method failed: %w", err)
 	}
 	return
 }
@@ -78,7 +78,7 @@ func (c *Client) TorrentStartNowRecentlyActive(ctx context.Context) (err error) 
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStopIDs(ctx context.Context, ids []int64) (err error) {
 	if err = c.rpcCall(ctx, "torrent-stop", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
-		err = fmt.Errorf("'torrent-stop' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-stop' rpc method failed: %w", err)
 	}
 	return
 }
@@ -87,7 +87,7 @@ func (c *Client) TorrentStopIDs(ctx context.Context, ids []int64) (err error) {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentStopHashes(ctx context.Context, hashes []string) (err error) {
 	if err = c.rpcCall(ctx, "torrent-stop", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
-		err = fmt.Errorf("'torrent-stop' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-stop' rpc method failed: %w", err)
 	}
 	return
 }
@@ -95,7 +95,7 @@ func (c *Client) TorrentStopHashes(ctx context.Context, hashes []string) (err er
 // TorrentStopRecentlyActive stops torrent(s) which have been recently active.
 func (c *Client) TorrentStopRecentlyActive(ctx context.Context) (err error) {
 	if err = c.rpcCall(ctx, "torrent-stop", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
-		err = fmt.Errorf("'torrent-stop' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-stop' rpc method failed: %w", err)
 	}
 	return
 }
@@ -104,7 +104,7 @@ func (c *Client) TorrentStopRecentlyActive(ctx context.Context) (err error) {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentVerifyIDs(ctx context.Context, ids []int64) (err error) {
 	if err = c.rpcCall(ctx, "torrent-verify", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
-		err = fmt.Errorf("'torrent-verify' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-verify' rpc method failed: %w", err)
 	}
 	return
 }
@@ -113,7 +113,7 @@ func (c *Client) TorrentVerifyIDs(ctx context.Context, ids []int64) (err error) 
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentVerifyHashes(ctx context.Context, hashes []string) (err error) {
 	if err = c.rpcCall(ctx, "torrent-verify", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
-		err = fmt.Errorf("'torrent-verify' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-verify' rpc method failed: %w", err)
 	}
 	return
 }
@@ -121,7 +121,7 @@ func (c *Client) TorrentVerifyHashes(ctx context.Context, hashes []string) (err 
 // TorrentVerifyRecentlyActive verifys torrent(s) which have been recently active.
 func (c *Client) TorrentVerifyRecentlyActive(ctx context.Context) (err error) {
 	if err = c.rpcCall(ctx, "torrent-verify", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
-		err = fmt.Errorf("'torrent-verify' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-verify' rpc method failed: %w", err)
 	}
 	return
 }
@@ -130,7 +130,7 @@ func (c *Client) TorrentVerifyRecentlyActive(ctx context.Context) (err error) {
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentReannounceIDs(ctx context.Context, ids []int64) (err error) {
 	if err = c.rpcCall(ctx, "torrent-reannounce", &torrentActionIDsParam{IDs: ids}, nil); err != nil {
-		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %w", err)
 	}
 	return
 }
@@ -139,7 +139,7 @@ func (c *Client) TorrentReannounceIDs(ctx context.Context, ids []int64) (err err
 // Can be one, can be several, can be all (if slice is empty or nil).
 func (c *Client) TorrentReannounceHashes(ctx context.Context, hashes []string) (err error) {
 	if err = c.rpcCall(ctx, "torrent-reannounce", &torrentActionHashesParam{IDs: hashes}, nil); err != nil {
-		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %w", err)
 	}
 	return
 }
@@ -147,7 +147,7 @@ func (c *Client) TorrentReannounceHashes(ctx context.Context, hashes []string) (
 // TorrentReannounceRecentlyActive reannounces torrent(s) which have been recently active.
 func (c *Client) TorrentReannounceRecentlyActive(ctx context.Context) (err error) {
 	if err = c.rpcCall(ctx, "torrent-reannounce", &torrentActionRecentlyActiveParam{IDs: "recently-active"}, nil); err != nil {
-		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-reannounce' rpc method failed: %w", err)
 	}
 	return
 }

@@ -20,7 +20,7 @@ func (c *Client) TorrentSetLocation(ctx context.Context, id int64, location stri
 		Location: location,
 		Move:     move,
 	}, nil); err != nil {
-		err = fmt.Errorf("'torrent-set-location' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-set-location' rpc method failed: %w", err)
 	}
 	return
 }
@@ -35,7 +35,7 @@ func (c *Client) TorrentSetLocationHash(ctx context.Context, hash, location stri
 		Location: location,
 		Move:     move,
 	}, nil); err != nil {
-		err = fmt.Errorf("'torrent-set-location' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-set-location' rpc method failed: %w", err)
 	}
 	return
 }

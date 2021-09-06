@@ -42,7 +42,7 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 	// Prepare the request
 	var req *http.Request
 	if req, err = http.NewRequestWithContext(ctx, "POST", c.url, pOut); err != nil {
-		err = fmt.Errorf("can't prepare request for '%s' method: %v", method, err)
+		err = fmt.Errorf("can't prepare request for '%s' method: %w", method, err)
 		return
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -69,9 +69,9 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 	if resp, err = c.httpC.Do(req); err != nil {
 		mg.Wait()
 		if encErr != nil {
-			err = fmt.Errorf("request error: %v | json payload marshall error: %v", err, encErr)
+			err = fmt.Errorf("request error: %w | json payload marshall error: %v", err, encErr)
 		} else {
-			err = fmt.Errorf("request error: %v", err)
+			err = fmt.Errorf("request error: %w", err)
 		}
 		return
 	}
@@ -79,7 +79,7 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 	// Let's test the enc result, just in case
 	mg.Wait()
 	if encErr != nil {
-		err = fmt.Errorf("request payload JSON marshalling failed: %v", encErr)
+		err = fmt.Errorf("request payload JSON marshalling failed: %w", encErr)
 		return
 	}
 	// Is the CRSF token invalid ?
@@ -114,7 +114,7 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 		Arguments: result,
 	}
 	if err = json.NewDecoder(resp.Body).Decode(&answer); err != nil {
-		err = fmt.Errorf("can't unmarshall request answer body: %v", err)
+		err = fmt.Errorf("can't unmarshall request answer body: %w", err)
 		return
 	}
 	// fmt.Println("DEBUG >", answer.Result)

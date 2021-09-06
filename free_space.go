@@ -23,7 +23,7 @@ func (c *Client) FreeSpace(ctx context.Context, path string) (freeSpace cunits.B
 			err = fmt.Errorf("returned path '%s' does not match with requested path '%s'", space.Path, path)
 		}
 	} else {
-		err = fmt.Errorf("'free-space' rpc method failed: %v", err)
+		err = fmt.Errorf("'free-space' rpc method failed: %w", err)
 	}
 	return
 }

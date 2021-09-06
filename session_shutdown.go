@@ -14,7 +14,7 @@ import (
 func (c *Client) SessionClose(ctx context.Context) (err error) {
 	// Send request
 	if err = c.rpcCall(ctx, "session-close", nil, nil); err != nil {
-		err = fmt.Errorf("'session-close' rpc method failed: %v", err)
+		err = fmt.Errorf("'session-close' rpc method failed: %w", err)
 	}
 	return
 }

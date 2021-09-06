@@ -34,7 +34,7 @@ func (c *Client) TorrentAddFileDownloadDir(ctx context.Context, filepath, downlo
 	// Get base64 encoded file content
 	b64, err := File2Base64(filepath)
 	if err != nil {
-		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
+		err = fmt.Errorf("can't encode '%s' content as base64: %w", filepath, err)
 		return
 	}
 	// Prepare and send payload
@@ -53,7 +53,7 @@ func (c *Client) TorrentAddFile(ctx context.Context, filepath string) (torrent *
 	// Get base64 encoded file content
 	b64, err := File2Base64(filepath)
 	if err != nil {
-		err = fmt.Errorf("can't encode '%s' content as base64: %v", filepath, err)
+		err = fmt.Errorf("can't encode '%s' content as base64: %w", filepath, err)
 		return
 	}
 	// Prepare and send payload
@@ -76,7 +76,7 @@ func (c *Client) TorrentAdd(ctx context.Context, payload *TorrentAddPayload) (to
 	// Send payload
 	var result torrentAddAnswer
 	if err = c.rpcCall(ctx, "torrent-add", payload, &result); err != nil {
-		err = fmt.Errorf("'torrent-add' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-add' rpc method failed: %w", err)
 		return
 	}
 	// Extract results
@@ -139,7 +139,7 @@ func File2Base64(filename string) (b64 string, err error) {
 	// Try to open file
 	file, err := os.Open(filename)
 	if err != nil {
-		err = fmt.Errorf("can't open file: %v", err)
+		err = fmt.Errorf("can't open file: %w", err)
 		return
 	}
 	defer file.Close()
@@ -148,12 +148,12 @@ func File2Base64(filename string) (b64 string, err error) {
 	encoder := base64.NewEncoder(base64.StdEncoding, buffer)
 	// Stream file to the encoder
 	if _, err = io.Copy(encoder, file); err != nil {
-		err = fmt.Errorf("can't copy file content into the base64 encoder: %v", err)
+		err = fmt.Errorf("can't copy file content into the base64 encoder: %w", err)
 		return
 	}
 	// Flush last bytes
 	if err = encoder.Close(); err != nil {
-		err = fmt.Errorf("can't flush last bytes of the base64 encoder: %v", err)
+		err = fmt.Errorf("can't flush last bytes of the base64 encoder: %w", err)
 		return
 	}
 	// Get the string form

@@ -20,7 +20,7 @@ func (c *Client) TorrentRenamePath(ctx context.Context, id int64, path, name str
 		Path: path,
 		Name: name,
 	}, nil); err != nil {
-		err = fmt.Errorf("'torrent-rename-path' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-rename-path' rpc method failed: %w", err)
 	}
 	return
 }
@@ -33,7 +33,7 @@ func (c *Client) TorrentRenamePathHash(ctx context.Context, hash, path, name str
 		Path:   path,
 		Name:   name,
 	}, nil); err != nil {
-		err = fmt.Errorf("'torrent-rename-path' rpc method failed: %v", err)
+		err = fmt.Errorf("'torrent-rename-path' rpc method failed: %w", err)
 	}
 	return
 }

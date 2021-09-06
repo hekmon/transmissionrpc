@@ -17,7 +17,7 @@ func (c *Client) PortTest(ctx context.Context) (open bool, err error) {
 	if err = c.rpcCall(ctx, "port-test", nil, &result); err == nil {
 		open = result.PortOpen
 	} else {
-		err = fmt.Errorf("'port-test' rpc method failed: %v", err)
+		err = fmt.Errorf("'port-test' rpc method failed: %w", err)
 	}
 	return
 }

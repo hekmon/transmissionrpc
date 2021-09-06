@@ -16,7 +16,7 @@ import (
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L548
 func (c *Client) SessionStats(ctx context.Context) (stats *SessionStats, err error) {
 	if err = c.rpcCall(ctx, "session-stats", nil, &stats); err != nil {
-		err = fmt.Errorf("'session-stats' rpc method failed: %v", err)
+		err = fmt.Errorf("'session-stats' rpc method failed: %w", err)
 	}
 	return
 }
