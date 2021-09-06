@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -10,9 +11,9 @@ import (
 */
 
 // SessionClose tells the transmission session to shut down.
-func (c *Client) SessionClose() (err error) {
+func (c *Client) SessionClose(ctx context.Context) (err error) {
 	// Send request
-	if err = c.rpcCall("session-close", nil, nil); err != nil {
+	if err = c.rpcCall(ctx, "session-close", nil, nil); err != nil {
 		err = fmt.Errorf("'session-close' rpc method failed: %v", err)
 	}
 	return

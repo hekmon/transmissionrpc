@@ -2,6 +2,7 @@ package transmissionrpc
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -19,7 +20,7 @@ import (
 // TorrentAddFileDownloadDir is wrapper to directly add a torrent file (it handles the base64 encoding
 // and payload generation) to a DownloadDir (not the default download dir). If successful (torrent added
 // or duplicate) torrent return value will only have HashString, ID and Name fields set up.
-func (c *Client) TorrentAddFileDownloadDir(filepath, downloaddir string) (torrent *Torrent, err error) {
+func (c *Client) TorrentAddFileDownloadDir(ctx context.Context, filepath, downloaddir string) (torrent *Torrent, err error) {
 	// Validate filepath
 	if filepath == "" {
 		err = errors.New("filepath can't be empty")
@@ -37,13 +38,13 @@ func (c *Client) TorrentAddFileDownloadDir(filepath, downloaddir string) (torren
 		return
 	}
 	// Prepare and send payload
-	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64, DownloadDir: &downloaddir})
+	return c.TorrentAdd(ctx, &TorrentAddPayload{MetaInfo: &b64, DownloadDir: &downloaddir})
 }
 
 // TorrentAddFile is wrapper to directly add a torrent file (it handles the base64 encoding
 // and payload generation). If successful (torrent added or duplicate) torrent return value
 // will only have HashString, ID and Name fields set up.
-func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
+func (c *Client) TorrentAddFile(ctx context.Context, filepath string) (torrent *Torrent, err error) {
 	// Validate
 	if filepath == "" {
 		err = errors.New("filepath can't be empty")
@@ -56,13 +57,13 @@ func (c *Client) TorrentAddFile(filepath string) (torrent *Torrent, err error) {
 		return
 	}
 	// Prepare and send payload
-	return c.TorrentAdd(&TorrentAddPayload{MetaInfo: &b64})
+	return c.TorrentAdd(ctx, &TorrentAddPayload{MetaInfo: &b64})
 }
 
 // TorrentAdd allows to send an Add payload. If successful (torrent added or duplicate) torrent
 // return value will only have HashString, ID and Name fields set up.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L373
-func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err error) {
+func (c *Client) TorrentAdd(ctx context.Context, payload *TorrentAddPayload) (torrent *Torrent, err error) {
 	// Validate
 	if payload == nil {
 		err = errors.New("payload can't be nil")
@@ -74,7 +75,7 @@ func (c *Client) TorrentAdd(payload *TorrentAddPayload) (torrent *Torrent, err e
 	}
 	// Send payload
 	var result torrentAddAnswer
-	if err = c.rpcCall("torrent-add", payload, &result); err != nil {
+	if err = c.rpcCall(ctx, "torrent-add", payload, &result); err != nil {
 		err = fmt.Errorf("'torrent-add' rpc method failed: %v", err)
 		return
 	}

@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hekmon/cunits/v2"
@@ -13,8 +14,8 @@ import (
 
 // SessionStats returns all (current/cumulative) statistics.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L548
-func (c *Client) SessionStats() (stats *SessionStats, err error) {
-	if err = c.rpcCall("session-stats", nil, &stats); err != nil {
+func (c *Client) SessionStats(ctx context.Context) (stats *SessionStats, err error) {
+	if err = c.rpcCall(ctx, "session-stats", nil, &stats); err != nil {
 		err = fmt.Errorf("'session-stats' rpc method failed: %v", err)
 	}
 	return

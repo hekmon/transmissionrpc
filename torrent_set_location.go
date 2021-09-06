@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -13,8 +14,8 @@ import (
 // 'location' is the new torrent location.
 // 'move' if true, move from previous location. Otherwise, search "location" for file.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L423
-func (c *Client) TorrentSetLocation(id int64, location string, move bool) (err error) {
-	if err = c.rpcCall("torrent-set-location", torrentSetLocationPayload{
+func (c *Client) TorrentSetLocation(ctx context.Context, id int64, location string, move bool) (err error) {
+	if err = c.rpcCall(ctx, "torrent-set-location", torrentSetLocationPayload{
 		IDs:      []int64{id},
 		Location: location,
 		Move:     move,
@@ -28,8 +29,8 @@ func (c *Client) TorrentSetLocation(id int64, location string, move bool) (err e
 // 'location' is the new torrent location.
 // 'move' if true, move from previous location. Otherwise, search "location" for file.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L423
-func (c *Client) TorrentSetLocationHash(hash, location string, move bool) (err error) {
-	if err = c.rpcCall("torrent-set-location", torrentSetLocationHashPayload{
+func (c *Client) TorrentSetLocationHash(ctx context.Context, hash, location string, move bool) (err error) {
+	if err = c.rpcCall(ctx, "torrent-set-location", torrentSetLocationHashPayload{
 		Hashes:   []string{hash},
 		Location: location,
 		Move:     move,

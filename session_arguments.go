@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -14,8 +15,8 @@ import (
 */
 
 // RPCVersion returns true if the lib RPC version is greater or equals to the remote server rpc minimum version.
-func (c *Client) RPCVersion() (ok bool, serverVersion int64, serverMinimumVersion int64, err error) {
-	payload, err := c.SessionArgumentsGet()
+func (c *Client) RPCVersion(ctx context.Context) (ok bool, serverVersion int64, serverMinimumVersion int64, err error) {
+	payload, err := c.SessionArgumentsGet(ctx)
 	if err != nil {
 		err = fmt.Errorf("can't get session values: %v", err)
 		return
@@ -36,7 +37,7 @@ func (c *Client) RPCVersion() (ok bool, serverVersion int64, serverMinimumVersio
 
 // SessionArgumentsSet allows to modify global/session values.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L534
-func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
+func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArguments) (err error) {
 	// Checks
 	if payload == nil {
 		err = fmt.Errorf("payload can't be nil")
@@ -49,7 +50,7 @@ func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
 	payload.SessionID = nil
 	payload.Version = nil
 	// Exec
-	if err = c.rpcCall("session-set", payload, nil); err != nil {
+	if err = c.rpcCall(ctx, "session-set", payload, nil); err != nil {
 		err = fmt.Errorf("'session-set' rpc method failed: %v", err)
 	}
 	return
@@ -57,8 +58,8 @@ func (c *Client) SessionArgumentsSet(payload *SessionArguments) (err error) {
 
 // SessionArgumentsGet returns global/session values.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L542
-func (c *Client) SessionArgumentsGet() (sessionArgs *SessionArguments, err error) {
-	if err = c.rpcCall("session-get", nil, &sessionArgs); err != nil {
+func (c *Client) SessionArgumentsGet(ctx context.Context) (sessionArgs *SessionArguments, err error) {
+	if err = c.rpcCall(ctx, "session-get", nil, &sessionArgs); err != nil {
 		err = fmt.Errorf("'session-get' rpc method failed: %v", err)
 	}
 	return

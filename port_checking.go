@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -10,10 +11,10 @@ import (
 */
 
 // PortTest allows tests to see if your incoming peer port is accessible from the outside world.
-func (c *Client) PortTest() (open bool, err error) {
+func (c *Client) PortTest(ctx context.Context) (open bool, err error) {
 	var result portTestAnswer
 	// Send request
-	if err = c.rpcCall("port-test", nil, &result); err == nil {
+	if err = c.rpcCall(ctx, "port-test", nil, &result); err == nil {
 		open = result.PortOpen
 	} else {
 		err = fmt.Errorf("'port-test' rpc method failed: %v", err)

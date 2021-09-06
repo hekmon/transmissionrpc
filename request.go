@@ -2,6 +2,7 @@ package transmissionrpc
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -26,11 +27,11 @@ type answerPayload struct {
 	Tag       *int        `json:"tag"`
 }
 
-func (c *Client) rpcCall(method string, arguments interface{}, result interface{}) (err error) {
-	return c.request(method, arguments, result, true)
+func (c *Client) rpcCall(ctx context.Context, method string, arguments interface{}, result interface{}) (err error) {
+	return c.request(ctx, method, arguments, result, true)
 }
 
-func (c *Client) request(method string, arguments interface{}, result interface{}, retry bool) (err error) {
+func (c *Client) request(ctx context.Context, method string, arguments interface{}, result interface{}, retry bool) (err error) {
 	// Let's avoid crashing
 	if c.httpC == nil {
 		err = errors.New("this controller is not initialized, please use the New() function")
@@ -40,7 +41,7 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 	pOut, pIn := io.Pipe()
 	// Prepare the request
 	var req *http.Request
-	if req, err = http.NewRequest("POST", c.url, pOut); err != nil {
+	if req, err = http.NewRequestWithContext(ctx, "POST", c.url, pOut); err != nil {
 		err = fmt.Errorf("can't prepare request for '%s' method: %v", method, err)
 		return
 	}
@@ -87,7 +88,7 @@ func (c *Client) request(method string, arguments interface{}, result interface{
 		c.updateSessionID(resp.Header.Get(csrfHeader))
 		// Retry request if first try
 		if retry {
-			return c.request(method, arguments, result, false)
+			return c.request(ctx, method, arguments, result, false)
 		}
 		err = errors.New("CSRF token invalid 2 times in a row: stopping to avoid infinite loop")
 		return

@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,7 +16,7 @@ import (
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L107
-func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
+func (c *Client) TorrentSet(ctx context.Context, payload *TorrentSetPayload) (err error) {
 	// Validate
 	if payload == nil {
 		return errors.New("payload can't be nil")
@@ -24,7 +25,7 @@ func (c *Client) TorrentSet(payload *TorrentSetPayload) (err error) {
 		return errors.New("there must be at least one ID")
 	}
 	// Send payload
-	if err = c.rpcCall("torrent-set", payload, nil); err != nil {
+	if err = c.rpcCall(ctx, "torrent-set", payload, nil); err != nil {
 		err = fmt.Errorf("'torrent-set' rpc method failed: %v", err)
 	}
 	return

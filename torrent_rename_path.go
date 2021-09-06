@@ -1,6 +1,7 @@
 package transmissionrpc
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -13,8 +14,8 @@ import (
 // 'path' is the path to the file or folder that will be renamed.
 // 'name' the file or folder's new name
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L440
-func (c *Client) TorrentRenamePath(id int64, path, name string) (err error) {
-	if err = c.rpcCall("torrent-rename-path", torrentRenamePathPayload{
+func (c *Client) TorrentRenamePath(ctx context.Context, id int64, path, name string) (err error) {
+	if err = c.rpcCall(ctx, "torrent-rename-path", torrentRenamePathPayload{
 		IDs:  []int64{id},
 		Path: path,
 		Name: name,
@@ -26,8 +27,8 @@ func (c *Client) TorrentRenamePath(id int64, path, name string) (err error) {
 
 // TorrentRenamePathHash allows to rename torrent name or path by its hash.
 // https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L440
-func (c *Client) TorrentRenamePathHash(hash, path, name string) (err error) {
-	if err = c.rpcCall("torrent-rename-path", torrentRenamePathHashPayload{
+func (c *Client) TorrentRenamePathHash(ctx context.Context, hash, path, name string) (err error) {
+	if err = c.rpcCall(ctx, "torrent-rename-path", torrentRenamePathHashPayload{
 		Hashes: []string{hash},
 		Path:   path,
 		Name:   name,
