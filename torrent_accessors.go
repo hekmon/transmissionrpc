@@ -292,7 +292,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 }
 
 // MarshalJSON allows to convert back golang values to original payload values.
-func (t *Torrent) MarshalJSON() (data []byte, err error) {
+func (t Torrent) MarshalJSON() (data []byte, err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTorrent Torrent
 	tmp := &struct {
@@ -305,7 +305,7 @@ func (t *Torrent) MarshalJSON() (data []byte, err error) {
 		Wanted         []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
-		RawTorrent: (*RawTorrent)(t),
+		RawTorrent: (*RawTorrent)(&t),
 	}
 	// Timestamps & Duration
 	if t.ActivityDate != nil {
@@ -600,7 +600,7 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 }
 
 // MarshalJSON allows to convert back golang values to original payload values.
-func (ts *TrackerStats) MarshalJSON() (data []byte, err error) {
+func (ts TrackerStats) MarshalJSON() (data []byte, err error) {
 	// Shadow real type for regular unmarshalling
 	type RawTrackerStats TrackerStats
 	tmp := struct {
@@ -619,7 +619,7 @@ func (ts *TrackerStats) MarshalJSON() (data []byte, err error) {
 		LastScrapeTime:        ts.LastScrapeTime.Unix(),
 		NextAnnounceTime:      ts.NextAnnounceTime.Unix(),
 		NextScrapeTime:        ts.NextScrapeTime.Unix(),
-		RawTrackerStats:       (*RawTrackerStats)(ts),
+		RawTrackerStats:       (*RawTrackerStats)(&ts),
 	}
 	// Convert real bool to its number form
 	if ts.LastScrapeTimedOut {

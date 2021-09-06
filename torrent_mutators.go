@@ -59,14 +59,14 @@ type TorrentSetPayload struct {
 // MarshalJSON allows to marshall into JSON only the non nil fields.
 // It differs from 'omitempty' which also skip default values
 // (as 0 or false which can be valid here).
-func (tsp *TorrentSetPayload) MarshalJSON() (data []byte, err error) {
+func (tsp TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 	// Build an intermediary payload with base types
 	type baseTorrentSetPayload TorrentSetPayload
 	tmp := struct {
 		SeedIdleLimit *int64 `json:"seedIdleLimit"`
 		*baseTorrentSetPayload
 	}{
-		baseTorrentSetPayload: (*baseTorrentSetPayload)(tsp),
+		baseTorrentSetPayload: (*baseTorrentSetPayload)(&tsp),
 	}
 	if tsp.SeedIdleLimit != nil {
 		sil := int64(*tsp.SeedIdleLimit / time.Minute)

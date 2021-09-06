@@ -106,9 +106,9 @@ type TorrentAddPayload struct {
 // MarshalJSON allows to marshall into JSON only the non nil fields.
 // It differs from 'omitempty' which also skip default values
 // (as 0 or false which can be valid here).
-func (tap *TorrentAddPayload) MarshalJSON() (data []byte, err error) {
+func (tap TorrentAddPayload) MarshalJSON() (data []byte, err error) {
 	// Build a payload with only the non nil fields
-	tspv := reflect.ValueOf(*tap)
+	tspv := reflect.ValueOf(tap)
 	tspt := tspv.Type()
 	cleanPayload := make(map[string]interface{}, tspt.NumField())
 	var currentValue reflect.Value
