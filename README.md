@@ -8,9 +8,17 @@ Even if there is some high level wrappers/helpers, the goal of this lib is to st
 
 Also payload generation aims to be precise: when several values can be added to a payload, only instanciated values will be forwarded (and kept !) to the final payload. This means that the default JSON marshalling (with omitempty) can't always be used and therefor a manual, reflect based, approach is used to build the final payload and accurately send what the user have instanciated, even if a value is at its default type value.
 
-This lib follows the [transmission v16 RPC specification](https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L806) (introduced with Transmission 3.00).
+This lib follows the [transmission v16 RPC specification](https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L806) (introduced with Transmission 3.00). It should be backward compatible with RPC v15 specification (introduced with Transmission 2.80) with almost all methods excepting the new `SessionArgumentsGet()` method (use the backward compatible `SessionArgumentsGetAll()` method in that case).
+
+If you want a 100% rpc v15 compatible lib, please use the v1 releases.
 
 ## Getting started
+
+Install the v2 with:
+
+```bash
+go get github.com/hekmon/transmissionrpc/v2
+```
 
 First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
