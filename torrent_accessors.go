@@ -45,7 +45,7 @@ func (c *Client) TorrentGetAllForHashes(ctx context.Context, hashes []string) (t
 // TorrentGet returns the given of fields (mandatory) for each ids (optionnal).
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
 func (c *Client) TorrentGet(ctx context.Context, fields []string, ids []int64) (torrents []*Torrent, err error) {
-	if err = c.validateFields(fields); err != nil {
+	if err = c.validateTorrentFields(fields); err != nil {
 		return
 	}
 	return c.torrentGet(ctx, fields, ids)
@@ -54,13 +54,13 @@ func (c *Client) TorrentGet(ctx context.Context, fields []string, ids []int64) (
 // TorrentGetHashes returns the given of fields (mandatory) for each ids (optionnal).
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L145
 func (c *Client) TorrentGetHashes(ctx context.Context, fields []string, hashes []string) (torrents []*Torrent, err error) {
-	if err = c.validateFields(fields); err != nil {
+	if err = c.validateTorrentFields(fields); err != nil {
 		return
 	}
 	return c.torrentGetHash(ctx, fields, hashes)
 }
 
-func (c *Client) validateFields(fields []string) (err error) {
+func (c *Client) validateTorrentFields(fields []string) (err error) {
 	// Validate fields
 	var fieldInvalid bool
 	var knownField string

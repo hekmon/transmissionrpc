@@ -15,9 +15,18 @@ import (
 	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L482
 */
 
+var validSessionFields []string
+
+func init() {
+	torrentType := reflect.TypeOf(SessionArguments{})
+	for i := 0; i < torrentType.NumField(); i++ {
+		validSessionFields = append(validSessionFields, torrentType.Field(i).Tag.Get("json"))
+	}
+}
+
 // RPCVersion returns true if the lib RPC version is greater or equals to the remote server rpc minimum version.
 func (c *Client) RPCVersion(ctx context.Context) (ok bool, serverVersion int64, serverMinimumVersion int64, err error) {
-	payload, err := c.SessionArgumentsGet(ctx)
+	payload, err := c.SessionArgumentsGetAll(ctx)
 	if err != nil {
 		err = fmt.Errorf("can't get session values: %w", err)
 		return
@@ -59,9 +68,46 @@ func (c *Client) SessionArgumentsSet(ctx context.Context, payload *SessionArgume
 
 // SessionArgumentsGet returns global/session values.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L563
-func (c *Client) SessionArgumentsGet(ctx context.Context) (sessionArgs *SessionArguments, err error) {
+func (c *Client) SessionArgumentsGetAll(ctx context.Context) (sessionArgs *SessionArguments, err error) {
 	if err = c.rpcCall(ctx, "session-get", nil, &sessionArgs); err != nil {
 		err = fmt.Errorf("'session-get' rpc method failed: %w", err)
+	}
+	return
+}
+
+type sessionGetParams struct {
+	Fields []string `json:"fields"`
+}
+
+// SessionArgumentsGet returns global/session values for specified fields.
+// See the JSON tags of the SessionArguments struct for valid fields.
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L563
+func (c *Client) SessionArgumentsGet(ctx context.Context, fields []string) (sessionArgs *SessionArguments, err error) {
+	if err = c.validateSessionFields(fields); err != nil {
+		return
+	}
+	if err = c.rpcCall(ctx, "session-get", sessionGetParams{Fields: fields}, &sessionArgs); err != nil {
+		err = fmt.Errorf("'session-get' rpc method failed: %w", err)
+	}
+	return
+}
+
+func (c *Client) validateSessionFields(fields []string) (err error) {
+	// Validate fields
+	var fieldInvalid bool
+	var knownField string
+	for _, inputField := range fields {
+		fieldInvalid = true
+		for _, knownField = range validSessionFields {
+			if inputField == knownField {
+				fieldInvalid = false
+				break
+			}
+		}
+		if fieldInvalid {
+			err = fmt.Errorf("field '%s' is invalid", inputField)
+			return
+		}
 	}
 	return
 }
