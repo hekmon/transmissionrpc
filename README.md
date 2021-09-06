@@ -112,7 +112,7 @@ Check [TorrentStartIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?t
 Ex:
 
 ```golang
-err := transmissionbt.TorrentStartIDs([]int64{55})
+err := transmissionbt.TorrentStartIDs(context.TODO(), []int64{55})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -127,7 +127,7 @@ Check [TorrentStartNowIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrp
 Ex:
 
 ```golang
-err := transmissionbt.TorrentStartNowHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
+err := transmissionbt.TorrentStartNowHashes(context.TODO(), []string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -142,7 +142,7 @@ Check [TorrentStopIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?ta
 Ex:
 
 ```golang
-err := transmissionbt.TorrentStopIDs([]int64{55})
+err := transmissionbt.TorrentStopIDs(context.TODO(), []int64{55})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -157,7 +157,7 @@ Check [TorrentVerifyIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?
 Ex:
 
 ```golang
-err := transmissionbt.TorrentVerifyHashes([]string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
+err := transmissionbt.TorrentVerifyHashes(context.TODO(), []string{"f07e0b0584745b7bcb35e98097488d34e68623d0"})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -172,7 +172,7 @@ Check [TorrentReannounceIDs()](https://pkg.go.dev/github.com/hekmon/transmission
 Ex:
 
 ```golang
-err := transmissionbt.TorrentReannounceRecentlyActive()
+err := transmissionbt.TorrentReannounceRecentlyActive(context.TODO())
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -191,7 +191,7 @@ Ex: apply a 1 MB/s limit to a torrent.
 ```golang
 uploadLimited := true
 uploadLimitKBps := int64(1000)
-err := transmissionbt.TorrentSet(&transmissionrpc.TorrentSetPayload{
+err := transmissionbt.TorrentSet(context.TODO(), transmissionrpc.TorrentSetPayload{
     IDs:           []int64{55},
     UploadLimited: &uploadLimited,
     UploadLimit:   &uploadLimitKBps,
@@ -212,7 +212,7 @@ There is a lot more [mutators](https://pkg.go.dev/github.com/hekmon/transmission
 All fields for all torrents with [TorrentGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGetAll):
 
 ```golang
-torrents, err := transmissionbt.TorrentGetAll()
+torrents, err := transmissionbt.TorrentGetAll(context.TODO())
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -223,7 +223,7 @@ if err != nil {
 All fields for a restricted list of ids with [TorrentGetAllFor()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGetAll):
 
 ```golang
-torrents, err := transmissionbt.TorrentGetAllFor([]int64{31})
+torrents, err := transmissionbt.TorrentGetAllFor(context.TODO(), []int64{31})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -234,7 +234,7 @@ if err != nil {
 Some fields for some torrents with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGet):
 
 ```golang
-torrents, err := transmissionbt.TorrentGet([]string{"status"}, []int64{54, 55})
+torrents, err := transmissionbt.TorrentGet(context.TODO(), []string{"status"}, []int64{54, 55})
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -247,7 +247,7 @@ if err != nil {
 Some fields for all torrents, still with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=doc#Client.TorrentGet):
 
 ```golang
-torrents, err := transmissionbt.TorrentGet([]string{"id", "name", "hashString"}, nil)
+torrents, err := transmissionbt.TorrentGet(context.TODO(), []string{"id", "name", "hashString"}, nil)
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -269,7 +269,7 @@ Adding a torrent from a file (using [TorrentAddFile](https://pkg.go.dev/github.c
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
-torrent, err := transmissionbt.TorrentAddFile(filepath)
+torrent, err := transmissionbt.TorrentAddFile(context.TODO(), filepath)
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -284,7 +284,7 @@ Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://pkg.go.d
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
-torrent, err := transmissionbt.TorrentAddFileDownloadDir(filepath, "/path/to/other/download/dir")
+torrent, err := transmissionbt.TorrentAddFileDownloadDir(context.TODO(), filepath, "/path/to/other/download/dir")
 if err != nil {
     fmt.Fprintln(os.Stderr, err)
 } else {
@@ -299,7 +299,7 @@ Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://p
 
 ```golang
 magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&dn=ubuntu-17.10.1-desktop-amd64.iso&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
-torrent, err := btserv.TorrentAdd(&transmissionrpc.TorrentAddPayload{
+torrent, err := btserv.TorrentAdd(context.TODO(), transmissionrpc.TorrentAddPayload{
     Filename: &magnet,
 })
 if err != nil {
@@ -330,7 +330,7 @@ if err != nil {
 } else {
     // Prepare and send payload
     paused := true
-    torrent, err := transmissionbt.TorrentAdd(&transmissionrpc.TorrentAddPayload{MetaInfo: &b64, Paused: &paused})
+    torrent, err := transmissionbt.TorrentAdd(context.TODO(), transmissionrpc.TorrentAddPayload{MetaInfo: &b64, Paused: &paused})
 }
 ```
 
@@ -385,7 +385,7 @@ Mapped as [PortTest()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?tab=
 Ex:
 
 ```golang
-    st, err := transmissionbt.PortTest()
+    st, err := transmissionbt.PortTest(context.TODO())
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
     }
@@ -427,7 +427,7 @@ Mappped as [FreeSpace()](https://pkg.go.dev/github.com/hekmon/transmissionrpc?ta
 Ex: Get the space available for /data.
 
 ```golang
-    freeSpace, err := transmissionbt.FreeSpace("/data")
+    freeSpace, err := transmissionbt.FreeSpace(context.TODO(), "/data")
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
     } else  {
