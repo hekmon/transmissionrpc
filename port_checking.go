@@ -7,10 +7,11 @@ import (
 
 /*
 	Port Checking
-	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L584
+	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L606
 */
 
 // PortTest allows tests to see if your incoming peer port is accessible from the outside world.
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L611
 func (c *Client) PortTest(ctx context.Context) (open bool, err error) {
 	var result portTestAnswer
 	// Send request

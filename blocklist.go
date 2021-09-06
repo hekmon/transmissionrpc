@@ -7,10 +7,11 @@ import (
 
 /*
 	Blocklist
-	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L578
+	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L600
 */
 
 // BlocklistUpdate triggers a blocklist update. It returns the number of entries of the updated blocklist.
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L602
 func (c *Client) BlocklistUpdate(ctx context.Context) (nbEntries int64, err error) {
 	var answer blocklistUpdateAnswer
 	// Send request

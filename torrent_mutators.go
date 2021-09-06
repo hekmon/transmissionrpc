@@ -11,11 +11,11 @@ import (
 
 /*
 	Torrent Mutators
-	https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L105
+	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L105
 */
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
-// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L107
+// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L107
 func (c *Client) TorrentSet(ctx context.Context, payload *TorrentSetPayload) (err error) {
 	// Validate
 	if payload == nil {
@@ -32,7 +32,6 @@ func (c *Client) TorrentSet(ctx context.Context, payload *TorrentSetPayload) (er
 }
 
 // TorrentSetPayload contains all the mutators appliable on one torrent.
-// https://github.com/transmission/transmission/blob/2.9x/extras/rpc-spec.txt#L111
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L111
 type TorrentSetPayload struct {
 	BandwidthPriority   *int64         `json:"bandwidthPriority"`   // this torrent's bandwidth tr_priority_t
