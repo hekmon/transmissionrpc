@@ -95,7 +95,7 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 	}
 	// Is request successful ?
 	if resp.StatusCode != 200 {
-		err = fmt.Errorf("HTTP error %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+		err = HTTPStatusCode(resp.StatusCode)
 		return
 	}
 	// Debug
@@ -145,4 +145,14 @@ func (c *Client) updateSessionID(newID string) {
 	defer c.sessionIDAccess.Unlock()
 	c.sessionIDAccess.Lock()
 	c.sessionID = newID
+}
+
+type HTTPStatusCode int
+
+func (hsc HTTPStatusCode) Error() string {
+	text := http.StatusText(int(hsc))
+	if text != "" {
+		text = ": " + text
+	}
+	return fmt.Sprintf("HTTP error %d%s", hsc, text)
 }
