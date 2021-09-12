@@ -61,7 +61,7 @@ func (c *Client) SessionArgumentsSet(ctx context.Context, payload SessionArgumen
 	return
 }
 
-// SessionArgumentsGet returns global/session values.
+// SessionArgumentsGetAll returns global/session values.
 // https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L563
 func (c *Client) SessionArgumentsGetAll(ctx context.Context) (sessionArgs SessionArguments, err error) {
 	if err = c.rpcCall(ctx, "session-get", nil, &sessionArgs); err != nil {

@@ -147,6 +147,7 @@ func (c *Client) updateSessionID(newID string) {
 	c.sessionID = newID
 }
 
+// HTTPStatusCode is a custom error type for HTTP errors
 type HTTPStatusCode int
 
 func (hsc HTTPStatusCode) Error() string {
