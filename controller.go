@@ -13,11 +13,11 @@ import (
 
 const (
 	// RPCVersion indicates the exact transmission RPC version this library is build against
-	RPCVersion       = 15
+	RPCVersion       = 17
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
 	defaultTimeout   = 30 * time.Second
-	defaultUserAgent = "github.com/hekmon/transmissionrpc"
+	defaultUserAgent = "github.com/hyperreal64/transmissionrpc"
 )
 
 // Client is the base object to interract with a remote transmission rpc endpoint.
