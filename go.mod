@@ -1,6 +1,6 @@
-module github.com/hekmon/transmissionrpc/v2
+module github.com/hyperreal64/transmissionrpc
 
-go 1.13
+go 1.19
 
 require (
 	github.com/hashicorp/go-cleanhttp v0.5.2

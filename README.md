@@ -12,7 +12,7 @@ This lib follows the [transmission v16 RPC specification](https://github.com/tra
 
 If you want a 100% compatible lib with rpc v15, please use the v1 releases.
 
-⚠️Transmission v4 seems to have switched to [RPC version 17](https://github.com/transmission/transmission/blob/4.0.0/docs/rpc-spec.md#5-protocol-versions) which is *incompatible* with the current v2 of this lib. See [#19](https://github.com/hekmon/transmissionrpc/issues/19) for more details.
+Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#5-protocol-versions).
 
 ## Getting started
 

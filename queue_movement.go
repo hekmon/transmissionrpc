@@ -7,11 +7,10 @@ import (
 
 /*
 	Queue Movement Requests
-	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L623
+    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#46-queue-movement-requests
 */
 
 // QueueMoveTop moves IDs to the top of the queue list.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L627
 func (c *Client) QueueMoveTop(ctx context.Context, IDs []int64) (err error) {
 	payload := &queueMovePayload{IDs: IDs}
 	if err = c.rpcCall(ctx, "queue-move-top", payload, nil); err != nil {
@@ -21,7 +20,6 @@ func (c *Client) QueueMoveTop(ctx context.Context, IDs []int64) (err error) {
 }
 
 // QueueMoveUp moves IDs of one position up on the queue list.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L628
 func (c *Client) QueueMoveUp(ctx context.Context, IDs []int64) (err error) {
 	payload := &queueMovePayload{IDs: IDs}
 	if err = c.rpcCall(ctx, "queue-move-up", payload, nil); err != nil {
@@ -31,7 +29,6 @@ func (c *Client) QueueMoveUp(ctx context.Context, IDs []int64) (err error) {
 }
 
 // QueueMoveDown moves IDs of one position down on the queue list.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L629
 func (c *Client) QueueMoveDown(ctx context.Context, IDs []int64) (err error) {
 	payload := &queueMovePayload{IDs: IDs}
 	if err = c.rpcCall(ctx, "queue-move-down", payload, nil); err != nil {
@@ -41,7 +38,6 @@ func (c *Client) QueueMoveDown(ctx context.Context, IDs []int64) (err error) {
 }
 
 // QueueMoveBottom moves IDs to the bottom of the queue list.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L630
 func (c *Client) QueueMoveBottom(ctx context.Context, IDs []int64) (err error) {
 	payload := &queueMovePayload{IDs: IDs}
 	if err = c.rpcCall(ctx, "queue-move-bottom", payload, nil); err != nil {
