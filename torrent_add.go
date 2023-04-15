@@ -87,18 +87,19 @@ func (c *Client) TorrentAdd(ctx context.Context, payload TorrentAddPayload) (tor
 
 // TorrentAddPayload represents the data to send in order to add a torrent.
 type TorrentAddPayload struct {
-	Cookies           *string `json:"cookies"`           // pointer to a string of one or more cookies
-	DownloadDir       *string `json:"download-dir"`      // path to download the torrent to
-	Filename          *string `json:"filename"`          // filename or URL of the .torrent file
-	MetaInfo          *string `json:"metainfo"`          // base64-encoded .torrent content
-	Paused            *bool   `json:"paused"`            // if true, don't start the torrent
-	PeerLimit         *int64  `json:"peer-limit"`        // maximum number of peers
-	BandwidthPriority *int64  `json:"bandwidthPriority"` // torrent's bandwidth tr_priority_t
-	FilesWanted       []int64 `json:"files-wanted"`      // indices of file(s) to download
-	FilesUnwanted     []int64 `json:"files-unwanted"`    // indices of file(s) to not download
-	PriorityHigh      []int64 `json:"priority-high"`     // indices of high-priority file(s)
-	PriorityLow       []int64 `json:"priority-low"`      // indices of low-priority file(s)
-	PriorityNormal    []int64 `json:"priority-normal"`   // indices of normal-priority file(s)
+	Cookies           *string  `json:"cookies"`           // pointer to a string of one or more cookies
+	DownloadDir       *string  `json:"download-dir"`      // path to download the torrent to
+	Filename          *string  `json:"filename"`          // filename or URL of the .torrent file
+	Labels            []string `json:"labels"`            // Labels for the torrent
+	MetaInfo          *string  `json:"metainfo"`          // base64-encoded .torrent content
+	Paused            *bool    `json:"paused"`            // if true, don't start the torrent
+	PeerLimit         *int64   `json:"peer-limit"`        // maximum number of peers
+	BandwidthPriority *int64   `json:"bandwidthPriority"` // torrent's bandwidth tr_priority_t
+	FilesWanted       []int64  `json:"files-wanted"`      // indices of file(s) to download
+	FilesUnwanted     []int64  `json:"files-unwanted"`    // indices of file(s) to not download
+	PriorityHigh      []int64  `json:"priority-high"`     // indices of high-priority file(s)
+	PriorityLow       []int64  `json:"priority-low"`      // indices of low-priority file(s)
+	PriorityNormal    []int64  `json:"priority-normal"`   // indices of normal-priority file(s)
 }
 
 // MarshalJSON allows to marshall into JSON only the non nil fields.

@@ -34,6 +34,7 @@ type TorrentSetPayload struct {
 	DownloadLimited     *bool          `json:"downloadLimited"`     // true if "downloadLimit" is honored
 	FilesWanted         []int64        `json:"files-wanted"`        // indices of file(s) to download
 	FilesUnwanted       []int64        `json:"files-unwanted"`      // indices of file(s) to not download
+	Group               *string        `json:"group"`               // bandwidth group to add torrent to
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"` // true if session upload limits are honored
 	IDs                 []int64        `json:"ids"`                 // torrent list
 	Labels              []string       `json:"labels"`              // RPC v16: strings of user-defined labels
