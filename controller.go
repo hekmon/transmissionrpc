@@ -17,7 +17,7 @@ const (
 	defaultPort      = 9091
 	defaultRPCPath   = "/transmission/rpc"
 	defaultTimeout   = 30 * time.Second
-	defaultUserAgent = "github.com/hyperreal64/transmissionrpc"
+	defaultUserAgent = "github.com/hekmon/transmissionrpc"
 )
 
 // Client is the base object to interract with a remote transmission rpc endpoint.
