@@ -46,6 +46,26 @@ type AdvancedConfig struct {
 	Debug       bool
 }
 
+// NewClient is the new entry into this module. URL, user and password are required.
+// The http client is optional, but recommended.
+func NewClient(url, user, password string, client *http.Client) *Client {
+	if client == nil {
+		client = &http.Client{Timeout: defaultTimeout}
+	}
+
+	return &Client{
+		url:       url,
+		user:      user,
+		password:  password,
+		userAgent: defaultUserAgent, // not configurable, and that's ok.
+		rnd:       rand.New(newLockedRandomSource(time.Now().Unix())),
+		httpC:     client,
+		// If you need debug, use a custom transport/roundtripper in your http client.
+		// Ex: https://pkg.go.dev/golift.io/starr@main/debuglog
+		debug: false,
+	}
+}
+
 // New returns an initialized and ready to use Controller
 func New(host, user, password string, conf *AdvancedConfig) (c *Client, err error) {
 	// Config
