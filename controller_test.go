@@ -11,10 +11,11 @@ func TestNew(t *testing.T) {
 	t.Parallel()
 
 	expect := &Client{
-		httpC:    &http.Client{Timeout: defaultTimeout},
-		user:     "localuser",
-		password: "localpass",
-		url:      fmt.Sprint("http://localhost:", defaultPort, defaultRPCPath),
+		httpC:     &http.Client{Timeout: defaultTimeout},
+		user:      "localuser",
+		password:  "localpass",
+		url:       fmt.Sprint("http://localhost:", defaultPort, defaultRPCPath),
+		userAgent: defaultUserAgent,
 	}
 
 	client, err := New("localhost", expect.user, expect.password, nil)
@@ -29,19 +30,25 @@ func TestNewClient(t *testing.T) {
 	t.Parallel()
 
 	expect := &Client{
-		httpC:    &http.Client{Timeout: defaultTimeout},
-		user:     "localuser",
-		password: "localpass",
-		url:      "http://localhost:999/rpc",
-		debug:    false,
+		httpC:     &http.Client{Timeout: defaultTimeout},
+		user:      "localuser",
+		password:  "localpass",
+		url:       "http://localhost:999/rpc",
+		debug:     false,
+		userAgent: "test agent",
+	}
+	config := Config{
+		URL:       expect.url,
+		Username:  expect.user,
+		Password:  expect.password,
+		UserAgent: expect.userAgent,
 	}
 
-	client := NewClient(expect.url, expect.user, expect.password, nil)
-	testCheckClient(t, client, expect)
+	testCheckClient(t, NewClient(config), expect)
 
 	expect.httpC.Timeout = time.Hour
-	client = NewClient(expect.url, expect.user, expect.password, expect.httpC)
-	testCheckClient(t, client, expect)
+	config.Client = &http.Client{Timeout: time.Hour}
+	testCheckClient(t, NewClient(config), expect)
 }
 
 func testCheckClient(t *testing.T, received *Client, expected *Client) {
@@ -64,6 +71,10 @@ func testCheckClient(t *testing.T, received *Client, expected *Client) {
 
 	if received.url != expected.url {
 		t.Error("Provided client was returned with the wrong URL.")
+	}
+
+	if received.userAgent != expected.userAgent {
+		t.Error("Provided client was returned with the wrong User Agent.")
 	}
 
 	if received.httpC.Timeout != expected.httpC.Timeout {
