@@ -1,6 +1,6 @@
 # TransmissionRPC
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/hekmon/transmissionrpc/v2.svg)](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2) [![Go report card](https://goreportcard.com/badge/github.com/hekmon/transmissionrpc)](https://goreportcard.com/report/github.com/hekmon/transmissionrpc)
+[![Go Reference](https://pkg.go.dev/badge/github.com/hekmon/transmissionrpc/v3.svg)](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3) [![Go report card](https://goreportcard.com/badge/github.com/hekmon/transmissionrpc)](https://goreportcard.com/report/github.com/hekmon/transmissionrpc)
 
 Golang bindings to Transmission (bittorrent) RPC interface.
 
@@ -8,27 +8,26 @@ Even if there is some high level wrappers/helpers, the goal of this lib is to st
 
 Also payload generation aims to be precise: when several values can be added to a payload, only instanciated values will be forwarded (and kept !) to the final payload. This means that the default JSON marshalling (with omitempty) can't always be used and therefor a manual, reflect based, approach is used to build the final payload and accurately send what the user have instanciated, even if a value is at its default type value.
 
-This lib follows the [transmission v16 RPC specification](https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L806) (introduced with Transmission 3.00). It should be backward compatible with RPC v15 specification (introduced with Transmission 2.80) with almost all methods excepting the new [`SessionArgumentsGet()`](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2@v2.0.1#Client.SessionArgumentsGet) method (use the backward compatible [`SessionArgumentsGetAll()`](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2@v2.0.1#Client.SessionArgumentsGetAll) method in that case).
+- If you want a 100% compatible lib with rpc v15, please use the v1 releases.
+- If you want 100% compatible lib with rpc v16, please use the v2 releases.
 
-If you want a 100% compatible lib with rpc v15, please use the v1 releases.
-
-⚠️Transmission v4 seems to have switched to [RPC version 17](https://github.com/transmission/transmission/blob/4.0.0/docs/rpc-spec.md#5-protocol-versions) which is *incompatible* with the current v2 of this lib. See [#19](https://github.com/hekmon/transmissionrpc/issues/19) for more details.
+Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#5-protocol-versions).
 
 ## Getting started
 
-Install the v2 with:
+Install the v3 with:
 
 ```bash
-go get github.com/hekmon/transmissionrpc/v2
+go get github.com/hekmon/transmissionrpc/v3
 ```
 
-First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
 
 ```golang
 transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
 ```
 
-But advanced values can also be configured to your liking using [AdvancedConfig](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#AdvancedConfig).
+But advanced values can also be configured to your liking using [AdvancedConfig](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#AdvancedConfig).
 Each value of `AdvancedConfig` with a type default value will be replaced by the lib default value, so you can set only the ones you want:
 
 ```golang
@@ -94,6 +93,9 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
     * [x] queue-move-bottom
   * [Free Space](#free-space)
     * [x] free-space
+  * [Bandwidth Groups](#bandwidth-groups)
+    * [x] group-set
+    * [x] group-get
 
 ### Torrent Requests
 
@@ -109,7 +111,7 @@ transmissionbt.TorrentXXXXRecentlyActive()
 
 * torrent-start
 
-Check [TorrentStartIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartIDs), [TorrentStartHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartHashes) and [TorrentStartRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartRecentlyActive).
+Check [TorrentStartIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartIDs), [TorrentStartHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartHashes) and [TorrentStartRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartRecentlyActive).
 
 Ex:
 
@@ -124,7 +126,7 @@ if err != nil {
 
 * torrent-start-now
 
-Check [TorrentStartNowIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartNowIDs), [TorrentStartNowHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartNowHashes) and [TorrentStartNowRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStartNowRecentlyActive).
+Check [TorrentStartNowIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartNowIDs), [TorrentStartNowHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartNowHashes) and [TorrentStartNowRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStartNowRecentlyActive).
 
 Ex:
 
@@ -139,7 +141,7 @@ if err != nil {
 
 * torrent-stop
 
-Check [TorrentStopIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStopIDs), [TorrentStopHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStopHashes) and [TorrentStopRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentStopRecentlyActive).
+Check [TorrentStopIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStopIDs), [TorrentStopHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStopHashes) and [TorrentStopRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentStopRecentlyActive).
 
 Ex:
 
@@ -154,7 +156,7 @@ if err != nil {
 
 * torrent-verify
 
-Check [TorrentVerifyIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentVerifyIDs), [TorrentVerifyHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentVerifyHashes) and [TorrentVerifyRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentVerifyRecentlyActive).
+Check [TorrentVerifyIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentVerifyIDs), [TorrentVerifyHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentVerifyHashes) and [TorrentVerifyRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentVerifyRecentlyActive).
 
 Ex:
 
@@ -169,7 +171,7 @@ if err != nil {
 
 * torrent-reannounce
 
-Check [TorrentReannounceIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentReannounceIDs), [TorrentReannounceHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentReannounceHashes) and [TorrentReannounceRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentReannounceRecentlyActive).
+Check [TorrentReannounceIDs()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentReannounceIDs), [TorrentReannounceHashes()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentReannounceHashes) and [TorrentReannounceRecentlyActive()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentReannounceRecentlyActive).
 
 Ex:
 
@@ -186,7 +188,7 @@ if err != nil {
 
 * torrent-set
 
-Mapped as [TorrentSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentSet).
+Mapped as [TorrentSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentSet).
 
 Ex: apply a 1 MB/s limit to a torrent.
 
@@ -205,13 +207,13 @@ if err != nil {
 }
 ```
 
-There is a lot more [mutators](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#TorrentSetPayload) available.
+There is a lot more [mutators](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#TorrentSetPayload) available.
 
 #### Torrent Accessors
 
 * torrent-get
 
-All fields for all torrents with [TorrentGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentGetAll):
+All fields for all torrents with [TorrentGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentGetAll):
 
 ```golang
 torrents, err := transmissionbt.TorrentGetAll(context.TODO())
@@ -222,7 +224,7 @@ if err != nil {
 }
 ```
 
-All fields for a restricted list of ids with [TorrentGetAllFor()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentGetAll):
+All fields for a restricted list of ids with [TorrentGetAllFor()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentGetAll):
 
 ```golang
 torrents, err := transmissionbt.TorrentGetAllFor(context.TODO(), []int64{31})
@@ -233,7 +235,7 @@ if err != nil {
 }
 ```
 
-Some fields for some torrents with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentGet):
+Some fields for some torrents with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentGet):
 
 ```golang
 torrents, err := transmissionbt.TorrentGet(context.TODO(), []string{"status"}, []int64{54, 55})
@@ -246,7 +248,7 @@ if err != nil {
 }
 ```
 
-Some fields for all torrents, still with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentGet):
+Some fields for all torrents, still with the low level accessor [TorrentGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentGet):
 
 ```golang
 torrents, err := transmissionbt.TorrentGet(context.TODO(), []string{"id", "name", "hashString"}, nil)
@@ -261,13 +263,13 @@ if err != nil {
 }
 ```
 
-Valid fields name can be found as JSON tag on the [Torrent](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Torrent) struct.
+Valid fields name can be found as JSON tag on the [Torrent](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Torrent) struct.
 
 #### Adding a Torrent
 
 * torrent-add
 
-Adding a torrent from a file (using [TorrentAddFile](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentAddFile) wrapper):
+Adding a torrent from a file (using [TorrentAddFile](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentAddFile) wrapper):
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
@@ -282,7 +284,7 @@ if err != nil {
 }
 ```
 
-Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentAddFileDownloadDir) wrapper) to a specified DownloadDir (this allows for separation of downloads to target folders):
+Adding a torrent from a file (using [TorrentAddFileDownloadDir](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentAddFileDownloadDir) wrapper) to a specified DownloadDir (this allows for separation of downloads to target folders):
 
 ```golang
 filepath := "/home/hekmon/Downloads/ubuntu-17.10.1-desktop-amd64.iso.torrent"
@@ -297,7 +299,7 @@ if err != nil {
 }
 ```
 
-Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentAdd) method:
+Adding a torrent from an URL (ex: a magnet) with the real [TorrentAdd](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentAdd) method:
 
 ```golang
 magnet := "magnet:?xt=urn:btih:f07e0b0584745b7bcb35e98097488d34e68623d0&dn=ubuntu-17.10.1-desktop-amd64.iso&tr=http%3A%2F%2Ftorrent.ubuntu.com%3A6969%2Fannounce&tr=http%3A%2F%2Fipv6.torrent.ubuntu.com%3A6969%2Fannounce"
@@ -340,19 +342,19 @@ if err != nil {
 
 * torrent-remove
 
-Mapped as [TorrentRemove()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentRemove).
+Mapped as [TorrentRemove()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentRemove).
 
 #### Moving a Torrent
 
 * torrent-set-location
 
-Mapped as [TorrentSetLocation()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentSetLocation).
+Mapped as [TorrentSetLocation()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentSetLocation).
 
 #### Renaming a Torrent path
 
 * torrent-rename-path
 
-Mapped as [TorrentRenamePath()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.TorrentRenamePath).
+Mapped as [TorrentRenamePath()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.TorrentRenamePath).
 
 ### Session Requests
 
@@ -360,29 +362,29 @@ Mapped as [TorrentRenamePath()](https://pkg.go.dev/github.com/hekmon/transmissio
 
 * session-set
 
-Mapped as [SessionArgumentsSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.SessionArgumentsSet).
+Mapped as [SessionArgumentsSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.SessionArgumentsSet).
 
 * session-get
 
-Mapped as [SessionArgumentsGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.SessionArgumentsGet).
+Mapped as [SessionArgumentsGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.SessionArgumentsGet).
 
 #### Session Statistics
 
 * session-stats
 
-Mapped as [SessionStats()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.SessionStats).
+Mapped as [SessionStats()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.SessionStats).
 
 #### Blocklist
 
 * blocklist-update
 
-Mapped as [BlocklistUpdate()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.BlocklistUpdate).
+Mapped as [BlocklistUpdate()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BlocklistUpdate).
 
 #### Port Checking
 
 * port-test
 
-Mapped as [PortTest()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.PortTest).
+Mapped as [PortTest()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.PortTest).
 
 Ex:
 
@@ -400,31 +402,31 @@ Ex:
 
 * session-close
 
-Mapped as [SessionClose()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.SessionClose).
+Mapped as [SessionClose()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.SessionClose).
 
 #### Queue Movement Requests
 
 * queue-move-top
 
-Mapped as [QueueMoveTop()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.QueueMoveTop).
+Mapped as [QueueMoveTop()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.QueueMoveTop).
 
 * queue-move-up
 
-Mapped as [QueueMoveUp()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.QueueMoveUp).
+Mapped as [QueueMoveUp()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.QueueMoveUp).
 
 * queue-move-down
 
-Mapped as [QueueMoveDown()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.QueueMoveDown).
+Mapped as [QueueMoveDown()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.QueueMoveDown).
 
 * queue-move-bottom
 
-Mapped as [QueueMoveBottom()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.QueueMoveBottom).
+Mapped as [QueueMoveBottom()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.QueueMoveBottom).
 
 #### Free Space
 
 * free-space
 
-Mappped as [FreeSpace()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v2?tab=doc#Client.FreeSpace).
+Mappped as [FreeSpace()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.FreeSpace).
 
 Ex: Get the space available for /data.
 
@@ -439,3 +441,58 @@ Ex: Get the space available for /data.
 ```
 
 For more information about the freeSpace type, check the [ComputerUnits](https://github.com/hekmon/cunits) library.
+
+#### Bandwidth Groups
+
+* group-set
+
+[BandwidthGroupSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupSet).
+
+Ex: Set bandwidth group properties:
+
+``` golang
+    honorSessionLimits      := true
+    name                    := "bw_group1"
+    speedLimitDownEnabled   := false
+    speedLimitUpEnabled     := true
+    speedLimitUp            := int64(20) // 20 KB/s
+    
+    payload := &transmissionrpc.BandwidthGroupSetPayload{
+        HonorSessionLimits:     &honorSessionLimits,
+        Name:                   &name,
+        SpeedLimitDownEnabled:  &speedLimitDownEnabled,
+        SpeedLimitUpEnabled:    &speedLimitUpEnabled,
+        SpeedLimitUp:           &speedLimitUp,
+    }
+    
+    if err = transmissionbt.BandwidthGroupSet(context.TODO(), *payload); err != nil {
+        fmt.Fprintln(os.Stderr, err)
+    } else {
+        fmt.Printf("Successfully set bandwidth group %s\n", *payload.Name)
+    }
+```
+
+* group-get
+
+[BandwidthGroupGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGet).
+[BandwidthGroupGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGetAll)
+
+Ex: Get the information for bandwidth groups bw_group1 and bw_group2.
+
+``` golang
+    groupNames := []string{"bw_group1", "bw_group2"}
+    fields := []string{
+        "name",
+        "speed-limit-down-enabled",
+        "speed-limit-down",
+        "speed-limit-up-enabled",
+        "speed-limit-up"
+    }
+    
+    bandwidthGroupsInfo, err := transmissionbt.BandwidthGroupGet(context.TODO(), fields, groupNames)
+    if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+    } else {
+        fmt.Println(bandwidthGroupsInfo)
+    }
+```

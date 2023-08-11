@@ -11,11 +11,10 @@ import (
 
 /*
 	Torrent Mutators
-	https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L105
+    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#32-torrent-mutator-torrent-set
 */
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L107
 func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err error) {
 	// Validate
 	if len(payload.IDs) == 0 {
@@ -29,13 +28,13 @@ func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err
 }
 
 // TorrentSetPayload contains all the mutators appliable on one torrent.
-// https://github.com/transmission/transmission/blob/3.00/extras/rpc-spec.txt#L111
 type TorrentSetPayload struct {
 	BandwidthPriority   *int64         `json:"bandwidthPriority"`   // this torrent's bandwidth tr_priority_t
 	DownloadLimit       *int64         `json:"downloadLimit"`       // maximum download speed (KBps)
 	DownloadLimited     *bool          `json:"downloadLimited"`     // true if "downloadLimit" is honored
 	FilesWanted         []int64        `json:"files-wanted"`        // indices of file(s) to download
 	FilesUnwanted       []int64        `json:"files-unwanted"`      // indices of file(s) to not download
+	Group               *string        `json:"group"`               // bandwidth group to add torrent to
 	HonorsSessionLimits *bool          `json:"honorsSessionLimits"` // true if session upload limits are honored
 	IDs                 []int64        `json:"ids"`                 // torrent list
 	Labels              []string       `json:"labels"`              // RPC v16: strings of user-defined labels
@@ -49,9 +48,7 @@ type TorrentSetPayload struct {
 	SeedIdleMode        *int64         `json:"seedIdleMode"`        // which seeding inactivity to use
 	SeedRatioLimit      *float64       `json:"seedRatioLimit"`      // torrent-level seeding ratio
 	SeedRatioMode       *SeedRatioMode `json:"seedRatioMode"`       // which ratio mode to use
-	TrackerAdd          []string       `json:"trackerAdd"`          // strings of announce URLs to add
-	TrackerRemove       []int64        `json:"trackerRemove"`       // ids of trackers to remove
-	TrackerReplace      []string       `json:"trackerReplace"`      // pairs of <trackerId/new announce URLs> (TODO: validate string value usable as is)
+	TrackerList         *string        `json:"trackerList"`         // string of announce URLs, one per line, and a blank line between tiers
 	UploadLimit         *int64         `json:"uploadLimit"`         // maximum upload speed (KBps)
 	UploadLimited       *bool          `json:"uploadLimited"`       // true if "uploadLimit" is honored
 }
