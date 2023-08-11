@@ -9,16 +9,17 @@ import (
 
 /*
 	Free Space
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#47-free-space
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#47-free-space
 */
 
 // FreeSpace allow to see how much free space is available in a client-specified folder.
-func (c *Client) FreeSpace(ctx context.Context, path string) (freeSpace cunits.Bits, err error) {
+func (c *Client) FreeSpace(ctx context.Context, path string) (freeSpace, totalSize cunits.Bits, err error) {
 	payload := &transmissionFreeSpacePayload{Path: path}
 	var space TransmissionFreeSpace
 	if err = c.rpcCall(ctx, "free-space", payload, &space); err == nil {
 		if space.Path == path {
 			freeSpace = cunits.ImportInByte(float64(space.Size))
+			totalSize = cunits.ImportInByte(float64(space.TotalSize))
 		} else {
 			err = fmt.Errorf("returned path '%s' does not match with requested path '%s'", space.Path, path)
 		}
