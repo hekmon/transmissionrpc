@@ -7,7 +7,7 @@ import (
 
 /*
 	Torrent Action Requests
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#31-torrent-action-requests
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#31-torrent-action-requests
 */
 
 type torrentActionIDsParam struct {
