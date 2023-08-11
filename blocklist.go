@@ -7,7 +7,7 @@ import (
 
 /*
 	Blocklist
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#43-blocklist
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#43-blocklist
 */
 
 // BlocklistUpdate triggers a blocklist update. It returns the number of entries of the updated blocklist.
