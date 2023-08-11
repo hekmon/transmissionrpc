@@ -7,7 +7,7 @@ import (
 
 /*
 	Moving a torrent
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#36-moving-a-torrent
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#36-moving-a-torrent
 */
 
 // TorrentSetLocation allows to set a new location for one or more torrents.
