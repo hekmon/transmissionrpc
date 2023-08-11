@@ -11,7 +11,7 @@ Also payload generation aims to be precise: when several values can be added to 
 - If you want a 100% compatible lib with rpc v15, please use the v1 releases.
 - If you want a 100% compatible lib with rpc v16, please use the v2 releases.
 
-Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#5-protocol-versions).
+Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#5-protocol-versions) (Transmission v4) and is currently in beta.
 
 ## Getting started
 
@@ -30,14 +30,14 @@ First the main client object must be instantiated with [New()](https://pkg.go.de
         "github.com/hekmon/transmissionrpc/v3"
     )
 
-	endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
-	if err != nil {
-		panic(err)
-	}
+    endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
+    if err != nil {
+        panic(err)
+    }
     tbt, err := transmissionrpc.New(endpoint, nil)
     if err != nil {
-		panic(err)
-	}
+        panic(err)
+    }
 ```
 
 The remote RPC version can be checked against this library before starting to operate:
