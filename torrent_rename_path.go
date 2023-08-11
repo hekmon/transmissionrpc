@@ -7,7 +7,7 @@ import (
 
 /*
 	Rename a torrent path
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#37-renaming-a-torrents-path
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#37-renaming-a-torrents-path
 */
 
 // TorrentRenamePath allows to rename torrent name or path.
