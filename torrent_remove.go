@@ -7,7 +7,7 @@ import (
 
 /*
 	Removing a Torrent
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#35-removing-a-torrent
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#35-removing-a-torrent
 */
 
 // TorrentRemove allows to delete one or more torrents only or with their data.
