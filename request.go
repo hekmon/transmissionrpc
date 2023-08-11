@@ -81,7 +81,7 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 		Arguments: result,
 	}
 	if err = json.NewDecoder(resp.Body).Decode(&answer); err != nil {
-		err = fmt.Errorf("can't unmarshall request answer body: %w", err)
+		err = fmt.Errorf("can't unmarshal request answer body: %w", err)
 		return
 	}
 	// Final checks

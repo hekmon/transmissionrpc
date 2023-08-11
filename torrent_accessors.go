@@ -234,7 +234,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 	}{
 		RawTorrent: (*RawTorrent)(t),
 	}
-	// Unmarshall (with timestamps as number)
+	// Unmarshal (with timestamps as number)
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return
 	}
@@ -575,7 +575,7 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 	}{
 		RawTrackerStats: (*RawTrackerStats)(ts),
 	}
-	// Unmarshall (with timestamps as number)
+	// Unmarshal (with timestamps as number)
 	if err = json.Unmarshal(data, &tmp); err != nil {
 		return
 	}
