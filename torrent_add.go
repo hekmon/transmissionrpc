@@ -14,7 +14,7 @@ import (
 
 /*
 	Adding a Torrent
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#34-adding-a-torrent
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#34-adding-a-torrent
 */
 
 // TorrentAddFileDownloadDir is wrapper to directly add a torrent file (it handles the base64 encoding
