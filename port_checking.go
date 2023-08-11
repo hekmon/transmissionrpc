@@ -7,7 +7,7 @@ import (
 
 /*
 	Port Checking
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#44-port-checking
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#44-port-checking
 */
 
 // PortTest allows tests to see if your incoming peer port is accessible from the outside world.
