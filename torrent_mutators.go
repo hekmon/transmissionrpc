@@ -6,12 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 )
 
 /*
 	Torrent Mutators
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#32-torrent-mutator-torrent-set
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#32-torrent-mutator-torrent-set
 */
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
@@ -44,11 +45,11 @@ type TorrentSetPayload struct {
 	PriorityLow         []int64        `json:"priority-low"`        // indices of low-priority file(s)
 	PriorityNormal      []int64        `json:"priority-normal"`     // indices of normal-priority file(s)
 	QueuePosition       *int64         `json:"queuePosition"`       // position of this torrent in its queue [0...n)
-	SeedIdleLimit       *time.Duration `json:"seedIdleLimit"`       // torrent-level number of minutes of seeding inactivity
+	SeedIdleLimit       *time.Duration `json:"-"`                   // torrent-level number of minutes of seeding inactivity
 	SeedIdleMode        *int64         `json:"seedIdleMode"`        // which seeding inactivity to use
 	SeedRatioLimit      *float64       `json:"seedRatioLimit"`      // torrent-level seeding ratio
 	SeedRatioMode       *SeedRatioMode `json:"seedRatioMode"`       // which ratio mode to use
-	TrackerList         *string        `json:"trackerList"`         // string of announce URLs, one per line, and a blank line between tiers
+	TrackerList         []string       `json:"-"`                   // string of announce URLs, one per line, and a blank line between tiers
 	UploadLimit         *int64         `json:"uploadLimit"`         // maximum upload speed (KBps)
 	UploadLimited       *bool          `json:"uploadLimited"`       // true if "uploadLimit" is honored
 }
@@ -60,7 +61,8 @@ func (tsp TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 	// Build an intermediary payload with base types
 	type baseTorrentSetPayload TorrentSetPayload
 	tmp := struct {
-		SeedIdleLimit *int64 `json:"seedIdleLimit"`
+		SeedIdleLimit *int64  `json:"seedIdleLimit"`
+		TrackerList   *string `json:"trackerList"`
 		*baseTorrentSetPayload
 	}{
 		baseTorrentSetPayload: (*baseTorrentSetPayload)(&tsp),
@@ -68,6 +70,10 @@ func (tsp TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 	if tsp.SeedIdleLimit != nil {
 		sil := int64(*tsp.SeedIdleLimit / time.Minute)
 		tmp.SeedIdleLimit = &sil
+	}
+	if tsp.TrackerList != nil {
+		oneLineList := strings.Join(tsp.TrackerList, "\n")
+		tmp.TrackerList = &oneLineList
 	}
 	// Build a payload with only the non nil fields
 	tspv := reflect.ValueOf(tmp)
