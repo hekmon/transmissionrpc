@@ -9,9 +9,9 @@ Even if there is some high level wrappers/helpers, the goal of this lib is to st
 Also payload generation aims to be precise: when several values can be added to a payload, only instanciated values will be forwarded (and kept !) to the final payload. This means that the default JSON marshalling (with omitempty) can't always be used and therefor a manual, reflect based, approach is used to build the final payload and accurately send what the user have instanciated, even if a value is at its default type value.
 
 - If you want a 100% compatible lib with rpc v15, please use the v1 releases.
-- If you want 100% compatible lib with rpc v16, please use the v2 releases.
+- If you want a 100% compatible lib with rpc v16, please use the v2 releases.
 
-Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#5-protocol-versions).
+Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#5-protocol-versions).
 
 ## Getting started
 
@@ -21,21 +21,23 @@ Install the v3 with:
 go get github.com/hekmon/transmissionrpc/v3
 ```
 
-First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#New). In its basic form only host/ip, username and password must be provided. Default will apply for port (`9091`) rpc URI (`/transmission/rpc`) and others values.
+First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#New). The library takes a parsed [URL](https://en.wikipedia.org/wiki/URL#Syntax) as input: it allows you to add any options you need to it (scheme, optional authentification, custom port, custom URI/prefix, etc...).
 
 ```golang
-transmissionbt := transmissionrpc.New("127.0.0.1", "rpcuser", "rpcpass", nil)
-```
+    import (
+        "net/url"
 
-But advanced values can also be configured to your liking using [AdvancedConfig](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#AdvancedConfig).
-Each value of `AdvancedConfig` with a type default value will be replaced by the lib default value, so you can set only the ones you want:
+        "github.com/hekmon/transmissionrpc/v3"
+    )
 
-```golang
-transmissionbt := transmissionrpc.New("bt.mydomain.net", "rpcuser", "rpcpass",
-    &transmissionrpc.AdvancedConfig{
-        HTTPS: true,
-        Port:  443,
-    })
+	endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
+	if err != nil {
+		panic(err)
+	}
+    tbt, err := transmissionrpc.New(endpoint, nil)
+    if err != nil {
+		panic(err)
+	}
 ```
 
 The remote RPC version can be checked against this library before starting to operate:
@@ -55,47 +57,26 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
 
 ## Features
 
-* [Torrent Requests](#torrent-requests)
-  * [Torrent Action Requests](#torrent-action-requests)
-    * [x] torrent-start
-    * [x] torrent-start-now
-    * [x] torrent-stop
-    * [x] torrent-verify
-    * [x] torrent-reannounce
-  * [Torrent Mutators](#torrent-mutators)
-    * [x] torrent-set
-  * [Torrent Accessors](#torrent-accessors)
-    * [x] torrent-get
-  * [Adding a Torrent](#adding-a-torrent)
-    * [x] torrent-add
-  * [Removing a Torrent](#removing-a-torrent)
-    * [x] torrent-remove
-  * [Moving a Torrent](#moving-a-torrent)
-    * [x] torrent-set-location
-  * [Renaming a Torrent path](#renaming-a-torrent-path)
-    * [x] torrent-rename-path
-* [Session Requests](#session-requests)
-  * [Session Arguments](#session-arguments)
-    * [x] session-set
-    * [x] session-get
-  * [Session Statistics](#session-statistics)
-    * [x] session-stats
-  * [Blocklist](#blocklist)
-    * [x] blocklist-update
-  * [Port Checking](#port-checking)
-    * [x] port-test
-  * [Session Shutdown](#session-shutdown)
-    * [x] session-close
-  * [Queue Movement Requests](#queue-movement-requests)
-    * [x] queue-move-top
-    * [x] queue-move-up
-    * [x] queue-move-down
-    * [x] queue-move-bottom
-  * [Free Space](#free-space)
-    * [x] free-space
-  * [Bandwidth Groups](#bandwidth-groups)
-    * [x] group-set
-    * [x] group-get
+- [TransmissionRPC](#transmissionrpc)
+  - [Getting started](#getting-started)
+  - [Features](#features)
+    - [Torrent Requests](#torrent-requests)
+      - [Torrent Action Requests](#torrent-action-requests)
+      - [Torrent Mutators](#torrent-mutators)
+      - [Torrent Accessors](#torrent-accessors)
+      - [Adding a Torrent](#adding-a-torrent)
+      - [Removing a Torrent](#removing-a-torrent)
+      - [Moving a Torrent](#moving-a-torrent)
+      - [Renaming a Torrent path](#renaming-a-torrent-path)
+    - [Session Requests](#session-requests)
+      - [Session Arguments](#session-arguments)
+      - [Session Statistics](#session-statistics)
+      - [Blocklist](#blocklist)
+      - [Port Checking](#port-checking)
+      - [Session Shutdown](#session-shutdown)
+      - [Queue Movement Requests](#queue-movement-requests)
+      - [Free Space](#free-space)
+      - [Bandwidth Groups](#bandwidth-groups)
 
 ### Torrent Requests
 
@@ -431,11 +412,12 @@ Mappped as [FreeSpace()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3
 Ex: Get the space available for /data.
 
 ```golang
-    freeSpace, err := transmissionbt.FreeSpace(context.TODO(), "/data")
+    freeSpace, totalSpace, err := transmissionbt.FreeSpace(context.TODO(), "/data")
     if err != nil {
         fmt.Fprintln(os.Stderr, err)
     } else  {
-        fmt.Printd("%s | %d | %v", freeSpace, freeSpace, freeSpace)
+        fmt.Printf("Free space: %s | %d | %v\n", freeSpace, freeSpace, freeSpace)
+        fmt.Printf("Total space: %s | %d | %v\n", totalSpace, totalSpace, totalSpace)
     }
 }
 ```
@@ -446,53 +428,9 @@ For more information about the freeSpace type, check the [ComputerUnits](https:/
 
 * group-set
 
-[BandwidthGroupSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupSet).
-
-Ex: Set bandwidth group properties:
-
-``` golang
-    honorSessionLimits      := true
-    name                    := "bw_group1"
-    speedLimitDownEnabled   := false
-    speedLimitUpEnabled     := true
-    speedLimitUp            := int64(20) // 20 KB/s
-    
-    payload := &transmissionrpc.BandwidthGroupSetPayload{
-        HonorSessionLimits:     &honorSessionLimits,
-        Name:                   &name,
-        SpeedLimitDownEnabled:  &speedLimitDownEnabled,
-        SpeedLimitUpEnabled:    &speedLimitUpEnabled,
-        SpeedLimitUp:           &speedLimitUp,
-    }
-    
-    if err = transmissionbt.BandwidthGroupSet(context.TODO(), *payload); err != nil {
-        fmt.Fprintln(os.Stderr, err)
-    } else {
-        fmt.Printf("Successfully set bandwidth group %s\n", *payload.Name)
-    }
-```
+Mapped as [BandwidthGroupSet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupSet).
 
 * group-get
 
-[BandwidthGroupGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGet).
-[BandwidthGroupGetAll()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGetAll)
+Mapped as [BandwidthGroupGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGet).
 
-Ex: Get the information for bandwidth groups bw_group1 and bw_group2.
-
-``` golang
-    groupNames := []string{"bw_group1", "bw_group2"}
-    fields := []string{
-        "name",
-        "speed-limit-down-enabled",
-        "speed-limit-down",
-        "speed-limit-up-enabled",
-        "speed-limit-up"
-    }
-    
-    bandwidthGroupsInfo, err := transmissionbt.BandwidthGroupGet(context.TODO(), fields, groupNames)
-    if err != nil {
-        fmt.Fprintln(os.Stderr, err)
-    } else {
-        fmt.Println(bandwidthGroupsInfo)
-    }
-```
