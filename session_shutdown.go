@@ -7,7 +7,7 @@ import (
 
 /*
 	Session shutdown
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#45-session-shutdown
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#45-session-shutdown
 */
 
 // SessionClose tells the transmission session to shut down.
