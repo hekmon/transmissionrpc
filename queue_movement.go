@@ -7,7 +7,7 @@ import (
 
 /*
 	Queue Movement Requests
-    https://github.com/transmission/transmission/blob/4.0.2/docs/rpc-spec.md#46-queue-movement-requests
+    https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#46-queue-movement-requests
 */
 
 // QueueMoveTop moves IDs to the top of the queue list.
