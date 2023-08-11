@@ -6,11 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
-	"os"
-	"sync"
 )
 
 const csrfHeader = "X-Transmission-Session-Id"
@@ -32,56 +28,38 @@ func (c *Client) rpcCall(ctx context.Context, method string, arguments interface
 }
 
 func (c *Client) request(ctx context.Context, method string, arguments interface{}, result interface{}, retry bool) (err error) {
-	// Let's avoid crashing
-	if c.httpC == nil {
+	// Let's avoid crashing if not instanciated properly
+	if c.http == nil {
 		err = errors.New("this controller is not initialized, please use the New() function")
 		return
 	}
-	// Prepare the pipeline between payload generation and request
-	pOut, pIn := io.Pipe()
-	// Prepare the request
+	// Prepare request payload
+	rq := requestPayload{
+		Method:    method,
+		Arguments: arguments,
+		Tag:       c.getRandomTag(),
+	}
+	rqJSON, err := json.Marshal(rq)
+	if err != nil {
+		err = fmt.Errorf("failed to marshal request payload: %w", err)
+		return
+	}
+	// Build the request
 	var req *http.Request
-	if req, err = http.NewRequestWithContext(ctx, "POST", c.url, pOut); err != nil {
+	if req, err = http.NewRequestWithContext(ctx, "POST", c.endpoint.String(), bytes.NewBuffer(rqJSON)); err != nil {
 		err = fmt.Errorf("can't prepare request for '%s' method: %w", method, err)
 		return
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", c.userAgent)
 	req.Header.Set(csrfHeader, c.getSessionID())
-	req.SetBasicAuth(c.user, c.password)
-	// Prepare the marshalling goroutine
-	var tag int
-	var encErr error
-	var mg sync.WaitGroup
-	mg.Add(1)
-	go func() {
-		tag = c.rnd.Int()
-		encErr = json.NewEncoder(pIn).Encode(&requestPayload{
-			Method:    method,
-			Arguments: arguments,
-			Tag:       tag,
-		})
-		pIn.Close()
-		mg.Done()
-	}()
 	// Execute request
 	var resp *http.Response
-	if resp, err = c.httpC.Do(req); err != nil {
-		mg.Wait()
-		if encErr != nil {
-			err = fmt.Errorf("request error: %w | json payload marshall error: %v", err, encErr)
-		} else {
-			err = fmt.Errorf("request error: %w", err)
-		}
+	if resp, err = c.http.Do(req); err != nil {
+		err = fmt.Errorf("failed to execute HTTP request: %w", err)
 		return
 	}
 	defer resp.Body.Close()
-	// Let's test the enc result, just in case
-	mg.Wait()
-	if encErr != nil {
-		err = fmt.Errorf("request payload JSON marshalling failed: %w", encErr)
-		return
-	}
 	// Is the CRSF token invalid ?
 	if resp.StatusCode == http.StatusConflict {
 		// Recover new token and save it
@@ -98,17 +76,6 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 		err = HTTPStatusCode(resp.StatusCode)
 		return
 	}
-	// Debug
-	if c.debug {
-		var data []byte
-		if data, err = ioutil.ReadAll(resp.Body); err == nil {
-			fmt.Fprintln(os.Stderr, string(data))
-		} else {
-			fmt.Fprintln(os.Stderr, err.Error())
-		}
-		resp.Body.Close()
-		resp.Body = ioutil.NopCloser(bytes.NewBuffer(data))
-	}
 	// Decode body
 	answer := answerPayload{
 		Arguments: result,
@@ -117,13 +84,12 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 		err = fmt.Errorf("can't unmarshall request answer body: %w", err)
 		return
 	}
-	// fmt.Println("DEBUG >", answer.Result)
 	// Final checks
 	if answer.Tag == nil {
 		err = errors.New("http answer does not have a tag within it's payload")
 		return
 	}
-	if *answer.Tag != tag {
+	if *answer.Tag != rq.Tag {
 		err = errors.New("http request tag and answer payload tag do not match")
 		return
 	}
@@ -133,18 +99,6 @@ func (c *Client) request(ctx context.Context, method string, arguments interface
 	}
 	// All good
 	return
-}
-
-func (c *Client) getSessionID() string {
-	defer c.sessionIDAccess.RUnlock()
-	c.sessionIDAccess.RLock()
-	return c.sessionID
-}
-
-func (c *Client) updateSessionID(newID string) {
-	defer c.sessionIDAccess.Unlock()
-	c.sessionIDAccess.Lock()
-	c.sessionID = newID
 }
 
 // HTTPStatusCode is a custom error type for HTTP errors
