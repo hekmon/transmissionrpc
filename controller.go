@@ -46,6 +46,44 @@ type AdvancedConfig struct {
 	Debug       bool
 }
 
+// Config is the input data needed to make a connection to Transmission RPC.
+type Config struct {
+	// URL should be a full url to the /transmission/rpc endpoint.
+	URL string
+	// Username if authentication is required.
+	Username string
+	// Password if authentication is required.
+	Password string
+	// UserAgent is set to this package's url if not provided here.
+	UserAgent string
+	// Client is set to an empty http.Client{} with a sane timeout if not provided.
+	Client *http.Client
+}
+
+// NewClient is the new entry into this module. Provide a Config with at minimum a URL.
+// The Client returned may be used to query the Transmission RPC.
+func NewClient(config Config) *Client {
+	if config.Client == nil {
+		config.Client = &http.Client{Timeout: defaultTimeout}
+	}
+
+	if config.UserAgent == "" {
+		config.UserAgent = defaultUserAgent
+	}
+
+	return &Client{
+		url:       config.URL,
+		user:      config.Username,
+		password:  config.Password,
+		userAgent: config.UserAgent,
+		rnd:       rand.New(newLockedRandomSource(time.Now().Unix())),
+		httpC:     config.Client,
+		// If you need debug, use a custom transport/roundtripper in your http.Client.
+		// Ex: https://pkg.go.dev/golift.io/starr@main/debuglog
+		debug: false,
+	}
+}
+
 // New returns an initialized and ready to use Controller
 func New(host, user, password string, conf *AdvancedConfig) (c *Client, err error) {
 	// Config
