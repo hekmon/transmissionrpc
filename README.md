@@ -24,20 +24,20 @@ go get github.com/hekmon/transmissionrpc/v3
 First the main client object must be instantiated with [New()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#New). The library takes a parsed [URL](https://en.wikipedia.org/wiki/URL#Syntax) as input: it allows you to add any options you need to it (scheme, optional authentification, custom port, custom URI/prefix, etc...).
 
 ```golang
-    import (
-        "net/url"
+import (
+    "net/url"
 
-        "github.com/hekmon/transmissionrpc/v3"
-    )
+    "github.com/hekmon/transmissionrpc/v3"
+)
 
-    endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
-    if err != nil {
-        panic(err)
-    }
-    tbt, err := transmissionrpc.New(endpoint, nil)
-    if err != nil {
-        panic(err)
-    }
+endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
+if err != nil {
+    panic(err)
+}
+tbt, err := transmissionrpc.New(endpoint, nil)
+if err != nil {
+    panic(err)
+}
 ```
 
 The remote RPC version can be checked against this library before starting to operate:
