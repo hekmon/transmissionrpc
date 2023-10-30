@@ -176,7 +176,7 @@ type Torrent struct {
 	RecheckProgress         *float64          `json:"recheckProgress"`
 	TimeDownloading         *time.Duration    `json:"-"` // from secondsDownloading
 	TimeSeeding             *time.Duration    `json:"-"` // from secondsSeeding
-	SeedIdleLimit           *int64            `json:"seedIdleLimit"`
+	SeedIdleLimit           *time.Duration    `json:"-"`
 	SeedIdleMode            *int64            `json:"seedIdleMode"`
 	SeedRatioLimit          *float64          `json:"seedRatioLimit"`
 	SeedRatioMode           *SeedRatioMode    `json:"seedRatioMode"`
@@ -226,6 +226,7 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		PieceSize          *int64  `json:"pieceSize"`
 		SecondsDownloading *int64  `json:"secondsDownloading"`
 		SecondsSeeding     *int64  `json:"secondsSeeding"`
+		SeedIdleLimit      *int64  `json:"seedIdleLimit"`
 		SizeWhenDone       *int64  `json:"sizeWhenDone"`
 		StartDate          *int64  `json:"startDate"`
 		TotalSize          *int64  `json:"totalSize"`
@@ -271,6 +272,10 @@ func (t *Torrent) UnmarshalJSON(data []byte) (err error) {
 		dur := time.Duration(*tmp.SecondsSeeding) * time.Second
 		t.TimeSeeding = &dur
 	}
+	if tmp.SeedIdleLimit != nil {
+		dur := time.Duration(*tmp.SeedIdleLimit) * time.Minute
+		t.SeedIdleLimit = &dur
+	}
 	if tmp.SizeWhenDone != nil {
 		swd := cunits.ImportInByte(float64(*tmp.SizeWhenDone))
 		t.SizeWhenDone = &swd
@@ -308,6 +313,7 @@ func (t Torrent) MarshalJSON() (data []byte, err error) {
 		DoneDate           *int64  `json:"doneDate"`
 		SecondsDownloading *int64  `json:"secondsDownloading"`
 		SecondsSeeding     *int64  `json:"secondsSeeding"`
+		SeedIdleLimit      *int64  `json:"seedIdleLimit"`
 		StartDate          *int64  `json:"startDate"`
 		Wanted             []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
@@ -338,6 +344,10 @@ func (t Torrent) MarshalJSON() (data []byte, err error) {
 	if t.TimeSeeding != nil {
 		ss := int64(*t.TimeSeeding / time.Second)
 		tmp.SecondsSeeding = &ss
+	}
+	if t.SeedIdleLimit != nil {
+		sil := int64(*t.SeedIdleLimit / time.Minute)
+		tmp.SeedIdleLimit = &sil
 	}
 	if t.StartDate != nil {
 		st := t.StartDate.Unix()
