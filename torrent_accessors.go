@@ -119,21 +119,21 @@ type torrentGetResults struct {
 // Torrent represents all the possible fields of data for a torrent.
 // All fields are pointers to detect if the value is nil (field not requested) or real default value.
 type Torrent struct {
-	ActivityDate            *time.Time        `json:"-"`
-	AddedDate               *time.Time        `json:"-"`
+	ActivityDate            *time.Time        `json:"activityDate"`
+	AddedDate               *time.Time        `json:"addedDate"`
 	Availability            []int64           `json:"availability"` // RPC v17
 	BandwidthPriority       *int64            `json:"bandwidthPriority"`
 	Comment                 *string           `json:"comment"`
 	CorruptEver             *int64            `json:"corruptEver"`
 	Creator                 *string           `json:"creator"`
-	DateCreated             *time.Time        `json:"-"`
+	DateCreated             *time.Time        `json:"dateCreated"`
 	DesiredAvailable        *int64            `json:"desiredAvailable"`
-	DoneDate                *time.Time        `json:"-"`
+	DoneDate                *time.Time        `json:"doneDate"`
 	DownloadDir             *string           `json:"downloadDir"`
 	DownloadedEver          *int64            `json:"downloadedEver"`
 	DownloadLimit           *int64            `json:"downloadLimit"`
 	DownloadLimited         *bool             `json:"downloadLimited"`
-	EditDate                *time.Time        `json:"-"`
+	EditDate                *time.Time        `json:"editDate"`
 	Error                   *int64            `json:"error"`
 	ErrorString             *string           `json:"errorString"`
 	ETA                     *int64            `json:"eta"`
@@ -167,26 +167,26 @@ type Torrent struct {
 	PercentDone             *float64          `json:"percentDone"`
 	Pieces                  *string           `json:"pieces"`
 	PieceCount              *int64            `json:"pieceCount"`
-	PieceSize               *cunits.Bits      `json:"-"`
+	PieceSize               *cunits.Bits      `json:"PieceSize"`
 	Priorities              []int64           `json:"priorities"`
 	PrimaryMimeType         *string           `json:"primary-mime-type"` // RPC v17
 	QueuePosition           *int64            `json:"queuePosition"`
 	RateDownload            *int64            `json:"rateDownload"` // B/s
 	RateUpload              *int64            `json:"rateUpload"`   // B/s
 	RecheckProgress         *float64          `json:"recheckProgress"`
-	TimeDownloading         *time.Duration    `json:"-"` // from secondsDownloading
-	TimeSeeding             *time.Duration    `json:"-"` // from secondsSeeding
-	SeedIdleLimit           *time.Duration    `json:"-"`
+	TimeDownloading         *time.Duration    `json:"secondsDownloading"`
+	TimeSeeding             *time.Duration    `json:"secondsSeeding"`
+	SeedIdleLimit           *time.Duration    `json:"seedIdleLimit"`
 	SeedIdleMode            *int64            `json:"seedIdleMode"`
 	SeedRatioLimit          *float64          `json:"seedRatioLimit"`
 	SeedRatioMode           *SeedRatioMode    `json:"seedRatioMode"`
-	SizeWhenDone            *cunits.Bits      `json:"-"`
-	StartDate               *time.Time        `json:"-"`
+	SizeWhenDone            *cunits.Bits      `json:"sizeWhenDone"`
+	StartDate               *time.Time        `json:"startDate"`
 	Status                  *TorrentStatus    `json:"status"`
 	Trackers                []Tracker         `json:"trackers"`
 	TrackerList             *string           `json:"trackerList"`
 	TrackerStats            []TrackerStats    `json:"trackerStats"`
-	TotalSize               *cunits.Bits      `json:"-"`
+	TotalSize               *cunits.Bits      `json:"totalSize"`
 	TorrentFile             *string           `json:"torrentFile"`
 	UploadedEver            *int64            `json:"uploadedEver"`
 	UploadLimit             *int64            `json:"uploadLimit"`

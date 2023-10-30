@@ -48,7 +48,7 @@ type SessionArguments struct {
 	BlocklistURL                     *string     `json:"blocklist-url"`                        // location of the blocklist to use for "blocklist-update"
 	CacheSizeMB                      *int64      `json:"cache-size-mb"`                        // maximum size of the disk cache (MB)
 	ConfigDir                        *string     `json:"config-dir"`                           // location of transmission's configuration directory
-	DefaultTrackers                  []string    `json:"-"`                                    // list of default trackers to use on public torrents
+	DefaultTrackers                  []string    `json:"default-trackers"`                     // list of default trackers to use on public torrents
 	DHTEnabled                       *bool       `json:"dht-enabled"`                          // true means allow dht in public torrents
 	DownloadDir                      *string     `json:"download-dir"`                         // default path to download torrents
 	DownloadQueueEnabled             *bool       `json:"download-queue-enabled"`               // if true, limit how many torrents can be downloaded at once
