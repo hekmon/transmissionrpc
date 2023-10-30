@@ -443,36 +443,36 @@ If you want to (or need to) inspect the requests made by the lib, you can use a 
 package main
 
 import (
-	"context"
-	"fmt"
-	"net/url"
-	"time"
+    "context"
+    "fmt"
+    "net/url"
+    "time"
 
-	"github.com/hashicorp/go-cleanhttp"
-	"github.com/hekmon/transmissionrpc/v3"
-	"golift.io/starr/debuglog"
+    "github.com/hashicorp/go-cleanhttp"
+    "github.com/hekmon/transmissionrpc/v3"
+    "golift.io/starr/debuglog"
 )
 
 func main() {
     // Parse API endpoint
-	endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
-	if err != nil {
-		panic(err)
-	}
+    endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
+    if err != nil {
+        panic(err)
+    }
 
     // Create the HTTP client with debugging capabilities
     httpClient := cleanhttp.DefaultPooledClient()
-	httpClient.Transport = debuglog.NewLoggingRoundTripper(debuglog.Config{
-		Redact: []string{endpoint.User.String()},
-	}, httpClient.Transport)
+    httpClient.Transport = debuglog.NewLoggingRoundTripper(debuglog.Config{
+        Redact: []string{endpoint.User.String()},
+    }, httpClient.Transport)
 
     // Initialize the transmission API client with the debbuging HTTP client
     tbt, err := transmissionrpc.New(endpoint, &transmissionrpc.Config{
-		CustomClient: httpClient,
-	})
-	if err != nil {
-		panic(err)
-	}
+        CustomClient: httpClient,
+    })
+    if err != nil {
+        panic(err)
+    }
 
     // do something with tbt now
 }
