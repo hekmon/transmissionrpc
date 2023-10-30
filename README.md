@@ -11,7 +11,7 @@ Also payload generation aims to be precise: when several values can be added to 
 - If you want a 100% compatible lib with rpc v15, please use the v1 releases.
 - If you want a 100% compatible lib with rpc v16, please use the v2 releases.
 
-Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#5-protocol-versions) (Transmission v4) and is currently in beta.
+Version v3 of this library is compatible with [RPC version 17](https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#5-protocol-versions) (Transmission v4).
 
 ## Getting started
 
