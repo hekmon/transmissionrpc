@@ -77,6 +77,7 @@ fmt.Printf("Remote transmission RPC version (v%d) is compatible with our transmi
       - [Queue Movement Requests](#queue-movement-requests)
       - [Free Space](#free-space)
       - [Bandwidth Groups](#bandwidth-groups)
+  - [Debugging](#debugging)
 
 ### Torrent Requests
 
@@ -434,3 +435,45 @@ Mapped as [BandwidthGroupSet()](https://pkg.go.dev/github.com/hekmon/transmissio
 
 Mapped as [BandwidthGroupGet()](https://pkg.go.dev/github.com/hekmon/transmissionrpc/v3?tab=doc#Client.BandwidthGroupGet).
 
+## Debugging
+
+If you want to (or need to) inspect the requests made by the lib, you can use a custom round tripper within a custom HTTP client. I personnaly like to use the [debuglog](https://pkg.go.dev/golift.io/starr/debuglog) package from the [starr](https://github.com/golift/starr) project. Example below.
+
+```golang
+package main
+
+import (
+	"context"
+	"fmt"
+	"net/url"
+	"time"
+
+	"github.com/hashicorp/go-cleanhttp"
+	"github.com/hekmon/transmissionrpc/v3"
+	"golift.io/starr/debuglog"
+)
+
+func main() {
+    // Parse API endpoint
+	endpoint, err := url.Parse("http://user:password@127.0.0.1:9091/transmission/rpc")
+	if err != nil {
+		panic(err)
+	}
+
+    // Create the HTTP client with debugging capabilities
+    httpClient := cleanhttp.DefaultPooledClient()
+	httpClient.Transport = debuglog.NewLoggingRoundTripper(debuglog.Config{
+		Redact: []string{endpoint.User.String()},
+	}, httpClient.Transport)
+
+    // Initialize the transmission API client with the debbuging HTTP client
+    tbt, err := transmissionrpc.New(endpoint, &transmissionrpc.Config{
+		CustomClient: httpClient,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+    // do something with tbt now
+}
+```
