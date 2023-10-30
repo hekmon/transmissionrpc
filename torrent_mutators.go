@@ -93,7 +93,10 @@ func (tsp TorrentSetPayload) MarshalJSON() (data []byte, err error) {
 					currentNestedValue = nestedStruct.Field(j)
 					currentNestedStructField = nestedStruct.Type().Field(j)
 					if !currentNestedValue.IsNil() {
-						cleanPayload[currentNestedStructField.Tag.Get("json")] = currentNestedValue.Interface()
+						JSONKeyName := currentNestedStructField.Tag.Get("json")
+						if JSONKeyName != "-" {
+							cleanPayload[JSONKeyName] = currentNestedValue.Interface()
+						}
 					}
 				}
 			} else {
