@@ -18,6 +18,14 @@ import (
 // The first occurrence of each URL is kept so order is unchanged.
 // Empty strings are kept: they are blank lines between tracker tiers.
 func compact(s []string) []string {
+	// Preserve empty input as-is: a nil slice must stay nil so that
+	// TorrentSet does not emit the "trackerList" JSON key when the caller
+	// passed no trackers (emitting an empty list would wipe all trackers on
+	// Transmission), while an explicit empty slice keeps its existing
+	// clear-trackers behavior.
+	if len(s) == 0 {
+		return s
+	}
 	out := make([]string, 0, len(s))
 	seen := make(map[string]struct{}, len(s))
 	for _, v := range s {
