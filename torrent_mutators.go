@@ -14,6 +14,26 @@ import (
 	Torrent Mutators
     https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#32-torrent-mutator-torrent-set
 */
+// compact deletes later duplicate announce URLs in s and returns the shorter header.
+// The first occurrence of each URL is kept, so order stays unchanged.
+// Empty strings stay: they are blank lines between tracker tiers.
+// ponytail: linear scan, fine while lists stay around 20; use a map past a few hundred.
+func compact(s []string) []string {
+	for i := 0; i < len(s); i++ {
+		if len(s[i]) == 0 {
+			continue
+		}
+		for j := i + 1; j < len(s); {
+			if s[j] != s[i] {
+				j++
+				continue
+			}
+			copy(s[j:], s[j+1:])
+			s = s[:len(s)-1]
+		}
+	}
+	return s
+}
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.
 func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err error) {
@@ -21,6 +41,8 @@ func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err
 	if len(payload.IDs) == 0 {
 		return errors.New("there must be at least one ID")
 	}
+	// Drop duplicate announce URLs without reordering the list.
+	payload.TrackerList = compact(payload.TrackerList)
 	// Send payload
 	if err = c.rpcCall(ctx, "torrent-set", payload, nil); err != nil {
 		err = fmt.Errorf("'torrent-set' rpc method failed: %w", err)
