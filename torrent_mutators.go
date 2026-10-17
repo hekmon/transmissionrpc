@@ -14,25 +14,32 @@ import (
 	Torrent Mutators
     https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#32-torrent-mutator-torrent-set
 */
-// compact deletes later duplicate announce URLs in s and returns the shorter header.
-// The first occurrence of each URL is kept, so order stays unchanged.
-// Empty strings stay: they are blank lines between tracker tiers.
-// ponytail: linear scan, fine while lists stay around 20; use a map past a few hundred.
+// compact returns a copy of s with later duplicate announce URLs removed.
+// The first occurrence of each URL is kept so order is unchanged.
+// Empty strings are kept: they are blank lines between tracker tiers.
 func compact(s []string) []string {
-	for i := 0; i < len(s); i++ {
-		if len(s[i]) == 0 {
+	// Preserve empty input as-is: a nil slice must stay nil so that
+	// TorrentSet does not emit the "trackerList" JSON key when the caller
+	// passed no trackers (emitting an empty list would wipe all trackers on
+	// Transmission), while an explicit empty slice keeps its existing
+	// clear-trackers behavior.
+	if len(s) == 0 {
+		return s
+	}
+	out := make([]string, 0, len(s))
+	seen := make(map[string]struct{}, len(s))
+	for _, v := range s {
+		if len(v) == 0 {
+			out = append(out, v)
 			continue
 		}
-		for j := i + 1; j < len(s); {
-			if s[j] != s[i] {
-				j++
-				continue
-			}
-			copy(s[j:], s[j+1:])
-			s = s[:len(s)-1]
+		if _, alreadySeen := seen[v]; alreadySeen {
+			continue
 		}
+		seen[v] = struct{}{}
+		out = append(out, v)
 	}
-	return s
+	return out
 }
 
 // TorrentSet apply a list of mutator(s) to a list of torrent ids.

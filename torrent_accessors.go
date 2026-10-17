@@ -167,7 +167,7 @@ type Torrent struct {
 	PercentDone             *float64          `json:"percentDone"`
 	Pieces                  *string           `json:"pieces"`
 	PieceCount              *int64            `json:"pieceCount"`
-	PieceSize               *cunits.Bits      `json:"PieceSize"`
+	PieceSize               *cunits.Bits      `json:"pieceSize"`
 	Priorities              []int64           `json:"priorities"`
 	PrimaryMimeType         *string           `json:"primary-mime-type"` // RPC v17
 	QueuePosition           *int64            `json:"queuePosition"`
@@ -311,10 +311,14 @@ func (t Torrent) MarshalJSON() (data []byte, err error) {
 		AddedDate          *int64  `json:"addedDate"`
 		DateCreated        *int64  `json:"dateCreated"`
 		DoneDate           *int64  `json:"doneDate"`
+		EditDate           *int64  `json:"editDate"`
+		PieceSize          *int64  `json:"pieceSize"`
 		SecondsDownloading *int64  `json:"secondsDownloading"`
 		SecondsSeeding     *int64  `json:"secondsSeeding"`
 		SeedIdleLimit      *int64  `json:"seedIdleLimit"`
+		SizeWhenDone       *int64  `json:"sizeWhenDone"`
 		StartDate          *int64  `json:"startDate"`
+		TotalSize          *int64  `json:"totalSize"`
 		Wanted             []int64 `json:"wanted"` // boolean in number form
 		*RawTorrent
 	}{
@@ -337,6 +341,14 @@ func (t Torrent) MarshalJSON() (data []byte, err error) {
 		dd := t.DoneDate.Unix()
 		tmp.DoneDate = &dd
 	}
+	if t.EditDate != nil {
+		ed := t.EditDate.Unix()
+		tmp.EditDate = &ed
+	}
+	if t.PieceSize != nil {
+		ps := int64(*t.PieceSize) / 8
+		tmp.PieceSize = &ps
+	}
 	if t.TimeDownloading != nil {
 		sd := int64(*t.TimeDownloading / time.Second)
 		tmp.SecondsDownloading = &sd
@@ -349,9 +361,17 @@ func (t Torrent) MarshalJSON() (data []byte, err error) {
 		sil := int64(*t.SeedIdleLimit / time.Minute)
 		tmp.SeedIdleLimit = &sil
 	}
+	if t.SizeWhenDone != nil {
+		swd := int64(*t.SizeWhenDone) / 8
+		tmp.SizeWhenDone = &swd
+	}
 	if t.StartDate != nil {
 		st := t.StartDate.Unix()
 		tmp.StartDate = &st
+	}
+	if t.TotalSize != nil {
+		ts := int64(*t.TotalSize) / 8
+		tmp.TotalSize = &ts
 	}
 	// Boolean as number
 	if t.Wanted != nil {
@@ -604,7 +624,7 @@ func (ts *TrackerStats) UnmarshalJSON(data []byte) (err error) {
 			return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
 		}
 	default:
-		return fmt.Errorf("can't convert 'lastScrapeTimedOut' value '%v' into boolean", tmp.LastScrapeTimedOut)
+		// Absent, null or non-numeric values decode as false (zero value).
 	}
 	// Create the real time value from the timestamps
 	ts.LastAnnounceStartTime = time.Unix(tmp.LastAnnounceStartTime, 0)

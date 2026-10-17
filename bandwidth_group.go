@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 )
 
 /*
@@ -14,7 +13,7 @@ import (
 
 // BandwidthGroup represents all possible fields of data for a bandwidth group.
 type BandwidthGroup struct {
-	HonorSessionLimits    bool   `json:"honorSessionLimits"`
+	HonorSessionLimits    bool   `json:"honorsSessionLimits"`
 	Name                  string `json:"name"`
 	SpeedLimitDownEnabled bool   `json:"speed-limit-down-enabled"`
 	SpeedLimitDown        int64  `json:"speed-limit-down"`
@@ -27,15 +26,9 @@ type BandwidthGroup struct {
 // https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#482-bandwidth-group-accessor-group-get
 // Testing always yield the full list of bandwidth groups, even when submitting a filter.
 func (c *Client) BandwidthGroupGet(ctx context.Context, groups []string) (bandwidthGroups []BandwidthGroup, err error) {
-	var (
-		filter string
-		answer bandwidthGroupGetAnswer
-	)
-	if len(groups) > 0 {
-		filter = strings.Join(groups, ",")
-	}
+	var answer bandwidthGroupGetAnswer
 	if err = c.rpcCall(ctx, "group-get", &bandwidthGroupGetParams{
-		Group: filter,
+		Group: groups,
 	}, &answer); err != nil {
 		err = fmt.Errorf("'group-get' rpc method failed: %w", err)
 		return
@@ -45,7 +38,7 @@ func (c *Client) BandwidthGroupGet(ctx context.Context, groups []string) (bandwi
 }
 
 type bandwidthGroupGetParams struct {
-	Group string `json:"group,omitempty"`
+	Group []string `json:"group,omitempty"`
 }
 
 type bandwidthGroupGetAnswer struct {
