@@ -2,6 +2,7 @@ package transmissionrpc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 )
 
@@ -12,6 +13,10 @@ import (
 
 // TorrentRemove allows to delete one or more torrents only or with their data.
 func (c *Client) TorrentRemove(ctx context.Context, payload TorrentRemovePayload) (err error) {
+	// Validate
+	if len(payload.IDs) == 0 {
+		return errors.New("there must be at least one ID")
+	}
 	// Send payload
 	if err = c.rpcCall(ctx, "torrent-remove", payload, nil); err != nil {
 		return fmt.Errorf("'torrent-remove' rpc method failed: %w", err)

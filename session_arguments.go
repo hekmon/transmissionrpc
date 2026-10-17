@@ -112,6 +112,16 @@ func (sa SessionArguments) MarshalJSON() (data []byte, err error) {
 	// Build a payload with only the non nil fields
 	sav := reflect.ValueOf(tmp)
 	sat := sav.Type()
+	// JSON keys owned by the overloaded (shadow) fields: they are alternate
+	// representations of fields of the embedded struct (e.g. "default-trackers"
+	// is a newline separated string on the wire, not the []string native form)
+	// so the nested loop must never emit the embedded form for those keys.
+	overloadedKeys := make(map[string]struct{})
+	for i := 0; i < sat.NumField(); i++ {
+		if sat.Field(i).Name != "baseSessionArguments" {
+			overloadedKeys[sat.Field(i).Tag.Get("json")] = struct{}{}
+		}
+	}
 	cleanPayload := make(map[string]interface{}, sat.NumField())
 	var currentValue, nestedStruct, currentNestedValue reflect.Value
 	var currentStructField, currentNestedStructField reflect.StructField
@@ -129,6 +139,10 @@ func (sa SessionArguments) MarshalJSON() (data []byte, err error) {
 					if !currentNestedValue.IsNil() {
 						JSONKeyName := currentNestedStructField.Tag.Get("json")
 						if JSONKeyName != "-" {
+							if _, overloaded := overloadedKeys[JSONKeyName]; overloaded {
+								// Overloaded fields win over their embedded counterpart
+								continue
+							}
 							cleanPayload[JSONKeyName] = currentNestedValue.Interface()
 						}
 					}
