@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"sort"
 	"strings"
 	"time"
 )
@@ -15,26 +14,22 @@ import (
 	Torrent Mutators
     https://github.com/transmission/transmission/blob/4.0.3/docs/rpc-spec.md#32-torrent-mutator-torrent-set
 */
-// Compact replaces consecutive runs of equal elements with a single copy.
-// This is like the uniq command found on Unix.
-// Compact modifies the contents of the slice s and returns the modified slice,
-// which may have a smaller length.
-// Compact zeroes the elements between the new length and the original length.
-// todo replace to slices.Compact on version 1.21
-func compact[S ~[]E, E comparable](s S) S {
-	if len(s) < 2 {
-		return s
-	}
-	for k := 1; k < len(s); k++ {
-		if s[k] == s[k-1] {
-			s2 := s[k:]
-			for k2 := 1; k2 < len(s2); k2++ {
-				if s2[k2] != s2[k2-1] {
-					s[k] = s2[k2]
-					k++
-				}
+// compact deletes later duplicate announce URLs in s and returns the shorter header.
+// The first occurrence of each URL is kept, so order stays unchanged.
+// Empty strings stay: they are blank lines between tracker tiers.
+// ponytail: linear scan, fine while lists stay around 20; use a map past a few hundred.
+func compact(s []string) []string {
+	for i := 0; i < len(s); i++ {
+		if len(s[i]) == 0 {
+			continue
+		}
+		for j := i + 1; j < len(s); {
+			if s[j] != s[i] {
+				j++
+				continue
 			}
-			return s[:k]
+			copy(s[j:], s[j+1:])
+			s = s[:len(s)-1]
 		}
 	}
 	return s
@@ -46,8 +41,7 @@ func (c *Client) TorrentSet(ctx context.Context, payload TorrentSetPayload) (err
 	if len(payload.IDs) == 0 {
 		return errors.New("there must be at least one ID")
 	}
-	//fix trackers
-	sort.Strings(payload.TrackerList)
+	// Drop duplicate announce URLs without reordering the list.
 	payload.TrackerList = compact(payload.TrackerList)
 	// Send payload
 	if err = c.rpcCall(ctx, "torrent-set", payload, nil); err != nil {
