@@ -30,7 +30,7 @@ type Encryption string
 
 const (
 	EncryptionRequired  Encryption = "required"
-	EncryptionPreferred Encryption = "prefered"
+	EncryptionPreferred Encryption = "preferred"
 	EncryptionTolerated Encryption = "tolerated"
 )
 

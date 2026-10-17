@@ -14,7 +14,7 @@ import (
 
 // BandwidthGroup represents all possible fields of data for a bandwidth group.
 type BandwidthGroup struct {
-	HonorSessionLimits    bool   `json:"honorSessionLimits"`
+	HonorSessionLimits    bool   `json:"honorsSessionLimits"`
 	Name                  string `json:"name"`
 	SpeedLimitDownEnabled bool   `json:"speed-limit-down-enabled"`
 	SpeedLimitDown        int64  `json:"speed-limit-down"`
